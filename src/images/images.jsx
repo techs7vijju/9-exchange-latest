@@ -43,6 +43,7 @@ export const Images = {
   success: "./assets/icons/success.svg",
   blocked:  "./assets/icons/blocked.svg",
   bonus:  "./assets/icons/bonus.svg",
+  wallet:  "./assets/icons/wallet.svg",
 
   //games
   ezugicasino: "./assets/games/ezugicasino.svg",

@@ -224,6 +224,7 @@ input[type="number"] {
   --green-color1: #8dcc3b;
   --yellow-color1: #f7c91d;
   --yellow-color2: #f4c690;
+  --orange-color1: #f2870a;
 }
 
 @font-face {
@@ -244,7 +245,7 @@ input[type="number"] {
 
 body {
   font-family: "Public Sans";
-  background-color: var(--blue-color6);
+  background-color: #e9eef2 !important;
   min-height: 100vh;
   overflow: hidden;
   width: 100%;
@@ -261,6 +262,12 @@ h2 {
   font-weight: 500;
   color: #ffff;
 }
+h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffff;
+}
+
 h6 {
   font-size: 14px;
   font-weight: 500;
@@ -269,8 +276,7 @@ h6 {
 p {
   font-size: 13px;
   font-weight: 400;
-  line-height: 3.19;
-  color: #ffffff;
+  color: var(--blue-color6);
 }
 /* ----button------ */
 .xbtn {
@@ -292,15 +298,18 @@ p {
 }
 .xbtn.button-blue:hover {
   background-color: var(--blue-color2);
+  /* color: var(--blue-color1); */
 }
 
 .xbtn.outline {
   border: 1px solid var(--blue-color1);
   background-color: transparent;
+  color: var(--blue-color1);
 }
 
 .xbtn.outline:hover {
   background-color: var(--blue-color2);
+  color: var(--white-font);
 }
 .xbtn:disabled {
   opacity: 0.6;
@@ -406,7 +415,7 @@ form .input-group .input-section,
 .form .input-group .input-section {
   border-color: var(--blue-color1);
   background-color: var(--white-font);
-  border: 2px solid #276AA599;
+  border: 2px solid #276aa599;
   border-radius: 10px !important;
   /* border-top-left-radius: 10px !important;
   border-bottom-right-radius: 10px !important; */
@@ -524,7 +533,7 @@ form .textarea-group label span,
 form .textarea-group textarea,
 .form .textarea-group textarea {
   font-size: 16px;
-  color: var(--grey-color1);
+  color: var(--blue-color4);
   background-color: var(--dark-color4);
   /* border: none; */
   border-color: var(--grey-color2);
@@ -1540,7 +1549,8 @@ form .textarea-group small,
 }
 
 .table-container th {
-  background-color: var(--dark-color3);
+  background-color: var(--blue-color4);
+  color: var(--white-font);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -1562,8 +1572,8 @@ form .textarea-group small,
 }
 
 .pagination-container button {
-  background-color: var(--dark-color6);
-  color: var(--grey-color10);
+  background-color: var(--blue-color1);
+  color: var(--white-font);
   padding: 10px 15px;
   border-radius: 6px;
   margin: 0 5px;
@@ -1574,16 +1584,16 @@ form .textarea-group small,
 .common-card {
   padding: 10px 18px;
   border-radius: 9px;
-  background-color: var(--dark-color3);
+  background-color: var(--white-font);
   width: inherit;
 }
 
 .common-card .icon {
-  background-color: var(--voilet-color1);
+  background-color: var(--orange-color1);
   color: #ffff;
-  border-radius: 25px;
-  padding: 8px;
-  margin-left: 10px;
+  border-radius: 5px;
+  padding: 15px;
+  margin-left: 15px;
 }
 .common-card p {
   line-height: 2.5;
@@ -1946,4 +1956,10 @@ form .textarea-group small,
 }
 .statement-container .statement-table .statement-table-header {
   padding: 2rem;
+}
+
+.wallet-common-card {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 10px;
 }

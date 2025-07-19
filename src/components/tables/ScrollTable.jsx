@@ -1,3 +1,4 @@
+import React from "react";
 function ScrollTable({ data, columns, className }) {
     return (
       <div className={`page-table-container ${className}`}>

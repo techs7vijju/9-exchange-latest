@@ -176,9 +176,9 @@ const Appui = () => {
           <div style={{ width: "150px", marginBottom: "20px" }}>
             <button className="xbtn button-blue">Button</button>
           </div>
-          <div style={{ width: "150px", marginBottom: "20px" }}>
-            <button className="xbtn button-gray">Button</button>
-          </div>
+          {/* <div style={{ width: "150px", marginBottom: "20px" }}>
+            <button className="xbtn button">Button</button>
+          </div> */}
           <div style={{ width: "150px", marginBottom: "20px" }}>
             <button className="xbtn outline">Button</button>
           </div>
@@ -304,14 +304,14 @@ const Appui = () => {
           </form>
         </section>
 
-        <section style={{ marginBottom: "20px" }}>
+        <section style={{ marginBottom: "20px" }} >
           <h1 style={{ marginBottom: "20px" }}>Cards</h1>
           <div style={{ marginBottom: "20px" }}>
             <InfoCard title="Total Revenue" value="303.00" percent={6.32} />
           </div>
-          <div style={{ marginBottom: "20px" }}>
+          {/* <div style={{ marginBottom: "20px" }}>
             <StatCard buy="400" sale="200" balance="200" />
-          </div>
+          </div> */}
         </section>
 
         <section style={{ marginBottom: "20px" }}>
