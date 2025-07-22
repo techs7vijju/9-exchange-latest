@@ -15,13 +15,13 @@ import { ImExit } from "react-icons/im";
 // import socketService from "../utils/socketService";
 import { useMediaQuery } from "react-responsive";
 import { Images } from "../../images/images";
-import Login from "../banner/Popups/Login";
-import ForgotPassword from "../banner/Popups/ForgotPassword";
-import NewPassword from "../banner/Popups/NewPassword";
-import Success from "../banner/Popups/Success";
-import Blocked from "../banner/Popups/Blocked";
-import Register from "../banner/Popups/Register";
-import Thanks from "../banner/Popups/Thanks";
+import Login from "../../pages/banner/Popups/Login";
+import ForgotPassword from "../../pages/banner/Popups/ForgotPassword";
+import NewPassword from "../../pages/banner/Popups/NewPassword";
+import Success from "../../pages/banner/Popups/Success";
+import Blocked from "../../pages/banner/Popups/Blocked";
+import Register from "../../pages/banner/Popups/Register";
+import Thanks from "../../pages/banner/Popups/Thanks";
 
 function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const navigate = useNavigate();
