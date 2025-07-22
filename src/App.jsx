@@ -8,4 +8,12 @@ function App() {
   return <AppRoutes />;
 }
 
+function DefaultMoreContent() {
+  return (
+    <div className="w-80 h-100 grey-color1-bg">
+      Select an option from the sidebar
+    </div>
+  );
+}
+
 export default App;
