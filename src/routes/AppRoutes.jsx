@@ -6,6 +6,9 @@ import Appui from "../pages/home/Appui";
 import Layout from "../layout/Layout";
 import Tickets from "../pages/more/tickets/tickets";
 import MoreHome from "../pages/more/moreHome";
+import SportsLayout from "../layout/SportsLayout";
+import Sports from "../pages/sports/Sports";
+const SportsStats = () => <div>Sports Stats</div>;
 
 function AppRoutes() {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -14,18 +17,16 @@ function AppRoutes() {
     <div className={body}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
+          {/* Main pages with right bar */}
+          <Route element={<SportsLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/sports" element={<Sports />} />
+          </Route>
           <Route path="/more" element={<MoreHome />}>
             <Route index element={<DefaultMoreContent />} />
-            {/* <Route path="deposits" element={<Deposits />} /> */}
-            {/* <Route path="withdrawals" element={<Withdrawals />} /> */}
             <Route path="tickets" element={<Tickets />} />
-            {/* <Route path="profile" element={<Profile />} /> */}
-            {/* <Route path="privacy-policy" element={<PrivacyPolicy />} /> */}
-            {/* <Route path="terms-of-service" element={<TermsOfService />} /> */}
           </Route>
         </Route>
-
         <Route path="/appui" element={<Appui />} />
       </Routes>
     </div>

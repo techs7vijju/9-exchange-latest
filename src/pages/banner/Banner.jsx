@@ -8,7 +8,6 @@ import { FaPlay } from "react-icons/fa";
 import { Images } from "../../images/images";
 import { Carousel } from "react-bootstrap";
 import { useMediaQuery } from "react-responsive";
-import CollapsePage from "./Collapse";
 
 function Banner() {
   console.log("opened");
@@ -249,14 +248,14 @@ function Banner() {
                 direction=""
                 className="large-font mx-1 w-100"
               >
-                Welcom to 9-exchange
+                Welcome to 9-exchange
               </marquee>
             </div>
           </div>
         </>
       ) : (
         <div className="p-2 d-flex flex-between w-100 gap-2">
-          <div className="w-85">
+          <div>
             <div
               className="d-flex flex-between gap-2 w-100"
               style={{ height: "15.625rem" }}
@@ -405,13 +404,10 @@ function Banner() {
                   direction=""
                   className="xl-large-font mx-1 w-100"
                 >
-                  Welcom to 9-exchange
+                  Welcome to 9-exchange
                 </marquee>
               </div>
             </div>
-          </div>
-          <div className="w-15">
-            <CollapsePage />
           </div>
         </div>
       )}
