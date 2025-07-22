@@ -1,7 +1,6 @@
 import React from "react";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import Header from "../layout/header/Header";
 import Home from "../pages/home/Homepage";
 import Appui from "../pages/home/Appui";
 import Layout from "../layout/Layout";
@@ -19,15 +18,6 @@ function AppRoutes() {
         <Route path="/appui" element={<Appui />} />
       </Routes>
     </div>
-  );
-}
-
-function LayoutWithHeader() {
-  return (
-    <>
-      <Header />
-      <Outlet />
-    </>
   );
 }
 
