@@ -13,6 +13,8 @@ import {
 } from "react-icons/fa";
 import { IoEye, IoEyeOff, IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router";
+import TextInput from "../../../components/form-elements/TextInput";
+import SelectInput from "../../../components/form-elements/SelectInput";
 
 const emailRegex =
   /^(([a-z\d+_\-][a-z\d+'._\-]*[a-z\d+_\-])|([a-z\d+_\-]{1,2}))@((([a-z\d][a-z\d\-]{0,100}[a-z\d])|([a-z\d]))\.)+[a-z]{2,}$/i;
@@ -31,7 +33,7 @@ const validationSchema1 = Yup.object({
       /^[A-Za-z0-9_]+$/,
       "User Name can only contain letters, numbers, and Underscore"
     )
-    .min(5, "User Name must be at least 5 characters long")
+    .min(5, "User Name must be at least 5 characters")
     .max(15, "User Name must not exceed 15 characters"),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
@@ -124,6 +126,7 @@ const Register = ({
   const [countrySearchTerm, setCountrySearchTerm] = useState("");
   const [currencySearchTerm, setCurrencySearchTerm] = useState("");
   const [selectedForm, setSelectedForm] = useState("register");
+  const [currencies, setCurrencies] = useState([]);
   const [checkBoxes, setCheckBoxes] = useState({
     age_agree: false,
     agree_policy: false,
@@ -383,7 +386,9 @@ const Register = ({
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    console.log("hitting");
     setApiErrors([]);
     try {
       await validationSchema1.validate(formData, { abortEarly: false });
@@ -479,7 +484,6 @@ const Register = ({
 
         setMessage(response.message);
 
-        handleApiError("");
         setApiErrors([]);
         setSelectedCountryItem("");
         setCountrydropdownOpen(false);
@@ -508,17 +512,22 @@ const Register = ({
       }
     } catch (error) {
       setLoading(false);
-      const { validationErrors: newValidationErrors, apiErrors: newApiErrors } =
-        handleApiError(error);
+      console.log("Validation error:", error);
 
-      if (newValidationErrors) {
-        setValidationErrors(newValidationErrors);
-      }
-      if (newApiErrors) {
-        setApiErrors(newApiErrors);
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
       }
     }
   };
+  console.log("setValidationErrors", validationErrors);
 
   const handleClose = () => {
     handleApiError("");
@@ -734,387 +743,309 @@ const Register = ({
 
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setCountrydropdownOpen(false);
-        setCurrencydropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       setCountrydropdownOpen(false);
+  //       setCurrencydropdownOpen(false);
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   return (
-    <Modal
-      show={showRegister}
-      // onHide={handleCancel}
-      centered
-      // className="custom-login-modal"
-    >
-      <div className="d-flex flex-col blue-color4 py-2">
-        <h3 className="flex-center">REGISTRATION</h3>
-        
-          <div className="d-flex items-center justify-items-center px-10">
-            <button
-              className="d-flex flex-between xbtn button-blue"
-              onClick={() => setSelectedForm("register")}
-            >
-              <FaUserFriends className="me-2" />
-              SIGN UP / REGISTER
-            </button>
+    <Modal show={showRegister} centered className="custom-popup-modal" size="lg">
+      <div className="d-flex flex-col blue-color4 p-2 popup-scroll position-relative">
+        <button
+          className="btn-close"
+          onClick={() => setShowRegister(false)}
+          aria-label="Close"
+        ></button>
 
-            <button
-              className="d-flex flex-between xbtn grey-8-btn"
-            >
-              <FaBolt className="me-2" />
-              ONE CLICK
-            </button>
+        <h5 className="flex-center fw-600 mt-3">REGISTRATION</h5>
+        <div className="d-flex flex-col flex-center w-100 gap-2 mt-1">
+          <span className="thank-bar w-20"></span>
+          <span className="thank-bar w-15"></span>
+        </div>
+
+        <div className="d-flex flex-center py-2 gap-10 large-font">
+          <button
+            className="d-flex flex-between xbtn button-blue "
+            onClick={() => setSelectedForm("register")}
+          >
+            <FaUserFriends className="me-2" />
+            SIGN UP / REGISTER
+          </button>
+
+          <button className="d-flex flex-between xbtn grey-8-btn blue-color4">
+            <FaBolt className="me-2" />
+            ONE CLICK
+          </button>
+        </div>
+
+        {apiErrors.length > 0 && (
+          <div className="alert alert-danger">
+            {apiErrors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
           </div>
+        )}
 
-          {apiErrors.length > 0 && (
-            <div className="alert alert-danger">
-              {apiErrors.map((error, index) => (
-                <div key={index}>{error}</div>
-              ))}
-            </div>
-          )}
-
-          {selectedForm === "register" ? (
-            <form onSubmit={handleSubmit}>
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.name ? "is-invalid" : ""
-                    }`}
-                  />
-                  {validationErrors.name && (
-                    <div className="invalid-feedback">
-                      {validationErrors.name}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>User Name</label>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      name="user_name"
-                      value={formData.user_name}
-                      onChange={handleChange}
-                      className={`form-control ${
-                        validationErrors.user_name || userError
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    />
-                    {isUsernameLoading && (
-                      <span className="input-group-text">...</span>
-                    )}
-                    {!isUsernameLoading &&
-                      formData.user_name.length >= 5 &&
-                      !userError && (
-                        <span className="input-group-text text-success">
-                          <FaCheck />
-                        </span>
-                      )}
-                  </div>
-                  {(validationErrors.user_name || userError) && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.user_name || userError}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Password</label>
-                  <div className="input-group">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className={`form-control ${
-                        validationErrors.password ? "is-invalid" : ""
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {validationErrors.password && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.password}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>Confirm Password</label>
-                  <div className="input-group">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className={`form-control ${
-                        validationErrors.confirmPassword ? "is-invalid" : ""
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                    >
-                      {showConfirmPassword ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {validationErrors.confirmPassword && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.confirmPassword}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Master/Parent ID (Optional)</label>
-                  <input
-                    type="text"
-                    name="masterID"
-                    value={formData.masterID}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label>Date of Birth</label>
-                  <div className="input-group">
-                    <input
-                      type="date"
-                      name="dob"
-                      value={formData.dob}
-                      onChange={(e) => handleDateChange(e.target.value)}
-                      className={`form-control ${
-                        validationErrors.dob ? "is-invalid" : ""
-                      }`}
-                    />
-                    <span className="input-group-text">
-                      <FaCalendarAlt />
-                    </span>
-                  </div>
-                  {validationErrors.dob && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.dob}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Country</label>
-                  <select
-                    name="country_id"
-                    value={formData.country_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.country_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Country</option>
-                    {/* Populate with actual countries */}
-                  </select>
-                  {validationErrors.country_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.country_id}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>Currency</label>
-                  <select
-                    name="currency_id"
-                    value={formData.currency_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.currency_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Currency</option>
-                    {/* Populate with actual currencies */}
-                  </select>
-                  {validationErrors.currency_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.currency_id}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label>Email (Optional)</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`form-control ${
-                    validationErrors.email ? "is-invalid" : ""
-                  }`}
-                />
-                {validationErrors.email && (
-                  <div className="invalid-feedback d-block">
-                    {validationErrors.email}
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-3">
-                <h5>Security Questions</h5>
-                {/* Render security questions here */}
-              </div>
-
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isChecked}
-                  onChange={() => setIsChecked(!isChecked)}
-                />
-                <label className="form-check-label">
-                  Yes, I am 18+ Years Old
-                </label>
-              </div>
-
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAgreed}
-                  onChange={() => setIsAgreed(!isAgreed)}
-                />
-                <label className="form-check-label">
-                  I agree to the Terms and Conditions and Privacy Policy
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading}
-              >
-                {loading ? "Registering..." : "REGISTER"}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleOneClickSubmit}>
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Country</label>
-                  <select
-                    name="country_id"
-                    value={formData.country_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.country_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Country</option>
-                    {/* Populate with actual countries */}
-                  </select>
-                  {validationErrors.country_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.country_id}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>Currency</label>
-                  <select
-                    name="currency_id"
-                    value={formData.currency_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.currency_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Currency</option>
-                    {/* Populate with actual currencies */}
-                  </select>
-                  {validationErrors.currency_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.currency_id}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label>Master/Parent ID (Optional)</label>
-                <input
+        {selectedForm === "register" ? (
+          <form onSubmit={handleSubmit}>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <TextInput
                   type="text"
+                  label="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={validationErrors?.name}
+                />
+              </div>
+
+              <div className="col-md-6">
+                <TextInput
+                  type="text"
+                  label="User Name"
+                  name="user_name"
+                  value={formData.user_name}
+                  onChange={handleChange}
+                  error={validationErrors.user_name}
+                  showLoading={isUsernameLoading}
+                  showCheckmark={
+                    !isUsernameLoading &&
+                    formData.user_name.length >= 5 &&
+                    !userError
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <TextInput
+                  type={showPassword ? "text" : "password"}
+                  label="Password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={validationErrors.password}
+                  togglePassword={() => setShowPassword(!showPassword)}
+                  showPassword={showPassword}
+                />
+              </div>
+              <div className="col-md-6">
+                <TextInput
+                  type={showConfirmPassword ? "text" : "password"}
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  error={validationErrors.confirmPassword}
+                  togglePassword={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
+                  showPassword={showConfirmPassword}
+                />
+              </div>
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <TextInput
+                  type="text"
+                  label="Master/Parent ID (Optional)"
                   name="masterID"
                   value={formData.masterID}
                   onChange={handleChange}
-                  className="form-control"
                 />
               </div>
-
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isChecked}
-                  onChange={() => setIsChecked(!isChecked)}
-                />
-                <label className="form-check-label">
-                  Yes, I am 18+ Years Old
-                </label>
+              <div className="col-md-6">
+                <label>Date of Birth</label>
+                <div className="input-group">
+                  <TextInput
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
+                    onChange={(e) => handleChange("dob", e.target.value)}
+                    error={validationErrors.dob}
+                  />
+                  <span className="input-group-text">
+                    <FaCalendarAlt />
+                  </span>
+                </div>
+                {validationErrors.dob && (
+                  <div className="invalid-feedback d-block">
+                    {validationErrors.dob}
+                  </div>
+                )}
               </div>
+            </div>
 
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAgreed}
-                  onChange={() => setIsAgreed(!isAgreed)}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <SelectInput
+                  label="Country"
+                  name="country_id"
+                  value={countries.find((c) => c.id === formData.country_id)}
+                  onChange={(selected) => handleCountryChange(selected)}
+                  options={countries.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  error={validationErrors.country_id}
+                  required
                 />
-                <label className="form-check-label">
-                  I agree to the Terms and Conditions and Privacy Policy
-                </label>
               </div>
+              <div className="col-md-6">
+                <SelectInput
+                  label="Currency"
+                  name="currency_id"
+                  value={currencies?.find((c) => c.id === formData.currency_id)}
+                  onChange={(selected) => handleCurrencyChange(selected)}
+                  options={currencies?.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  error={validationErrors.currency_id}
+                  required
+                />
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading}
-              >
-                {loading ? "Registering..." : "REGISTER"}
-              </button>
-            </form>
-          )}
+            <div className="mb-3">
+              <TextInput
+                type="email"
+                label="Email (Optional)"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={validationErrors.email}
+              />
+            </div>
 
-          <div className="mt-3 text-center">
-            Already have an account? <a href="#">LOGIN</a>
-          </div>
-       
+            <div className="mb-3">
+              <h5>Security Questions</h5>
+              {/* Render security questions here */}
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+              />
+              <label className="form-check-label">
+                Yes, I am 18+ Years Old
+              </label>
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isAgreed}
+                onChange={() => setIsAgreed(!isAgreed)}
+              />
+              <label className="form-check-label">
+                I agree to the Terms and Conditions and Privacy Policy
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "REGISTER"}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleOneClickSubmit}>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <SelectInput
+                  label="Country"
+                  name="country_id"
+                  value={countries.find((c) => c.id === formData.country_id)}
+                  onChange={(selected) => handleCountryChange(selected)}
+                  options={countries.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  error={validationErrors.country_id}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <SelectInput
+                  label="Currency"
+                  name="currency_id"
+                  value={currencies.find((c) => c.id === formData.currency_id)}
+                  onChange={(selected) => handleCurrencyChange(selected)}
+                  options={currencies.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  error={validationErrors.currency_id}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <TextInput
+                type="text"
+                label="Master/Parent ID (Optional)"
+                name="masterID"
+                value={formData.masterID}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+              />
+              <label className="form-check-label">
+                Yes, I am 18+ Years Old
+              </label>
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isAgreed}
+                onChange={() => setIsAgreed(!isAgreed)}
+              />
+              <label className="form-check-label">
+                I agree to the Terms and Conditions and Privacy Policy
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "REGISTER"}
+            </button>
+          </form>
+        )}
+
+        <div className="mt-3 text-center">
+          Already have an account? <a href="#">LOGIN</a>
+        </div>
       </div>
     </Modal>
   );
