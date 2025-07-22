@@ -970,10 +970,6 @@ form .textarea-group small,
   flex-grow: 1;
 }
 
-.text-center {
-  text-align: center;
-}
-
 .flex-start {
   display: flex;
   align-items: center;

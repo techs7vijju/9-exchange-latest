@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import Home from "../pages/home/Homepage";
 import Appui from "../pages/home/Appui";
