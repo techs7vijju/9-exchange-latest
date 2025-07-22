@@ -246,113 +246,40 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </Dropdown.Toggle>
             </Dropdown>
 
-            <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
-              <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer w-100">
-                <span className="large-font">SPORTS</span>
-                {openSports ? (
-                  <IoChevronUpSharp className="ms-1 xl-large-font" />
-                ) : (
-                  <IoChevronDownSharp className="ms-1 xl-large-font" />
-                )}
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="custom-dropdown1 large-font">
-                <Dropdown.Item
-                //   onClick={() => navigate("/cricket")}
-                >
-                  <div className="d-flex justify-content-between align-items-center pb-1 border-bottom-grey">
-                    <div>
-                      <img
-                        src={Images.bat}
-                        className="ms-0 mx-2"
-                        alt="Cricket"
-                      />
-                      Cricket
-                    </div>
-                    <FaChevronRight className=" arow-clr" />
-                  </div>
-                </Dropdown.Item>
+       <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
+  <Dropdown.Toggle className="d-flex justify-content-between align-items-center custom-dropdown pointer w-100">
+    <span className="large-font">SPORTS</span>
+    {openSports ? (
+      <IoChevronUpSharp className="ms-1 xl-large-font" />
+    ) : (
+      <IoChevronDownSharp className="ms-1 xl-large-font" />
+    )}
+  </Dropdown.Toggle>
 
-                <Dropdown.Item
-                //   onClick={() => navigate("/soccer")}
-                >
-                  <div className="d-flex justify-content-between align-items-center pb-1 border-bottom-grey">
-                    <div>
-                      <img
-                        src={Images.ball}
-                        className="ms-0 mx-2"
-                        alt="Football"
-                      />
-                      Football
-                    </div>
-                    <FaChevronRight className=" arow-clr" />
-                  </div>
-                </Dropdown.Item>
+  <Dropdown.Menu className="custom-dropdown1">
+    {[
+      { img: Images.bat, name: "Cricket" },
+      { img: Images.ball, name: "Football" },
+      { img: Images.tennis, name: "Tennis" },
+      { img: Images.horse, name: "Horse Racing" },
+      { img: Images.grey, name: "Greyhound" },
+      { img: Images.baseball, name: "Baseball" },
+    ].map((item, index) => (
+      <Dropdown.Item key={index} className="dropdown-item-custom">
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="dropdown-content">
+            <img src={item.img} alt={item.name} className="dropdown-icon" />
+            <span className="dropdown-label">{item.name}</span>
+          </div>
+          <FaChevronRight className="dropdown-arrow" />
+        </div>
+      </Dropdown.Item>
+    ))}
+  </Dropdown.Menu>
+</Dropdown>
 
-                <Dropdown.Item
-                //   onClick={() => navigate("/tennis")}
-                >
-                  <div className="d-flex justify-content-between align-items-center pb-1 border-bottom-grey">
-                    <div>
-                      <img
-                        src={Images.tennis}
-                        className="ms-0 mx-2"
-                        alt="Tennis"
-                      />
-                      Tennis
-                    </div>
-                    <FaChevronRight className=" arow-clr" />
-                  </div>
-                </Dropdown.Item>
 
-                <Dropdown.Item
-                //   onClick={() => navigate("/hourse-racing")}
-                >
-                  <div className="d-flex justify-content-between align-items-center pb-1 border-bottom-grey">
-                    <div>
-                      <img
-                        src={Images.horse}
-                        className="ms-0 mx-2"
-                        alt="Horse Racing"
-                      />
-                      Horse Racing
-                    </div>
-                    <FaChevronRight className=" arow-clr" />
-                  </div>
-                </Dropdown.Item>
 
-                <Dropdown.Item
-                //   onClick={() => navigate("/greyhound")}
-                >
-                  <div className="d-flex justify-content-between align-items-center pb-1 border-bottom-grey">
-                    <div>
-                      <img
-                        src={Images.grey}
-                        className="ms-0 mx-2"
-                        alt="GreyHound"
-                      />
-                      GreyHound
-                    </div>
-                    <FaChevronRight className=" arow-clr" />
-                  </div>
-                </Dropdown.Item>
-
-                <Dropdown.Item
-                //   onClick={() => navigate("/badmaintaininplay")}
-                >
-                  {/* <div className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <img
-                        src={Images.Logo}
-                        className="ms-0 mx-2"
-                        alt="Kabaddi"
-                      />
-                      Kabaddi
-                    </div>
-                    <FaChevronRight className=" arow-clr" />
-                  </div> */}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
 
             <Dropdown show={openLive} onToggle={() => handleToggle("live")}>
               <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer ">
