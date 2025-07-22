@@ -6,32 +6,9 @@ const CollapseRightbar = () => {
 
   return (
     <div
-      style={{
-        width: rightbarWidth,
-        transition: "width 0.3s",
-        background: "#f5f5f5",
-        borderLeft: "1px solid #ddd",
-        position: "relative",
-        height: "100vh",
-      }}
+      className="collapse-right-bar-container"
+      style={{ width: rightbarWidth }}
     >
-      <button
-        style={{
-          position: "absolute",
-          top: 10,
-          left: -30,
-          zIndex: 2,
-          width: 30,
-          height: 30,
-          borderRadius: "50%",
-          border: "1px solid #ccc",
-          background: "#fff",
-          cursor: "pointer",
-        }}
-        onClick={() => setCollapsed((c) => !c)}
-      >
-        {collapsed ? ">>" : "<<"}
-      </button>
       <div
         style={{
           padding: 10,
@@ -39,7 +16,7 @@ const CollapseRightbar = () => {
           transition: "opacity 0.3s",
         }}
       >
-        Content
+        <p onClick={() => setCollapsed((c) => !c)}> Collepse </p>
       </div>
     </div>
   );

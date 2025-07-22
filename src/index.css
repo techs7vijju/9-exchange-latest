@@ -1577,7 +1577,6 @@ form .textarea-group small,
   margin-bottom: 8px;
 }
 
-
 /* Banner.jsx */
 .carousel {
   height: 100%;
@@ -1667,7 +1666,6 @@ form .textarea-group small,
   border-radius: 2px;
   cursor: pointer;
 }
-
 
 :root {
   --header-bg: #205583;
@@ -1792,7 +1790,7 @@ form .textarea-group small,
   .large-font {
     font-size: 12px;
   }
-   .medium-font {
+  .medium-font {
     font-size: 10px;
   }
 }
@@ -1818,7 +1816,7 @@ form .textarea-group small,
   .large-font {
     font-size: 15px;
   }
-   .medium-font {
+  .medium-font {
     font-size: 12px;
   }
 }
@@ -1844,7 +1842,7 @@ form .textarea-group small,
   .large-font {
     font-size: 20px;
   }
-   .medium-font {
+  .medium-font {
     font-size: 18px;
   }
 }
@@ -1869,14 +1867,19 @@ form .textarea-group small,
   .large-font {
     font-size: 25px;
   }
-   .medium-font {
+  .medium-font {
     font-size: 20px;
   }
 }
 
-
 /* collapse right bar styling */
-  
+
 .collapse-right-bar-container {
-  
+  transition: width 0.3s;
+  background: #f5f5f5;
+  border-left: 1px solid #ddd;
+  position: relative;
+  height: 100vh;
 }
+
+
