@@ -16,7 +16,7 @@ const CollapseRightbar = () => {
           transition: "opacity 0.3s",
         }}
       >
-        <p onClick={() => setCollapsed((c) => !c)}> Collepse </p>
+        <p className="text-white pointer" onClick={() => setCollapsed((c) => !c)}> Collepse </p>
       </div>
     </div>
   );
