@@ -13,7 +13,7 @@ function Banner() {
   console.log("opened");
   const navigate = useNavigate();
   const [dropdown, setdropdown] = useState(false);
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
 
   const getUserData = () => {
     const storedData = localStorage.getItem("user_data");
@@ -347,7 +347,7 @@ function Banner() {
             </div>
 
             <div className="p-1">
-              <div className="d-flex flex-row w-100 scroll-xaxis1 white-color medium-font py-2">
+              <div className="d-flex flex-row w-100 scroll-xaxis1 white-color large-font py-2">
                 <div className="scroll-card blue-color10-bg">
                   <img
                     src={Images.cricket1}

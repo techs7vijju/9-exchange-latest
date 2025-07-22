@@ -4,7 +4,7 @@ import { customStyles } from "../styles/ReactSelectStyles";
 
 const SelectInput = ({
   label,
-  
+
   options,
   value,
   onChange,
@@ -14,11 +14,11 @@ const SelectInput = ({
 }) => {
   return (
     <div className="select-group">
-      <label htmlFor="select">{label}
-      {required && <span className="span ">*</span>}
+      <label htmlFor="select">
+        {label}
+        {required && <span className="span ">*</span>}
       </label>
       <Select
-      
         placeholder={placeholder}
         styles={customStyles}
         id="select"

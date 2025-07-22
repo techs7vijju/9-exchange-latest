@@ -1,5 +1,5 @@
 import React from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const TextInput = ({
   type,
@@ -11,15 +11,17 @@ const TextInput = ({
   svgIcon,
   togglePassword,
   showPassword,
-  register,
   name,
-  errors,
+  error,
   onKeyDown,
   onInput,
   onPaste,
+  value,
+  onChange,
+  showCheckmark,
+  showLoading,
+  hideErrorMessage
 }) => {
-  const error = errors?.[name]?.message;
-
   return (
     <div className="input-group">
       {label && (
@@ -37,14 +39,17 @@ const TextInput = ({
         <input
           id={name}
           type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
           maxLength={maxLength}
           placeholder={placeholder}
           className={error ? "input-error" : ""}
-          {...(register && name ? register(name) : {})}
           onKeyDown={onKeyDown}
           onInput={onInput}
           onPaste={onPaste}
         />
+        
         {type === "password" && (
           <>
             {showPassword ? (
@@ -54,9 +59,19 @@ const TextInput = ({
             )}
           </>
         )}
+        
+        {showLoading && <span >...</span>}
+        
+        {showCheckmark && (
+          <span className=" text-success border-none">
+            <FaCheck />
+          </span>
+        )}
+        
         {svgIcon && svgIcon()}
       </div>
-      {error && <small className="error">{error}</small>}
+      
+      {!hideErrorMessage && error && <small className="error">{error}</small>}
     </div>
   );
 };

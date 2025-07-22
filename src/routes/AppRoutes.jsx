@@ -11,7 +11,7 @@ import Sports from "../pages/sports/Sports";
 import PageNotFound from "../pages/page-not-found/PageNotFound";
 
 function AppRoutes() {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
   const body = isMobile ? "body1" : "body";
   return (
     <div className={body}>

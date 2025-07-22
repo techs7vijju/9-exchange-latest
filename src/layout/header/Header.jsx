@@ -52,7 +52,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const toggleMessages = () => {
     setShowMessages((prev) => !prev);
   };
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
   const [showLogin, setShowLogin] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -246,40 +246,41 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </Dropdown.Toggle>
             </Dropdown>
 
-       <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
-  <Dropdown.Toggle className="d-flex justify-content-between align-items-center custom-dropdown pointer w-100">
-    <span className="large-font">SPORTS</span>
-    {openSports ? (
-      <IoChevronUpSharp className="ms-1 xl-large-font" />
-    ) : (
-      <IoChevronDownSharp className="ms-1 xl-large-font" />
-    )}
-  </Dropdown.Toggle>
+            <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
+              <Dropdown.Toggle className="d-flex justify-content-between align-items-center custom-dropdown pointer w-100">
+                <span className="large-font">SPORTS</span>
+                {openSports ? (
+                  <IoChevronUpSharp className="ms-1 xl-large-font" />
+                ) : (
+                  <IoChevronDownSharp className="ms-1 xl-large-font" />
+                )}
+              </Dropdown.Toggle>
 
-  <Dropdown.Menu className="custom-dropdown1">
-    {[
-      { img: Images.bat, name: "Cricket" },
-      { img: Images.ball, name: "Football" },
-      { img: Images.tennis, name: "Tennis" },
-      { img: Images.horse, name: "Horse Racing" },
-      { img: Images.grey, name: "Greyhound" },
-      { img: Images.baseball, name: "Baseball" },
-    ].map((item, index) => (
-      <Dropdown.Item key={index} className="dropdown-item-custom">
-        <div className="d-flex justify-content-between align-items-center">
-          <div className="dropdown-content">
-            <img src={item.img} alt={item.name} className="dropdown-icon" />
-            <span className="dropdown-label">{item.name}</span>
-          </div>
-          <FaChevronRight className="dropdown-arrow" />
-        </div>
-      </Dropdown.Item>
-    ))}
-  </Dropdown.Menu>
-</Dropdown>
-
-
-
+              <Dropdown.Menu className="custom-dropdown1">
+                {[
+                  { img: Images.bat, name: "Cricket" },
+                  { img: Images.ball, name: "Football" },
+                  { img: Images.tennis, name: "Tennis" },
+                  { img: Images.horse, name: "Horse Racing" },
+                  { img: Images.grey, name: "Greyhound" },
+                  { img: Images.baseball, name: "Baseball" },
+                ].map((item, index) => (
+                  <Dropdown.Item key={index} className="dropdown-item-custom">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div className="dropdown-content">
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          className="dropdown-icon"
+                        />
+                        <span className="dropdown-label">{item.name}</span>
+                      </div>
+                      <FaChevronRight className="dropdown-arrow" />
+                    </div>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
 
             <Dropdown show={openLive} onToggle={() => handleToggle("live")}>
               <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer ">
