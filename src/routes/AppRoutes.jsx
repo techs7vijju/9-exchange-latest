@@ -6,6 +6,7 @@ import Appui from "../pages/home/Appui";
 import Layout from "../layout/Layout";
 import Tickets from "../pages/more/tickets/tickets";
 import MoreHome from "../pages/more/moreHome";
+import PageNotFound from "../pages/page-not-found/PageNotFound";
 
 function AppRoutes() {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -24,9 +25,10 @@ function AppRoutes() {
             {/* <Route path="privacy-policy" element={<PrivacyPolicy />} /> */}
             {/* <Route path="terms-of-service" element={<TermsOfService />} /> */}
           </Route>
-        </Route>
 
-        <Route path="/appui" element={<Appui />} />
+          <Route path="appui" element={<Appui />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
       </Routes>
     </div>
   );
