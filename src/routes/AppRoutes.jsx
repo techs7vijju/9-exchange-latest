@@ -8,7 +8,7 @@ import Tickets from "../pages/more/tickets/tickets";
 import MoreHome from "../pages/more/moreHome";
 import SportsLayout from "../layout/SportsLayout";
 import Sports from "../pages/sports/Sports";
-const SportsStats = () => <div>Sports Stats</div>;
+import PageNotFound from "../pages/page-not-found/PageNotFound";
 
 function AppRoutes() {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -28,6 +28,9 @@ function AppRoutes() {
           </Route>
         </Route>
         <Route path="/appui" element={<Appui />} />
+
+        <Route path="appui" element={<Appui />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );

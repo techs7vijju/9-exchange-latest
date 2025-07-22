@@ -219,6 +219,7 @@ input[type="number"] {
   --blue-color11: #ddeefc;
   --blue-color12: #0a2c4d;
   --blue-color13: #205583;
+  --blue-color14: #30334D;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -227,6 +228,7 @@ input[type="number"] {
   --grey-color7: #e0e0e0;
   --grey-color8: #e7e7e7;
   --grey-color9: #adc0d1;
+  --grey-color10: #666666;
   --red-color1: #ff8282;
   --red-color2: #ff5145;
   --green-color1: #8dcc3b;
@@ -279,6 +281,9 @@ h1 {
   font-weight: 700;
   color: var(--blue-color4);
 }
+h1.h1-blue{
+  color: var(--blue-color14);
+}
 h2 {
   font-size: 20px;
   font-weight: 500;
@@ -300,6 +305,9 @@ h6 {
   font-size: 13px;
   font-weight: 400;
   color: var(--blue-color6);
+}
+.p.p-grey{
+  color: var(--grey-color10);
 }
 .p-10 {
   margin-left: 10px;
@@ -1883,3 +1891,49 @@ form .textarea-group small,
 }
 
 
+/* PageNotFound*/
+.page-not-found-container {
+  background-color: var(--white-color);
+  height: 100vh;
+  width: 100%;
+ 
+}
+
+
+
+
+.page-not-found-container .page-not-found-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 74%;
+  height: 71%;
+  background-image: url("../../public/assets/404/404.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 3;
+  z-index: 0;
+}
+
+.page-not-found-container .page-not-found-content img {
+  margin-bottom: 4rem;
+  max-width: 79%;
+  position: relative;
+  bottom: -12%;
+  left: 24%;
+}
+.page-not-found-container .page-not-found-content h1{
+  position: relative;
+  bottom: -12%;
+  left: 24%;
+}
+.page-not-found-container .page-not-found-content p{
+  position: relative;
+  bottom: -12%;
+  left: 26%;
+  color: var(--grey-color10);
+}
+
+/*--------------------------------*/
