@@ -115,11 +115,11 @@ const Sidebarbtn = () => {
   };
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="small-button  white-font pointer">
+    <div className="d-flex flex-col px-2 h-100">
+      <div className="small-button white-font pointer">
         <img src={Images.thump} className="payment-images" />
       </div>
-      <div className="small-button  white-font pointer">
+      <div className="small-button white-font pointer">
         <img src={Images.star} className="payment-images" />
       </div>
       <div className="small-button white-font pointer">
@@ -128,7 +128,7 @@ const Sidebarbtn = () => {
       <div className="small-button white-font pointer">
         <img src={Images.settings} className="payment-images" />
       </div>
-      <div className="small-button1 position-relative" ref={dropdownMenuRef}>
+      <div className="small-button position-relative" ref={dropdownMenuRef}>
         <div
           className="sidebar-icon white-font pointer "
           onClick={() => setShowDropdown(!showDropdown)}
@@ -162,9 +162,7 @@ const Sidebarbtn = () => {
         openPrivacy={openPrivacy}
         setOpenPrivacy={setOpenPrivacy}
       />
-      <TermsService
-      openTerms={openTerms}
-      setOpenTerms={setOpenTerms}/>
+      <TermsService openTerms={openTerms} setOpenTerms={setOpenTerms} />
     </div>
   );
 };

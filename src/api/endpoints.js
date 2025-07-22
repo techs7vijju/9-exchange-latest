@@ -14,6 +14,13 @@ const endpoints = {
       return `/user/banners/${params.userId}/${params.page}/${params.place}`;
     },
   },
+
+  getUserCountries: { method: "get", url: "/user/countries" },
+
+  getSecurityQuestions: {
+    method: "get",
+    url: `/website/${websiteId}/user/securityQuestions`,
+  },
 };
 
 export default endpoints;

@@ -3,16 +3,19 @@ import { useNavigate } from "react-router";
 import Sidebarbtn from "./Sidebarbtn";
 import { getPageBanners } from "../../api/apiMethods";
 import { decryptData } from "../../utils/cryptoUtils";
-import { imgUrl, imgUrlMain } from "../../api/baseUrl";
+import { imgUrl } from "../../api/baseUrl";
 import { FaPlay } from "react-icons/fa";
 import { Images } from "../../images/images";
 import { Carousel } from "react-bootstrap";
 import { useMediaQuery } from "react-responsive";
+import CollapsePage from "./Collapse";
 
 function Banner() {
+  console.log("opened");
   const navigate = useNavigate();
   const [dropdown, setdropdown] = useState(false);
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
   const getUserData = () => {
     const storedData = localStorage.getItem("user_data");
     return decryptData(storedData);
@@ -21,17 +24,9 @@ function Banner() {
   const hasFetched = useRef(false);
   const [inplayImages, setInplayImages] = useState([]);
 
-  const defaultBanners = [Images.Banner, Images.Banner];
- 
-  function toggleMenu() {
-    const menu = document.getElementById("sidebarMenu");
-    const arrow = document.getElementById("arrow");
-    
-    menu.classList.toggle("hidden");
-    arrow.classList.toggle("rotate");
-  }
-
-
+  const defaultBanners = isMobile
+    ? [Images.banner2, Images.banner2]
+    : [Images.banner1, Images.banner1];
 
   const getBanners = async () => {
     const params = {
@@ -96,49 +91,180 @@ function Banner() {
   //   };
   //   fetchData();
   // }, []);
-  const categories = [
-    { title: "Cricket", image: Images.cricket3 },
-    { title: "Football", image: Images.football5 },
-    { title: "Tennis", image: Images.tennis3 },
-    { title: "Casino", image: Images.casino3 },
-  ];
+
   return (
-    <>
+    <div className="d-flex w-100 flex-column">
       {isMobile ? (
-        <div className="skyblue-bg">
-          <div className="mobile-banner-wrapper">
-            <img
-              src={Images.banner1}
-              alt="Mobile Banner"
-              className="mobile-banner-image"
-            />
-          </div>
-          <div className="category-wrapper">
-            <div className="category-scroll justify-content-evenly">
-              {categories.map((item, index) => (
-                <div className="d-flex flex-column justify-content-center" key={index}>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="category-image"
-                  />
-                  <div className="text-center category-title">{item.title}</div>
-                </div>
-              ))}
+        <>
+          <div className="d-flex flex-between w-100">
+            <div className="w-100">
+              {inplayImages?.length > 0 ? (
+                <Carousel
+                  interval={5000}
+                  controls={inplayImages.length > 1}
+                  indicators={inplayImages.length > 1}
+                >
+                  {inplayImages.map((item, index) => (
+                    <Carousel.Item key={index}>
+                      {isVideoBanner ? (
+                        <div className="w-100">
+                          <video
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            poster="/fallback-image.jpg"
+                          >
+                            <source src={mediaUrl} type="video/mp4" />
+                          </video>
+
+                          {videoUrl && (
+                            <FaPlay
+                              onClick={() => handleFullScreen(videoUrl)}
+                              style={{
+                                position: "absolute",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                fontSize: "2rem",
+                                color: "white",
+                                cursor: "pointer",
+                                background: "rgba(0, 0, 0, 0.5)",
+                                padding: "10px",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          )}
+                        </div>
+                      ) : (
+                        <img
+                          loading="lazy"
+                          className="w-100"
+                          src={mediaUrl}
+                          alt="Game Banner"
+                        />
+                      )}
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                <Carousel interval={5000} controls indicators>
+                  {defaultBanners.map((banner, index) => (
+                    <Carousel.Item key={index} className=" ">
+                      <img
+                        loading="lazy"
+                        className="w-100"
+                        src={banner}
+                        alt="Default Game Banner"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              )}
             </div>
           </div>
-        
+          <div className="p-2">
+            <div className="d-flex flex-row w-100 scroll-xaxis white-bg blue-color6 medium-font py-2">
+              <div className="scroll-card">
+                <img
+                  src={Images.cricket2}
+                  className="w-100 p-1"
+                  alt="Cricket"
+                  // onClick={() => navigate("/cricket")}
+                />
+                <div className="flex-center fw-600">Cricket</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.football2}
+                  className="w-100 p-1 "
+                  alt="Tennis"
+                  // onClick={() => navigate("/tennis")}
+                />
+                <div className="flex-center fw-600">Football</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.tennis2}
+                  className="w-100 p-1"
+                  alt="Tennis"
+                  // onClick={() => navigate("/tennis")}
+                />
+                <div className="flex-center fw-600">Tennis</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.casino2}
+                  className="w-100 p-1"
+                  alt="Casino"
+                  // onClick={() => navigate("/badmaintaininplay")}
+                />
+                <div className="flex-center fw-600">Casino</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.casino2}
+                  className="w-100 p-1"
+                  alt="Casino"
+                  // onClick={() => navigate("/badmaintaininplay")}
+                />
+                <div className="flex-center fw-600">Casino</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.casino2}
+                  className="w-100 p-1"
+                  alt="Casino"
+                  // onClick={() => navigate("/badmaintaininplay")}
+                />
+                <div className="flex-center fw-600">Casino</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.casino2}
+                  className="w-100 p-1"
+                  alt="Casino"
+                  // onClick={() => navigate("/badmaintaininplay")}
+                />
+                <div className="flex-center fw-600">Casino</div>
+              </div>
+              <div className="scroll-card">
+                <img
+                  src={Images.casino2}
+                  className="w-100 p-1"
+                  alt="Casino"
+                  // onClick={() => navigate("/badmaintaininplay")}
+                />
+                <div className="flex-center fw-600">Casino</div>
+              </div>
+            </div>
+          </div>
 
-
-        </div>
+          <div className="w-100 white-font blue-color13-bg">
+            <div className="d-flex flex-row flex-center py-1 mx-1">
+              <img src={Images.bellIcon1} className="bell-icon" />
+              <marquee
+                behavior=""
+                direction=""
+                className="large-font mx-1 w-100"
+              >
+                Welcom to 9-exchange
+              </marquee>
+            </div>
+          </div>
+        </>
       ) : (
-        <>
-          <div className="d-flex w-100 flex-column">
-            <div className="d-flex flex-between w-100 gap-2">
+        <div className="p-2 d-flex flex-between w-100 gap-2">
+          <div className="w-85">
+            <div
+              className="d-flex flex-between gap-2 w-100"
+              style={{ height: "15.625rem" }}
+            >
               <div className="w-5 h-100">
                 <Sidebarbtn />
               </div>
-              <div className="w-95">
+              <div className="w-95 h-100">
                 {inplayImages?.length > 0 ? (
                   <Carousel
                     interval={5000}
@@ -163,9 +289,8 @@ function Banner() {
                       return (
                         <Carousel.Item key={index}>
                           {isVideoBanner ? (
-                            <div className="w-100 h-100">
+                            <div className="w-100">
                               <video
-                                // className="w-100 h-100"
                                 autoPlay
                                 muted
                                 loop
@@ -196,7 +321,7 @@ function Banner() {
                           ) : (
                             <img
                               loading="lazy"
-                              className="w-100 h-100"
+                              className="w-100"
                               src={mediaUrl}
                               alt="Game Banner"
                             />
@@ -222,77 +347,82 @@ function Banner() {
               </div>
             </div>
 
-            <div className="w-100 overflow-x-auto">
-              <div className="d-flex flex-nowrap px-2 py-2 scroll-wrapper">
-                <div
-                  className="col-6 col-md-4 col-lg-3 cricket-card me-3 mb-3"
-                  onClick={() => navigate("/cricket")}
-                >
+            <div className="p-1">
+              <div className="d-flex flex-row w-100 scroll-xaxis1 white-color medium-font py-2">
+                <div className="scroll-card blue-color10-bg">
                   <img
-                    src={Images.cricket2}
-                    className="cricket-image"
+                    src={Images.cricket1}
+                    className="w-100"
                     alt="Cricket"
+                    // onClick={() => navigate("/cricket")}
                   />
-                  <div className="cricket-label">Cricket</div>
+                  <div className="flex-center fw-600 py-2">Cricket</div>
                 </div>
-
-                <div className="col-6 col-md-4 col-lg-3 cricket-card me-3 mb-3">
+                <div className="scroll-card blue-color10-bg">
                   <img
-                    src={Images.football2}
-                    className="cricket-image"
+                    src={Images.cricket1}
+                    className="w-100"
+                    alt="Cricket"
+                    // onClick={() => navigate("/cricket")}
+                  />
+                  <div className="flex-center fw-600 py-2">Cricket</div>
+                </div>
+                <div className="scroll-card blue-color10-bg">
+                  <img
+                    src={Images.football1}
+                    className="w-100"
                     alt="Football"
-                    onClick={() => navigate("/footballinplay")}
+                    // onClick={() => navigate("/footballinplay")}
                   />
-                  <div className="cricket-label">Football</div>
+                  <div className="flex-center fw-600 py-2">Football</div>
                 </div>
-
-                <div className="col-6 col-md-4 col-lg-3 cricket-card me-3 mb-3">
+                <div className="scroll-card blue-color10-bg">
                   <img
-                    src={Images.tennis2}
-                    className="cricket-image"
+                    src={Images.tennis1}
+                    className="w-100"
                     alt="Tennis"
-                    onClick={() => navigate("/tennis")}
+                    // onClick={() => navigate("/footballinplay")}
                   />
-                  <div className="cricket-label">Tennis</div>
+                  <div className="flex-center fw-600 py-2">Tennis</div>
                 </div>
-
-                <div className="col-6 col-md-4 col-lg-3 cricket-card me-3 mb-3">
+                <div className="scroll-card blue-color10-bg">
                   <img
-                    src={Images.casino2}
-                    className="cricket-image"
+                    src={Images.casino1}
+                    className="w-100"
                     alt="Casino"
-                    onClick={() => navigate("/badmaintaininplay")}
+                    // onClick={() => navigate("/footballinplay")}
                   />
-                  <div className="cricket-label">Casino</div>
+                  <div className="flex-center fw-600 py-2">Casino</div>
                 </div>
               </div>
             </div>
 
-            <div className="w-100 white-font">
-              <div className="play-sec-bg  d-flex w-100 px-1">
-                <div className="flex-row  d-flex col-12 align-items-center py-1 mx-1">
-                  <img src={Images.BellIcon1} className="bell-icon" />
-                  <div className="notification-text font-14 mx-1 yellow-font">
-                    <marquee behavior="" direction="">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industry's
-                      standard dummy text ever since the 1500s, when an unknown
-                      ghteo printer...
-                    </marquee>
-                  </div>
-                </div>
+            <div className="w-100 white-font blue-color13-bg">
+              <div className="d-flex flex-row flex-center py-1 mx-1">
+                <img src={Images.bellIcon1} className="bell-icon" />
+                <marquee
+                  behavior=""
+                  direction=""
+                  className="xl-large-font mx-1 w-100"
+                >
+                  Welcom to 9-exchange
+                </marquee>
               </div>
             </div>
-            {/* <FullVideoPopup
+          </div>
+          <div className="w-15">
+            <CollapsePage />
+          </div>
+        </div>
+      )}
+
+      {/* <FullVideoPopup
         setVideoPopup={setVideoPopup}
         videoPopup={videoPopup}
         setVideoUrl={setVideoUrl}
         videoUrl={videoUrl}
       /> */}
-          </div>
-        </>
-      )}
-    </>
+    </div>
   );
 }
 

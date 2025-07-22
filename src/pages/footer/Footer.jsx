@@ -9,7 +9,7 @@ import { useMediaQuery } from "react-responsive";
 function Footer() {
   const [showChat, setShowChat] = useState(false);
   const handleChatShow = () => setShowChat(true);
-    const isMobile = useMediaQuery({ maxWidth: 768 });
+    const isMobile = useMediaQuery({ maxWidth: 767 });
      function toggleMenu() {
       const menu = document.getElementById("sidebarMenu");
       const arrow = document.getElementById("arrow");

@@ -3,21 +3,19 @@ export const Images = {
   Logo: "/assets/logo/9xlogo3.svg",
 
   //banners
-  Banner: "./assets/banner/9xBanner.svg",
-  cricket2: "./assets/banner/cricket2.svg",
-  football2: "./assets/banner/football2.svg",
-  tennis2: "./assets/banner/tennis2.svg",
-  casino2: "./assets/banner/casino2.svg",
   banner1: "./assets/banner/banner1.svg",
-  cricket3: "./assets/banner/cricket3.svg",
-  football5: "./assets/banner/football5.svg",
-  tennis3: "./assets/banner/tennis3.svg",
-  casino3: "./assets/banner/casino3.svg",
-  
- 
+  banner2: "./assets/banner/banner2.svg",
+  casino1: "./assets/banner/casino1.svg",
+  casino2: "./assets/banner/casino2.svg",
+  cricket1: "./assets/banner/cricket1.svg",
+  cricket2: "./assets/banner/cricket2.svg",
+  football1: "./assets/banner/football1.svg",
+  football2: "./assets/banner/football2.svg",
+  tennis1: "./assets/banner/tennis1.svg",
+  tennis2: "./assets/banner/tennis2.svg",
 
   //icons
-  BellIcon1: "./assets/icons/bell1.svg",
+  bellIcon1: "./assets/icons/bell1.svg",
   bank: "./assets/icons/bank.svg",
   upi: "./assets/icons/upi.svg",
   phnpay: "./assets/icons/phnpay.svg",
@@ -41,9 +39,9 @@ export const Images = {
   privacy: "./assets/icons/privacy.svg",
   terms: "./assets/icons/terms.svg",
   success: "./assets/icons/success.svg",
-  blocked:  "./assets/icons/blocked.svg",
-  bonus:  "./assets/icons/bonus.svg",
-  wallet:  "./assets/icons/wallet.svg",
+  blocked: "./assets/icons/blocked.svg",
+  bonus: "./assets/icons/bonus.svg",
+  wallet: "./assets/icons/wallet.svg",
 
   //games
   ezugicasino: "./assets/games/ezugicasino.svg",
@@ -91,6 +89,4 @@ export const Images = {
   set: "./assets/games/set.svg",
   account: "./assets/games/account.svg",
   tickets: "./assets/games/tickets.svg",
-
-
 };

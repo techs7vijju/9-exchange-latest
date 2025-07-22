@@ -52,7 +52,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const toggleMessages = () => {
     setShowMessages((prev) => !prev);
   };
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   const [showLogin, setShowLogin] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -200,63 +200,59 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
             {isLogin ? (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
-                  <div className="d-flex flex-end">
-                    <div style={{ textAlign: "right" }}>
-                      Casino Bal:{" "}
-                      <span className="green-clr fw-600">
-                        {/* {Number(balanceAmount || 0).toFixed(2)} */}
-                        1000
-                      </span>
+                  <div className="d-flex flex-start">
+                    <div>
+                      BALANCE
                       <br />
-                      Exp:{" "}
-                      <span className="green-clr fw-600">
-                        {/* {Number(walletDetails?.exposer || 0).toFixed(2)} */}
-                        1000
-                      </span>
+                      1000000
                     </div>
                   </div>
                 </div>
-                <div className="green-button large-font white-font pointer">
+                <div className="xbtn green-color large-font white-font pointer ">
                   Deposit
                 </div>
-                <div className="fourth-button large-font white-font pointer">
-                  <ImExit />
+                <div className="xbtn login large-font white-font pointer">
+                  <img src={Images.personal} className="payment-images" />
                 </div>
               </>
             ) : (
-              <>
-                <div className="third-button large-font">REGISTRATION</div>
+              <div className="d-flex flex-between gap-1 w-100">
                 <div
-                  className="fourth-button large-font"
+                  className="xbtn button-blue large-font w-60"
+                  onClick={handleRegister}
+                >
+                  REGISTRATION
+                </div>
+                <div
+                  className="xbtn login large-font w-40"
                   onClick={handleLoginClick}
                 >
                   LOGIN
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>
       ) : (
         <div className="flex-between w-100">
-          <div>
+          <div className="flex-evenly w-10">
             <img src={Images.Logo} alt="logo" className="logo-img w-100" />
           </div>
 
-          <div className="flex-evenly">
-            <div
-              className="pointer white-font mx-2"
-              //   onClick={() => navigate("/home")}
-            >
-              <span className="large-font">CRICKET</span>
-            </div>
+          <div className="flex-evenly w-40">
+            <Dropdown>
+              <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer w-100">
+                <span className="large-font">CRICKET</span>
+              </Dropdown.Toggle>
+            </Dropdown>
 
             <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
-              <Dropdown.Toggle className="custom-dropdown flex-evenly pointer">
+              <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer w-100">
                 <span className="large-font">SPORTS</span>
                 {openSports ? (
-                  <IoChevronUpSharp className="ms-1" />
+                  <IoChevronUpSharp className="ms-1 xl-large-font" />
                 ) : (
-                  <IoChevronDownSharp className="ms-1" />
+                  <IoChevronDownSharp className="ms-1 xl-large-font" />
                 )}
               </Dropdown.Toggle>
               <Dropdown.Menu className="custom-dropdown1 large-font">
@@ -359,12 +355,12 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
             </Dropdown>
 
             <Dropdown show={openLive} onToggle={() => handleToggle("live")}>
-              <Dropdown.Toggle className="custom-dropdown flex-evenly pointer ">
+              <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer ">
                 <span className="large-font">LIVE</span>
                 {openLive ? (
-                  <IoChevronUpSharp className="ms-1" />
+                  <IoChevronUpSharp className="ms-1 xl-large-font" />
                 ) : (
-                  <IoChevronDownSharp className="ms-1" />
+                  <IoChevronDownSharp className="ms-1 xl-large-font" />
                 )}
               </Dropdown.Toggle>
               <Dropdown.Menu className="casino-dropdown-menu1 large-font">
@@ -429,12 +425,12 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 show={openCasino}
                 onToggle={() => handleToggle("casino")}
               >
-                <Dropdown.Toggle className="custom-dropdown pointer">
+                <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer">
                   <span className="large-font">CASINO</span>
                   {openCasino ? (
-                    <IoChevronUpSharp className="ms-1" />
+                    <IoChevronUpSharp className="ms-1 xl-large-font" />
                   ) : (
-                    <IoChevronDownSharp className="ms-1" />
+                    <IoChevronDownSharp className="ms-1 xl-large-font" />
                   )}
                 </Dropdown.Toggle>
 
@@ -461,12 +457,12 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
             </div>
 
             <Dropdown show={openMore} onToggle={() => handleToggle("more")}>
-              <Dropdown.Toggle className="custom-dropdown flex-evenly pointer">
+              <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer">
                 <span className="large-font">MORE</span>
                 {openMore ? (
-                  <IoChevronUpSharp className="ms-1" />
+                  <IoChevronUpSharp className="ms-1 xl-large-font" />
                 ) : (
-                  <IoChevronDownSharp className="ms-1" />
+                  <IoChevronDownSharp className="ms-1 xl-large-font" />
                 )}
               </Dropdown.Toggle>
               <Dropdown.Menu className="custom-dropdown1 large-font">
@@ -611,75 +607,76 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
             </Dropdown>
           </div>
 
-          <div className="flex-evenly gap-2 mx-2">
+          <div className="flex-evenly w-30 p-2">
             {isLogin ? (
-              <>
-                <div className="green-button large-font white-font pointer">
+              <div className="d-flex flex-between w-100 gap-1">
+                <div className="xbtn green-color large-font w-50 pointer ">
                   Make A Deposit
                 </div>
-                <div className="position-relative d-flex justify-content-center">
+                <div className="d-flex flex-between w-50 gap-1">
                   <div
-                    className="fourth-button large-font white-font pointer"
+                    className="d-flex flex-between xbtn login white-font pointer "
                     onClick={toggleMessages}
                   >
-                    <MdOutlineChat size={24} />
-                  </div>
+                    <MdOutlineChat />
 
-                  {showMessages && (
-                    <div className="message-dropdown shadow rounded">
-                      <div className="dropdown-arrow-up" />
-                      <div className="fw-bold px-3 pt-3 pb-2 text-primary border-bottom">
-                        Your Messsages
-                      </div>
-
-                      {notificationData.map((item, i) => (
-                        <div
-                          className="d-flex align-items-start px-3 py-3 border-bottom"
-                          key={i}
-                        >
-                          <img
-                            src={item.image}
-                            alt="avatar"
-                            className="avatar-img me-2"
-                          />
-                          <div className="flex-grow-1">
-                            <div className="fw-bold small mb-1 text-dark">
-                              {item.name}
-                            </div>
-                            <div className="small text-body ">{item.text}</div>
-                          </div>
-                          <div className="text-muted small ms-2 mt-1 white-space-nowrap">
-                            {item.date}
-                          </div>
+                    {showMessages && (
+                      <div className="message-dropdown shadow rounded">
+                        <div className="dropdown-arrow-up" />
+                        <div className="fw-bold px-3 pt-3 pb-2 text-primary border-bottom">
+                          Your Messsages
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
 
-                <div className="fourth-button large-font white-font pointer">
-                  <ImExit />
+                        {notificationData.map((item, i) => (
+                          <div
+                            className="d-flex align-items-start px-3 py-3 border-bottom"
+                            key={i}
+                          >
+                            <img
+                              src={item.image}
+                              alt="avatar"
+                              className="avatar-img me-2"
+                            />
+                            <div className="flex-grow-1">
+                              <div className="fw-bold small mb-1 text-dark">
+                                {item.name}
+                              </div>
+                              <div className="small text-body ">
+                                {item.text}
+                              </div>
+                            </div>
+                            <div className="text-muted small ms-2 mt-1 white-space-nowrap">
+                              {item.date}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="d-flex flex-between  xbtn login white-font pointer">
+                    <ImExit />
+                  </div>
                 </div>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="d-flex flex-between gap-1 w-100">
                 <div
-                  className="third-button large-font"
+                  className="xbtn button-blue large-font w-60"
                   onClick={handleRegister}
                 >
                   REGISTRATION
                 </div>
                 <div
-                  className="fourth-button large-font"
+                  className="xbtn login large-font w-40"
                   onClick={handleLoginClick}
                 >
                   LOGIN
                 </div>
-              </>
+              </div>
             )}
           </div>
 
-          <div className="flex-evenly gap-2 white-font large-font mx-2">
+          <div className="flex-evenly w-20 gap-2 white-font large-font mx-2">
             {isLogin && (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
@@ -721,17 +718,19 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </>
             )}
 
-            <Dropdown show={openEn} onToggle={() => handleToggle("en")}>
-              <Dropdown.Toggle className="custom-dropdown flex-evenly pointer">
-                <span className="large-font">EN</span>
-                {openEn ? (
-                  <IoChevronUpSharp className="ms-1" />
-                ) : (
-                  <IoChevronDownSharp className="ms-1" />
-                )}
-              </Dropdown.Toggle>
-              {/* <Dropdown.Menu className="custom-dropdown large-font"> */}
-            </Dropdown>
+            <div className="d-flex flex-end w-40">
+              <Dropdown show={openEn} onToggle={() => handleToggle("en")}>
+                <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer">
+                  <span className="large-font">EN</span>
+                  {openEn ? (
+                    <IoChevronUpSharp className="ms-1 xl-large-font" />
+                  ) : (
+                    <IoChevronDownSharp className="ms-1 xl-large-font" />
+                  )}
+                </Dropdown.Toggle>
+                {/* <Dropdown.Menu className="custom-dropdown large-font"> */}
+              </Dropdown>
+            </div>
           </div>
         </div>
       )}

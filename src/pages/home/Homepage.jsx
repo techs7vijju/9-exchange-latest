@@ -1,11 +1,10 @@
+import React from "react";
 import Banner from "../banner/Banner";
 
-function HomePage() {
+export default function HomePage() {
   return (
-    <div className="">
+    <div>
       <Banner />
     </div>
   );
 }
-
-export default HomePage;
