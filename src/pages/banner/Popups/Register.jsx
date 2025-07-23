@@ -8,8 +8,11 @@ import SelectInput from "../../../components/form-elements/SelectInput";
 import {
   getSecurityQuestions,
   getUserCountries,
+  oneClickSignup,
+  signUpUser,
   verifyUsername,
 } from "../../../api/apiMethods";
+import { encryptData } from "../../../utils/cryptoUtils";
 
 const emailRegex =
   /^(([a-z\d+_\-][a-z\d+'._\-]*[a-z\d+_\-])|([a-z\d+_\-]{1,2}))@((([a-z\d][a-z\d\-]{0,100}[a-z\d])|([a-z\d]))\.)+[a-z]{2,}$/i;
@@ -86,18 +89,12 @@ const validationSchema1 = Yup.object({
 const Register = ({
   showRegister,
   setShowRegister,
-  isChecked,
-  setLoginModal,
   setTermsPopup,
-  setIsChecked,
-  setIsAgreed,
-  isAgreed,
   setMessage,
   setRegistrationSuccessfull,
-  setOpenSuccessNavPopup,
+  setShowSuccess,
 }) => {
   const navigate = useNavigate();
-  const [activeStatus, setActiveStatus] = useState(1);
   const [activeButton, setActiveButton] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -109,33 +106,23 @@ const Register = ({
   const [userError, setUserError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isUsernameLoading, setIsUsernameLoading] = useState(false);
-  const [buttonHighlight, setButtonHighlight] = useState(0);
   const datePickerRef = useRef(null);
-  const salutations = ["Mr", "Mrs", "Miss", "Ms"];
-  const title = salutations[buttonHighlight] || "Mr";
   const [selectedCountryItem, setSelectedCountryItem] = useState("");
-  const [countrydropdownOpen, setCountrydropdownOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState(null);
   const [selectedCurrencyItem, setSelectedCurrencyItem] = useState("");
   const [currencydropdownOpen, setCurrencydropdownOpen] = useState(false);
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [isCheckedError, setIsCheckedError] = useState("");
+  const [isAgreedError, setIsAgreedError] = useState("");
   const [countries, setCountries] = useState([]);
-  const [countrySearchTerm, setCountrySearchTerm] = useState("");
-  const [currencySearchTerm, setCurrencySearchTerm] = useState("");
-  const [currencies, setCurrencies] = useState([]);
-  const [checkBoxes, setCheckBoxes] = useState({
-    age_agree: false,
-    agree_policy: false,
-  });
-  console.log("countries", countries);
-  useEffect(() => {
-    setCheckBoxes((prev) => ({
-      ...prev,
-      age_agree: isChecked,
-      agree_policy: isAgreed,
-    }));
-  }, [isChecked, isAgreed]);
+
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0];
+  };
 
   const [formData, setFormData] = useState({
-    title: title,
     name: "",
     lastName: "",
     user_name: "",
@@ -148,18 +135,6 @@ const Register = ({
     email: "",
     securityQuestions: [],
   });
-  console.log("secQuError", secQuError);
-  console.log("formData", formData);
-  const validationSchema2 = Yup.object().test(
-    "at-least-3-answers",
-    "You must answer at least 3 security questions",
-    function () {
-      const answeredCount = formData.securityQuestions.filter(
-        (q) => q.answer && q.answer.trim() !== ""
-      ).length;
-      return answeredCount >= 3;
-    }
-  );
 
   const [validationErrors, setValidationErrors] = useState({
     name: "",
@@ -305,23 +280,21 @@ const Register = ({
     }
   };
 
-  const handleCountryChange = (selectedCountry) => {
-    console.log("selectedCountry", selectedCountry)
+  const handleCountryChange = (selected) => {
+    setSelectedCountry(selected);
     setFormData((prev) => ({
       ...prev,
-      country_id: selectedCountry.id,
+      country_id: selected.key,
     }));
     setValidationErrors((prev) => ({ ...prev, country_id: "" }));
-    setSelectedCountryItem(selectedCountry.name);
-    setCountrydropdownOpen(false);
   };
 
-  const handleCurrencyChange = (selectedCurrency) => {
+  const handleCurrencyChange = (selected) => {
+    setSelectedCurrency(selected);
     setFormData((prev) => ({
       ...prev,
-      currency_id: selectedCurrency.id,
+      currency_id: selected.key,
     }));
-    setSelectedCurrencyItem(selectedCurrency);
     setValidationErrors((prev) => ({ ...prev, currency_id: "" }));
     setCurrencydropdownOpen(false);
   };
@@ -357,11 +330,12 @@ const Register = ({
     try {
       setIsUsernameLoading(true);
       const response = await verifyUsername({ user_name });
-
       if (response.status === true) {
+        setIsUsernameLoading(false);
         setUserError("");
         return true;
       } else {
+        setIsUsernameLoading(false);
         setUserError(
           response?.message ||
             "User Name verification failed. Please try a different user name."
@@ -370,191 +344,24 @@ const Register = ({
       }
     } catch (error) {
       setIsUsernameLoading(false);
-      console.log("Validation error:", error);
-
-      if (error.name === "ValidationError") {
-        const errors = {};
-        error.inner.forEach((err) => {
-          errors[err.path] = err.message;
-        });
-        setValidationErrors(errors);
-      } else {
-        setApiErrors([
-          error.message || "An error occurred during registration",
-        ]);
-      }
+      setUserError("Something went wrong");
     }
   };
 
-  const handleSubmit = async (e) => {
-    if (e) e.preventDefault();
-    console.log("hitting");
-    setApiErrors([]);
-    try {
-      await validationSchema1.validate(formData, { abortEarly: false });
-
-      const answeredQuestions = formData.securityQuestions.filter(
-        (q) => q.answer && q.answer.trim() !== ""
-      );
-
-      if (answeredQuestions.length < 3) {
-        setSecQuError("You must answer at least 3 security questions.");
-        return;
-      }
-
-      setLoading(true);
-
-      const {
-        securityQuestions,
-        confirmPassword,
-        ...formDataWithoutQuestions
-      } = formData;
-
-      let formattedDob = "";
-      if (formDataWithoutQuestions.dob) {
-        const date = new Date(formDataWithoutQuestions.dob);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        formattedDob = `${year}-${month}-${day}`;
-      }
-
-      const filteredFormData = Object.fromEntries(
-        Object.entries(formDataWithoutQuestions).filter(
-          ([_, value]) => value !== undefined && value !== null && value !== ""
-        )
-      );
-
-      if (formattedDob) {
-        filteredFormData.dob = formattedDob;
-      }
-
-      const payload = {
-        ...filteredFormData,
-        securityQuestions: answeredQuestions,
-        title: salutations[buttonHighlight] || "Mr",
-        confirm_password: confirmPassword,
-      };
-
-      if (!confirmPassword) {
-        delete payload.confirm_password;
-      }
-
-      const response = await signUpUser(payload);
-
-      if (response.status === true) {
-        const userInfo = response?.user;
-        const userData = {
-          userId: userInfo?.id,
-          userName: userInfo?.userid,
-          county_id: userInfo?.county_id,
-          created_admin_panel_id: userInfo?.created_admin_panel_id,
-          created_by: userInfo?.created_by,
-          web_site_id: userInfo?.web_site_id,
-          currency_id: userInfo?.currency_id,
-          is_updated_password: userInfo?.is_updated_password,
-          email: userInfo?.email,
-          phone_no: userInfo?.phone_no,
-          photo: userInfo?.photo,
-        };
-
-        localStorage.setItem("user_data", encryptData(userData));
-
-        localStorage.setItem("jwt_token", response?.token);
-        localStorage.setItem("welcomeBonusId", userInfo?.promoId);
-
-        setOpenSuccessNavPopup(true);
-
-        setLoading(false);
-        setFormData({
-          title: title,
-          name: "",
-          lastName: "",
-          user_name: "",
-          password: "",
-          confirmPassword: "",
-          masterID: "",
-          dob: "",
-          country_id: "",
-          currency_id: "",
-          email: "",
-          securityQuestions: [],
-        });
-        setActiveStatus(1);
-
-        setMessage(response.message);
-
-        setApiErrors([]);
-        setSelectedCountryItem("");
-        setCountrydropdownOpen(false);
-        setSelectedCurrencyItem("");
-        setCurrencydropdownOpen(false);
-        setCheckBoxes({
-          age_agree: false,
-          agree_policy: false,
-        });
-        setValidationErrors({
-          name: "",
-          lastName: "",
-          user_name: "",
-          password: "",
-          confirmPassword: "",
-          dob: "",
-          country_id: "",
-          currency_id: "",
-          email: "",
-          age_agree: false,
-          agree_policy: false,
-        });
-        setActiveButton(1);
-        setActiveStatus(1);
-        showRegister(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log("Validation error:", error);
-
-      if (error.name === "ValidationError") {
-        const errors = {};
-        error.inner.forEach((err) => {
-          errors[err.path] = err.message;
-        });
-        setValidationErrors(errors);
-      } else {
-        setApiErrors([
-          error.message || "An error occurred during registration",
-        ]);
-      }
-    }
+  const handleTerms = () => {
+    setTermsPopup(true);
+    setShowRegister(false);
   };
 
-  const handleClose = () => {
-    setApiErrors([]);
-    setSelectedCountryItem("");
-    setCountrydropdownOpen(false);
-    setSelectedCurrencyItem("");
-    setCurrencydropdownOpen(false);
-    setCheckBoxes({
-      age_agree: false,
-      agree_policy: false,
-    });
-    setShowConfirmPassword(false);
-    setShowPassword(false);
-    setValidationErrors({
-      name: "",
-      lastName: "",
-      user_name: "",
-      password: "",
-      confirmPassword: "",
-      dob: "",
-      country_id: "",
-      currency_id: "",
-      email: "",
-      age_agree: false,
-      agree_policy: false,
-    });
+  const handleButtonChange = (value) => {
+    setSecQuError("");
+    setIsCheckedError("");
+    setIsAgreedError("");
+    setIsChecked(false);
+    setIsAgreed(false);
+    setSelectedCountry(null);
+    setSelectedCurrency(null);
     setFormData({
-      title: title,
       name: "",
       lastName: "",
       user_name: "",
@@ -568,34 +375,132 @@ const Register = ({
       securityQuestions: [],
     });
     setUserError("");
-    setActiveButton(1);
-    setShowRegister(false);
-    navigate("/");
-  };
-
-  const handleTerms = () => {
-    setTermsPopup(true);
-    setShowRegister(false);
-    setLoginModal(false);
-  };
-
-  const handleOneClickSubmit = async () => {
+    setShowConfirmPassword(false);
+    setShowPassword(false);
     setApiErrors([]);
-    if (
-      !checkBoxes.age_agree === true ||
-      !checkBoxes.agree_policy === true ||
-      !formData.country_id ||
-      !formData.currency_id
-    ) {
+    setSelectedCountryItem("");
+    setSelectedCurrencyItem("");
+    setCurrencydropdownOpen(false);
+    setValidationErrors({
+      name: "",
+      lastName: "",
+      user_name: "",
+      password: "",
+      confirmPassword: "",
+      dob: "",
+      country_id: "",
+      currency_id: "",
+      email: "",
+      age_agree: false,
+      agree_policy: false,
+    });
+    setActiveButton(value);
+  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (formData.user_name && formData.user_name.length >= 5) {
+        fetchUsername(formData.user_name);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [formData.user_name]);
+
+  const renderSecurityQuestions = () => (
+    <div className="my-2">
+      {securityQuestions.map((question, index) => {
+        const questionKey = `question_${question.question_id}`;
+        const currentQuestion = formData.securityQuestions.find(
+          (q) => q.question_id === question.question_id
+        );
+        const currentAnswer = currentQuestion?.answer || "";
+        const currentError = validationErrors[questionKey] || "";
+
+        return (
+          <div key={question.question_id} className="flex-column mt-2">
+            <div>
+              <TextInput
+                type="text"
+                label={`Q${index + 1}. ${question.questions}`}
+                name={questionKey}
+                placeholder="Enter"
+                value={currentAnswer}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setSecQuError("");
+
+                  setValidationErrors((prev) => ({
+                    ...prev,
+                    [questionKey]: "",
+                  }));
+
+                  setFormData((prev) => ({
+                    ...prev,
+                    securityQuestions: prev.securityQuestions.map((q) =>
+                      q.question_id === question.question_id
+                        ? { ...q, answer: value }
+                        : q
+                    ),
+                  }));
+
+                  if (value && value.length < 2) {
+                    setValidationErrors((prev) => ({
+                      ...prev,
+                      [questionKey]: "Answer must be at least 2 characters",
+                    }));
+                  }
+                }}
+                onBlur={(e) => {
+                  if (e.target.value.length < 2) {
+                    setValidationErrors((prev) => ({
+                      ...prev,
+                      [questionKey]: "Answer must be at least 2 characters",
+                    }));
+                  }
+                }}
+                error={currentError}
+              />
+            </div>
+          </div>
+        );
+      })}
+      {secQuError && <div className="text-danger small mt-2">{secQuError}</div>}
+    </div>
+  );
+
+  const handleOneClickSubmit = async (e) => {
+    if (e) e.preventDefault();
+    setApiErrors([]);
+    setIsCheckedError("");
+    setIsAgreedError("");
+
+    const errors = {};
+
+    if (!isChecked) {
+      errors.isChecked = "Please confirm you are 18+ years old to proceed.";
+    }
+    if (!isAgreed) {
+      errors.isAgreed = "Please agree to proceed.";
+    }
+    if (!formData.country_id) {
+      errors.country_id = "Country is required";
+    }
+    if (!formData.currency_id) {
+      errors.currency_id = "Currency is required";
+    }
+
+    if (Object.keys(errors).length > 0) {
       setValidationErrors((prevErrors) => ({
         ...prevErrors,
-        age_agree: checkBoxes.age_agree ? "" : "Please confirm",
-        agree_policy: checkBoxes.agree_policy
-          ? ""
-          : "Please accept terms and conditions",
-        country_id: formData.country_id ? "" : "Country is required",
-        currency_id: formData.currency_id ? "" : "Currency is required",
+        ...errors,
       }));
+
+      if (errors.isChecked) {
+        setIsCheckedError(errors.isChecked);
+      }
+      if (errors.isAgreed) {
+        setIsAgreedError(errors.isAgreed);
+      }
       return;
     }
 
@@ -640,13 +545,11 @@ const Register = ({
         setMessage(response.message);
         setApiErrors([]);
         setSelectedCountryItem("");
-        setCountrydropdownOpen(false);
         setSelectedCurrencyItem("");
         setCurrencydropdownOpen(false);
-        setCheckBoxes({
-          age_agree: false,
-          agree_policy: false,
-        });
+        setSelectedCountry(null);
+        setSelectedCurrency(null);
+
         setValidationErrors({
           name: "",
           lastName: "",
@@ -661,13 +564,11 @@ const Register = ({
           agree_policy: false,
         });
         setActiveButton(1);
-        setActiveStatus(1);
         setRegistrationSuccessfull(true);
         setShowRegister(false);
       }
     } catch (error) {
       setLoading(false);
-      console.log("Validation error:", error);
 
       if (error.name === "ValidationError") {
         const errors = {};
@@ -683,39 +584,144 @@ const Register = ({
     }
   };
 
-  const handleBack = () => {
-    setActiveStatus((prev) => prev - 1);
-  };
+  // const handleSubmit = async (e) => {
+  //   if (e) e.preventDefault();
+  //   setApiErrors([]);
+  //   try {
+  //     await validationSchema1.validate(formData, { abortEarly: false });
 
-  const handleButtonChange = (value) => {
-    setActiveButton(value);
-    setActiveStatus(1);
-    setFormData({
-      title: title,
-      name: "",
-      lastName: "",
-      user_name: "",
-      password: "",
-      confirmPassword: "",
-      masterID: "",
-      dob: "",
-      country_id: "",
-      currency_id: "",
-      email: "",
-      securityQuestions: [],
-    });
-    setUserError("");
-    setShowConfirmPassword(false);
-    setShowPassword(false);
+  //     const answeredQuestions = formData.securityQuestions.filter(
+  //       (q) => q.answer && q.answer.trim() !== ""
+  //     );
+
+  //     if (answeredQuestions.length < 3) {
+  //       setSecQuError("You must answer at least 3 security questions.");
+  //       return;
+  //     }
+
+  //     setLoading(true);
+
+  //     const {
+  //       securityQuestions,
+  //       confirmPassword,
+  //       ...formDataWithoutQuestions
+  //     } = formData;
+
+  //     let formattedDob = "";
+  //     if (formDataWithoutQuestions.dob) {
+  //       const date = new Date(formDataWithoutQuestions.dob);
+  //       const year = date.getFullYear();
+  //       const month = String(date.getMonth() + 1).padStart(2, "0");
+  //       const day = String(date.getDate()).padStart(2, "0");
+  //       formattedDob = `${year}-${month}-${day}`;
+  //     }
+
+  //     const filteredFormData = Object.fromEntries(
+  //       Object.entries(formDataWithoutQuestions).filter(
+  //         ([_, value]) => value !== undefined && value !== null && value !== ""
+  //       )
+  //     );
+
+  //     if (formattedDob) {
+  //       filteredFormData.dob = formattedDob;
+  //     }
+
+  //     const payload = {
+  //       ...filteredFormData,
+  //       securityQuestions: answeredQuestions,
+  //       confirm_password: confirmPassword,
+  //     };
+
+  //     if (!confirmPassword) {
+  //       delete payload.confirm_password;
+  //     }
+
+  //     const response = await signUpUser(payload);
+
+  //     if (response.status === true) {
+  //       const userInfo = response?.user;
+  //       const userData = {
+  //         userId: userInfo?.id,
+  //         userName: userInfo?.userid,
+  //         county_id: userInfo?.county_id,
+  //         created_admin_panel_id: userInfo?.created_admin_panel_id,
+  //         created_by: userInfo?.created_by,
+  //         web_site_id: userInfo?.web_site_id,
+  //         currency_id: userInfo?.currency_id,
+  //         is_updated_password: userInfo?.is_updated_password,
+  //         email: userInfo?.email,
+  //         phone_no: userInfo?.phone_no,
+  //         photo: userInfo?.photo,
+  //       };
+
+  //       localStorage.setItem("user_data", encryptData(userData));
+
+  //       localStorage.setItem("jwt_token", response?.token);
+  //       localStorage.setItem("welcomeBonusId", userInfo?.promoId);
+
+  //       setShowSuccess(true);
+
+  //       setLoading(false);
+  //       setFormData({
+  //         name: "",
+  //         lastName: "",
+  //         user_name: "",
+  //         password: "",
+  //         confirmPassword: "",
+  //         masterID: "",
+  //         dob: "",
+  //         country_id: "",
+  //         currency_id: "",
+  //         email: "",
+  //         securityQuestions: [],
+  //       });
+
+  //       setMessage(response.message);
+
+  //       setApiErrors([]);
+  //       setSelectedCountryItem("");
+  //       setSelectedCurrencyItem("");
+  //       setCurrencydropdownOpen(false);
+
+  //       setValidationErrors({
+  //         name: "",
+  //         lastName: "",
+  //         user_name: "",
+  //         password: "",
+  //         confirmPassword: "",
+  //         dob: "",
+  //         country_id: "",
+  //         currency_id: "",
+  //         email: "",
+  //         age_agree: false,
+  //         agree_policy: false,
+  //       });
+  //       setActiveButton(1);
+  //       showRegister(false);
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+
+  //     if (error.name === "ValidationError") {
+  //       const errors = {};
+  //       error.inner.forEach((err) => {
+  //         errors[err.path] = err.message;
+  //       });
+  //       setValidationErrors(errors);
+  //     } else {
+  //       setApiErrors([
+  //         error.message || "An error occurred during registration",
+  //       ]);
+  //     }
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
     setApiErrors([]);
-    setSelectedCountryItem("");
-    setCountrydropdownOpen(false);
-    setSelectedCurrencyItem("");
-    setCurrencydropdownOpen(false);
-    setCheckBoxes({
-      age_agree: false,
-      agree_policy: false,
-    });
+    setSecQuError("");
+    setIsCheckedError("");
+    setIsAgreedError("");
     setValidationErrors({
       name: "",
       lastName: "",
@@ -729,50 +735,217 @@ const Register = ({
       age_agree: false,
       agree_policy: false,
     });
-  };
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (formData.user_name && formData.user_name.length >= 5) {
-        fetchUsername(formData.user_name);
+
+    try {
+      const [schemaValidation, answeredQuestions] = await Promise.all([
+        validationSchema1
+          .validate(formData, { abortEarly: false })
+          .catch((err) => err),
+        Promise.resolve(
+          formData.securityQuestions.filter(
+            (q) => q.answer && q.answer.trim() !== ""
+          )
+        ),
+      ]);
+
+      const errors = {};
+
+      if (schemaValidation.name === "ValidationError") {
+        schemaValidation.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
       }
-    }, 500);
 
-    return () => clearTimeout(timer);
-  }, [formData.user_name]);
+      if (answeredQuestions.length < 3) {
+        errors.securityQuestions =
+          "You must answer at least 3 security questions.";
+      }
 
-  const dropdownRef = useRef(null);
+      if (!isChecked) {
+        errors.isChecked = "Please confirm you are 18+ years old to proceed.";
+      }
+      if (!isAgreed) {
+        errors.isAgreed = "Please agree to proceed.";
+      }
 
-  const renderSecurityQuestions = () => (
-    <div className="my-2">
-      {securityQuestions.map((question, index) => {
-        const questionKey = `question_${question.question_id}`;
-        const currentAnswer =
-          formData.securityQuestions.find(
-            (q) => q.question_id === question.question_id
-          )?.answer || "";
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors((prev) => ({
+          ...prev,
+          ...errors,
+        }));
 
-        return (
-          <div key={question.question_id} className="flex-column mt-2">
-            <div>
-              <TextInput
-                type="text"
-                label={`Q${index + 1}. ${question.questions}`}
-                name={questionKey}
-                placeholder="Enter your answer"
-                value={currentAnswer}
-                onChange={handleChange}
-                error={validationErrors[questionKey]}
-              />
-            </div>
-          </div>
-        );
-      })}
-      {secQuError && <div className="text-danger small mt-2">{secQuError}</div>}
-    </div>
-  );
+        if (errors.securityQuestions) {
+          setSecQuError(errors.securityQuestions);
+        }
+        if (errors.isChecked) {
+          setIsCheckedError(errors.isChecked);
+        }
+        if (errors.isAgreed) {
+          setIsAgreedError(errors.isAgreed);
+        }
+        return;
+      }
+      setLoading(true);
 
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
+      const {
+        securityQuestions,
+        confirmPassword,
+        ...formDataWithoutQuestions
+      } = formData;
+
+      let formattedDob = "";
+      if (formDataWithoutQuestions.dob) {
+        const date = new Date(formDataWithoutQuestions.dob);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        formattedDob = `${year}-${month}-${day}`;
+      }
+
+      const filteredFormData = Object.fromEntries(
+        Object.entries(formDataWithoutQuestions).filter(
+          ([_, value]) => value !== undefined && value !== null && value !== ""
+        )
+      );
+
+      if (formattedDob) {
+        filteredFormData.dob = formattedDob;
+      }
+
+      const payload = {
+        ...filteredFormData,
+        securityQuestions: answeredQuestions,
+        confirm_password: confirmPassword,
+      };
+
+      if (!confirmPassword) {
+        delete payload.confirm_password;
+      }
+
+      const response = await signUpUser(payload);
+
+      if (response.status === true) {
+        const userInfo = response?.user;
+        const userData = {
+          userId: userInfo?.id,
+          userName: userInfo?.userid,
+          county_id: userInfo?.county_id,
+          created_admin_panel_id: userInfo?.created_admin_panel_id,
+          created_by: userInfo?.created_by,
+          web_site_id: userInfo?.web_site_id,
+          currency_id: userInfo?.currency_id,
+          is_updated_password: userInfo?.is_updated_password,
+          email: userInfo?.email,
+          phone_no: userInfo?.phone_no,
+          photo: userInfo?.photo,
+        };
+
+        localStorage.setItem("user_data", encryptData(userData));
+
+        localStorage.setItem("jwt_token", response?.token);
+        localStorage.setItem("welcomeBonusId", userInfo?.promoId);
+
+        setShowSuccess(true);
+
+        setLoading(false);
+        setFormData({
+          name: "",
+          lastName: "",
+          user_name: "",
+          password: "",
+          confirmPassword: "",
+          masterID: "",
+          dob: "",
+          country_id: "",
+          currency_id: "",
+          email: "",
+          securityQuestions: [],
+        });
+
+        setMessage(response.message);
+
+        setApiErrors([]);
+        setSelectedCountryItem("");
+        setSelectedCurrencyItem("");
+        setCurrencydropdownOpen(false);
+        setSelectedCountry(null);
+        setSelectedCurrency(null);
+
+        setValidationErrors({
+          name: "",
+          lastName: "",
+          user_name: "",
+          password: "",
+          confirmPassword: "",
+          dob: "",
+          country_id: "",
+          currency_id: "",
+          email: "",
+          age_agree: false,
+          agree_policy: false,
+        });
+        setActiveButton(1);
+        showRegister(false);
+      }
+    } catch (error) {
+      setLoading(false);
+
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
+      }
+    }
+  };
+
+  const handleClose = () => {
+    setApiErrors([]);
+    setSelectedCountryItem("");
+    setSelectedCurrencyItem("");
+    setCurrencydropdownOpen(false);
+    setIsCheckedError("");
+    setIsAgreedError("");
+    setSecQuError("");
+    setIsChecked(false);
+    setIsAgreed(false);
+    setShowConfirmPassword(false);
+    setShowPassword(false);
+    setValidationErrors({
+      name: "",
+      lastName: "",
+      user_name: "",
+      password: "",
+      confirmPassword: "",
+      dob: "",
+      country_id: "",
+      currency_id: "",
+      email: "",
+      age_agree: false,
+      agree_policy: false,
+    });
+    setFormData({
+      name: "",
+      lastName: "",
+      user_name: "",
+      password: "",
+      confirmPassword: "",
+      masterID: "",
+      dob: "",
+      country_id: "",
+      currency_id: "",
+      email: "",
+      securityQuestions: [],
+    });
+    setUserError("");
+    setActiveButton(1);
+    setShowRegister(false);
+    navigate("/");
   };
 
   return (
@@ -949,11 +1122,12 @@ const Register = ({
                 <SelectInput
                   label="Country"
                   name="country_id"
-                  value={countries.find((c) => c.id === formData.country_id)}
+                  value={selectedCountry}
                   onChange={(selected) => handleCountryChange(selected)}
                   options={countries.map((c) => ({
-                    value: c.id,
+                    key: c.id,
                     label: c.name,
+                    value: c,
                   }))}
                   error={validationErrors.country_id}
                   required
@@ -963,10 +1137,11 @@ const Register = ({
                 <SelectInput
                   label="Currency"
                   name="currency_id"
-                  value={currencies.find((c) => c.id === formData.currency_id)}
+                  value={selectedCurrency}
                   onChange={(selected) => handleCurrencyChange(selected)}
                   options={countries.map((country) => ({
-                    value: country.id,
+                    key: country.id,
+                    value: country,
                     label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
                   }))}
                   error={validationErrors.currency_id}
@@ -985,34 +1160,42 @@ const Register = ({
                 error={validationErrors.email}
               />
             </div>
-            <div class="custom-line"></div>
+            <div className="custom-line"></div>
             <div className="d-flex flex-center flex-col m-2">
               <h5 className="fw-600">Set Your Security Questions</h5>
             </div>
             {renderSecurityQuestions()}
 
-            <div className="form-check mb-3">
+            <div className="form-check d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
                 className="form-check-input"
                 checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
+                onChange={() => {
+                  setIsCheckedError(false);
+                  setIsChecked(!isChecked);
+                }}
               />
               <label className="form-check-label">
                 Yes, I am 18+ Years Old
               </label>
+              <div className="">{isCheckedError}</div>
             </div>
 
-            <div className="form-check mb-3">
+            <div className="form-check d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
                 className="form-check-input"
                 checked={isAgreed}
-                onChange={() => setIsAgreed(!isAgreed)}
+                onChange={() => {
+                  setIsAgreedError(false);
+                  setIsAgreed(!isAgreed);
+                }}
               />
               <label className="form-check-label">
                 I agree to the Terms and Conditions and Privacy Policy
               </label>
+              <div>{isAgreedError}</div>
             </div>
 
             <button
@@ -1030,11 +1213,12 @@ const Register = ({
                 <SelectInput
                   label="Country"
                   name="country_id"
-                  value={countries.find((c) => c.id === formData.country_id)}
+                  value={selectedCountry}
                   onChange={(selected) => handleCountryChange(selected)}
                   options={countries.map((c) => ({
-                    value: c.id,
+                    key: c.id,
                     label: c.name,
+                    value: c,
                   }))}
                   error={validationErrors.country_id}
                   required
@@ -1044,10 +1228,11 @@ const Register = ({
                 <SelectInput
                   label="Currency"
                   name="currency_id"
-                  value={currencies.find((c) => c.id === formData.currency_id)}
+                  value={selectedCurrency}
                   onChange={(selected) => handleCurrencyChange(selected)}
                   options={countries.map((country) => ({
-                    value: country.id,
+                    key: country.id,
+                    value: country,
                     label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
                   }))}
                   error={validationErrors.currency_id}
@@ -1071,30 +1256,37 @@ const Register = ({
               />
             </div>
 
-            <div className="form-check mb-3">
+            <div className="form-check d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
                 className="form-check-input"
                 checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)}
+                onChange={() => {
+                  setIsCheckedError(false);
+                  setIsChecked(!isChecked);
+                }}
               />
               <label className="form-check-label">
                 Yes, I am 18+ Years Old
               </label>
+              <div className="">{isCheckedError}</div>
             </div>
 
-            <div className="form-check mb-3">
+            <div className="form-check d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
                 className="form-check-input"
                 checked={isAgreed}
-                onChange={() => setIsAgreed(!isAgreed)}
+                onChange={() => {
+                  setIsAgreedError(false);
+                  setIsAgreed(!isAgreed);
+                }}
               />
               <label className="form-check-label">
                 I agree to the Terms and Conditions and Privacy Policy
               </label>
+              <div>{isAgreedError}</div>
             </div>
-
             <button
               type="submit"
               className="btn btn-primary w-100"

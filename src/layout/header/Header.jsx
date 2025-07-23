@@ -22,16 +22,24 @@ import Success from "../../pages/banner/Popups/Success";
 import Blocked from "../../pages/banner/Popups/Blocked";
 import Register from "../../pages/banner/Popups/Register";
 import Thanks from "../../pages/banner/Popups/Thanks";
+import RegistrationSuccessfull from "../../pages/banner/Popups/RegistrationSuccessfull";
 
 function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
   // const isLogin = localStorage.getItem("login");
-  const [showMsgPopup, setShowMsgPopup] = useState(false);
-  const [openRegistation, setRegistation] = useState(false);
+
   const [openSign, setOpenSign] = useState(false);
   const [walletDetails, setWalletDetails] = useState(null);
+
   const [error, setError] = useState({});
+  const [message, setMessage] = useState("");
+
+  // popups
+  const [showMsgPopup, setShowMsgPopup] = useState(false);
+  const [registrationSuccessfull, setRegistrationSuccessfull] = useState(false);
+  const [welcomeBonusPopup, setWelcomeBonusPopup] = useState(false);
+  const [loginPopup, setLoginPopup] = useState(false);
 
   const [openSports, setOpenSports] = useState(false);
   const [openLive, setOpenLive] = useState(false);
@@ -65,6 +73,15 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   };
   const handleRegister = () => {
     setShowRegister(true);
+  };
+
+  const getWelcomeBonus = async () => {
+    const welcomeId = localStorage.getItem("welcomeBonusId");
+
+    if (!welcomeId || welcomeId === "undefined" || welcomeId === "null") {
+      return <Navigate to="/" />;
+    }
+    setWelcomeBonusPopup(true);
   };
 
   //   const handleNavigate = () => {
@@ -663,27 +680,27 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         </div>
       )}
 
-      {/* {openRegistation && (
-        <Registration
-          openRegistation={openRegistation}
-          setRegistation={setRegistation}
-          setOpenSign={setOpenSign}
-          setUserData={setUserData}
-          openOneClick={openOneClick}
-          setOpenClick={setOpenClick}
-        />
-      )}
-      {openSign && (
-        <Login
-          openSign={openSign}
-          setOpenSign={setOpenSign}
-          setRegistation={setRegistation}
-        />
-      )} */}
       <Register
         showRegister={showRegister}
         setShowRegister={setShowRegister}
         setShowThanks={setShowThanks}
+        setMessage={setMessage}
+        setRegistrationSuccessfull={setRegistrationSuccessfull}
+        setShowSuccess={setShowSuccess}
+      />
+      <RegistrationSuccessfull
+        registrationSuccessfull={registrationSuccessfull}
+        setRegistrationSuccessfull={setRegistrationSuccessfull}
+        getWelcome={getWelcomeBonus}
+      />
+      <LoginPopup
+        setLoginModal={setLoginPopup}
+        loginModal={loginPopup}
+        setRegisterModal={setRegisterpopup}
+        registerModal={registerpopup}
+        setForgotPasswordModal={setForgotPasswordModal}
+        setAdminResetPopup={setAdminResetPopup}
+        adminResetPopup={adminResetPopup}
       />
       <Thanks showThanks={showThanks} setShowThanks={setShowThanks} />
       <Login

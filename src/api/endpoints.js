@@ -26,6 +26,17 @@ const endpoints = {
     method: "post",
     url: `/website/${websiteId}/user/verify/username`,
   },
+
+  signUpUser: {
+    method: "post",
+    url: () => `/website/${websiteId}/user/signup`,
+  },
+
+  oneClickSignup: {
+    method: "post",
+    url: () => `/website/${websiteId}/user/oneClickLogin`,
+  },
+  userLogin: { method: "post", url: `/website/${websiteNewId}/user/login` },
 };
 
 export default endpoints;
