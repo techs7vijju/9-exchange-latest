@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 
 const CollapseRightbar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const rightbarWidth = collapsed ? 50 : 200;
+  const rightbarWidth = collapsed ? 50 : 250;
 
   return (
     <div
@@ -11,12 +12,27 @@ const CollapseRightbar = () => {
     >
       <div
         style={{
-          padding: 10,
-          opacity: collapsed ? 0 : 1,
           transition: "opacity 0.3s",
         }}
       >
-        <p className="text-white pointer" onClick={() => setCollapsed((c) => !c)}> Collepse </p>
+        {collapsed ? (
+          <div className="flex-center p-2">
+            <FaAnglesLeft
+              className="pointer"
+              size={18}
+              color="text-white"
+              onClick={() => setCollapsed((c) => !c)}
+            />
+          </div>
+        ) : (
+          <button
+            className="xbtn d-flex gap-2 items-center justify-center"
+            onClick={() => setCollapsed((c) => !c)}
+          >
+            Collapse
+            <FaAnglesRight size={18} />
+          </button>
+        )}
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ import CollapseRightbar from "./right-collapse/CollapseRightbar";
 
 const SportsLayout = () => {
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <div style={{ flex: 1, overflow: "auto" }}>
+    <div className="d-flex h-100">
+      <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
       <CollapseRightbar />

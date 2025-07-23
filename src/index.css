@@ -220,6 +220,7 @@ input[type="number"] {
   --blue-color12: #0a2c4d;
   --blue-color13: #205583;
   --blue-color14: #30334d;
+  --blue-color15: #205582;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -780,7 +781,6 @@ form .textarea-group small,
 /* 6 . fORM  END HERE */
 /* --------------------------  */
 
-
 /* --------------------------  */
 /* 8 . Global Classes Started */
 /* --------------------------  */
@@ -1241,7 +1241,6 @@ form .textarea-group small,
     padding: 0.5rem;
     height: 3.45rem !important;
   }
-
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -1347,9 +1346,22 @@ form .textarea-group small,
 /* collapse right bar styling */
 
 .collapse-right-bar-container {
+  margin: 8px 5px;
+  background-color: #30334d;
   transition: width 0.3s;
   position: relative;
   height: 100vh;
+}
+
+.collapse-right-bar-container button {
+  padding: 10px 20px;
+  width: 100%;
+  background-color: var(--blue-color15);
+}
+
+
+.collapse-right-bar-container button:hover {
+  transform: scale(1);
 }
 
 /* PageNotFound*/
