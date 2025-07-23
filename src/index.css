@@ -223,6 +223,10 @@ input[type="number"] {
   --blue-color15: #205582;
   --blue-color16: #276aa566;
   --blue-color17: #2b5782;
+  --blue-color18: #5488b6;
+  --blue-color19: #2f5a84;
+  --blue-color20: #065ca8;
+  --blue-color21:#BADEFF;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -233,6 +237,7 @@ input[type="number"] {
   --grey-color9: #adc0d1;
   --grey-color10: #7599b8;
   --grey-color11: #666666;
+  --grey-color12: #dbe4eb;
   --red-color1: #ff8282;
   --red-color2: #ff5145;
   --green-color1: #8dcc3b;
@@ -375,6 +380,12 @@ p {
 }
 p.p-grey {
   color: var(--grey-color10);
+}
+p.p-blue {
+  color: var(--blue-color18);
+}
+p.p-blue-dark {
+  color: var(--blue-color19);
 }
 .p-2 {
   padding-left: 2px;
@@ -1806,3 +1817,102 @@ form .textarea-group small,
 .menuList-sidebar-content .sidebar-arrow.open {
   transform: rotate(180deg);
 }
+
+/*StepperInput*/
+.stake-stepper-input {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+  width: 160px;
+  background-color: #cce6ff;
+}
+
+.step-btn {
+  width: 40px !important;
+  height: 40px;
+  background-color: #1e3a5f !important;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-btn:focus {
+  outline: none;
+}
+
+.step-value {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: green;
+  background-color: white;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stake-stepper-input-container .stake-row button{
+  background: #1e3a5f;
+  color: #fff;
+  margin-right: 20px;
+  border-radius: 10px;
+  padding: 6px 20px;
+}
+
+/*-------*/
+/*BetSlip*/
+.bet-slip-container {
+  margin-top: 6px;
+}
+.bet-slip-container button {
+  padding: 10px 39px;
+}
+.bet-slip-container .betslip-content {
+  background: var(--grey-color1);
+  padding: 0.5rem;
+}
+.bet-slip-container .betslip-content p {
+  font-weight: 600;
+}
+.bet-slip-container .betslip-content .betslip-icon {
+  color: var(--blue-color18);
+  background: var(--grey-color12);
+  padding: 0.5rem;
+}
+.bet-slip-container .betslip-content .betslip-modal {
+  background: var(--white-color);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+.bet-slip-container .betslip-modal .modal-title {
+  color: var(--blue-color18);
+  font-weight: 600;
+}
+.bet-slip-container .betslip-modal .icon {
+  color: var(--blue-color18);
+}
+.bet-slip-container .betslip-modal .modal-sub-title {
+  margin-top: 10px;
+  color: var(--blue-color19);
+  font-weight: 700;
+  text-decoration: underline;
+}
+.bet-slip-container .betslip-modal .modal-btn button {
+  color: var(--blue-color20);
+  font-weight: 700;
+}
+.bet-slip-container .stake-container{
+  background: var(--blue-color21);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+ 
+}
+/*----------------------------------*/

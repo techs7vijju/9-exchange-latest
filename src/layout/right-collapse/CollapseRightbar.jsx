@@ -4,7 +4,7 @@ import BetSlip from "../bet-slip/BetSlip";
 
 const CollapseRightbar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const rightbarWidth = collapsed ? 50 : 250;
+  const rightbarWidth = collapsed ? 50 : 280;
 
   return (
     <div
