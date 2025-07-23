@@ -370,11 +370,13 @@ h3 {
   font-weight: 500;
   color: #ffff;
 }
+
 h4 {
   font-size: 12px;
   font-weight: 500;
   color: #ffff;
 }
+
 h6 {
   font-size: 14px;
   font-weight: 500;
@@ -424,7 +426,9 @@ p.p-grey {
   padding-left: 2px;
   padding-right: 2px;
 }
-
+.p-10{
+  padding: 10px;
+}
 /* gaps */
 .gap-10 {
   gap: 10px;
@@ -630,6 +634,12 @@ p.p-grey {
 .xbtn.active {
   background-color: var(--blue-color1);
 }
+.xbtn-search{
+   background-color: var(--green-color1);
+       padding:5px 40px;
+        border-radius: 4px;
+        color: var(--white-color);
+}
 
 .spinner-border {
   display: inline-block;
@@ -642,7 +652,9 @@ p.p-grey {
   border-right-color: transparent;
   margin-right: 10px;
 }
-
+.form-label{
+  color: var(--blue-color6);
+}
 @keyframes spinner-border {
   to {
     transform: rotate(360deg);
@@ -1061,12 +1073,27 @@ form .textarea-group small,
 .ticket-container {
   background-color: var(--grey-color1);
 }
-.ticket-container h4 {
+.ticket-container h3 {
   color: var(--blue-color6);
 }
 .ticket-container-smalltext {
   color: var(--blue-color7);
 }
+.ticket-heading {
+  font-size: 20px;
+  font-weight: 700; /* Bold */
+  color: #143D63;   /* Dark blue tone */
+  margin-bottom: 4px;
+}
+
+.ticket-subtext {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3674A3;   /* Light-mid blue */
+  margin: 0;
+  white-space: nowrap;
+}
+
 
 /* --------------------------  */
 /* 6 . fORM  END HERE */

@@ -1,15 +1,55 @@
 import React, { useState } from "react";
-import { FaEye, FaRegCalendarAlt } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PaginationTable from "../../../components/tables/PaginationTable";
 
+// Utility: Format date to yyyy-mm-dd
+const formatDate = (date) => {
+  const d = new Date(date);
+  const month = `${d.getMonth() + 1}`.padStart(2, "0");
+  const day = `${d.getDate()}`.padStart(2, "0");
+  const year = d.getFullYear();
+  return `${year}-${month}-${day}`;
+};
+
+// Custom TextInput Component
+const TextInput = ({
+  type = "text",
+  label,
+  name,
+  value,
+  onChange,
+  error,
+  minDate,
+  maxDate,
+}) => {
+  return (
+    <div className="mb-3">
+      {label && (
+        <label htmlFor={name} className="form-label" style={{ display: "block", marginBottom: "5px", fontWeight: "500" }}>
+          {label}
+        </label>
+      )}
+      <input
+        type={type}
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+        className={`form-control ${error ? "is-invalid" : ""}`}
+        min={minDate}
+        max={maxDate}
+        placeholder="13/11/2023"
+      />
+      {error && <div className="text-danger">{error}</div>}
+    </div>
+  );
+};
+
 function Tickets() {
   const [selectedDate, setSelectedDate] = useState(null);
 
-  const placeholder = "dd/mm/yyyy";
-  const minDate = new Date("2000-01-01");
-  const maxDate = new Date();
   const dataColumns = [
     { header: "Date", field: "one" },
     { header: "Credit/Debit", field: "two" },
@@ -21,10 +61,33 @@ function Tickets() {
     { header: "Status", field: "eight" },
   ];
 
+  const [formData, setFormData] = useState({
+    dob: "",
+  });
+
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setValidationErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.dob) {
+      setValidationErrors({ dob: "Date of Birth is required" });
+    } else {
+      alert("Submitted: " + formData.dob);
+    }
+  };
+
+  const minDate = formatDate(new Date(new Date().setFullYear(new Date().getFullYear() - 100)));
+  const maxDate = formatDate(new Date(new Date().setFullYear(new Date().getFullYear() - 18)));
+
   const dataRows = [
     {
       one: (
-        <div className="">
+        <div>
           13-09-23,
           <br />
           12:18:10 PM
@@ -49,7 +112,7 @@ function Tickets() {
     },
     {
       one: (
-        <div className="">
+        <div>
           13-09-23,
           <br />
           12:18:10 PM
@@ -80,7 +143,7 @@ function Tickets() {
     },
     {
       one: (
-        <div className="">
+        <div>
           13-09-23,
           <br />
           12:18:10 PM
@@ -105,7 +168,7 @@ function Tickets() {
     },
     {
       one: (
-        <div className="">
+        <div>
           13-09-23,
           <br />
           12:18:10 PM
@@ -134,67 +197,20 @@ function Tickets() {
         </div>
       ),
     },
-    // {
-    //   one: "T20 world cup",
-    //   two: <div className="color-orange2">Newziland vs SriLanka</div>,
-    //   three: "Cricket,Male",
-    //   four: (
-    //     <div className="bg-dark4 rounded-pill" style={{ height: "42px" }}></div>
-    //   ),
-    //   five: (
-    //     <div>
-    //       One Day
-    //       <br /> Amhadabad Stadium
-    //     </div>
-    //   ),
-    //   six: (
-    //     <div className="d-flex">
-    //       <div>
-    //         01/08/2023
-    //         <br />
-    //         11:46:00 AM
-    //       </div>
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   one: "T20 world cup",
-    //   two: <div className="color-orange2">Newziland vs SriLanka</div>,
-    //   three: "Cricket,Male",
-    //   four: (
-    //     <div className="bg-dark4 rounded-pill" style={{ height: "42px" }}></div>
-    //   ),
-    //   five: (
-    //     <div>
-    //       One Day
-    //       <br /> Amhadabad Stadium
-    //     </div>
-    //   ),
-    //   six: (
-    //     <div className="d-flex">
-    //       <div>
-    //         01/08/2023
-    //         <br />
-    //         11:46:00 AM
-    //       </div>
-    //     </div>
-    //   ),
-    // },
   ];
+
   return (
     <div className="d-flex w-100 flex-column ticket-container">
       <div className="p-10">
-        {/* Header row */}
         <div className="row align-items-center justify-content-between">
           <div className="col-2">
-            <h4 className="ticket-container fw-600 mb-1">Tickets</h4>
-            <div className="xsmall-font p fw-500 nowrap ticket-container-smalltext">
+            <h3 className="ticket-heading">Tickets</h3>
+            <h6 className="ticket-subtext">
               More information about your deposit & withdraw
-            </div>
+            </h6>
           </div>
 
-          <div className="col-auto d-flex gap-4 ">
-
+          <div className="col-auto d-flex gap-4">
             <div>
               <button className="xbtn button-green px-4 mx-2">DEPOSIT</button>
               <button className="xbtn outline-red px-4 mx-2">WITHDRAW</button>
@@ -205,42 +221,59 @@ function Tickets() {
                 WALLET TRANSFER
               </button>
             </div>
-
           </div>
         </div>
 
-        {/* Date Picker and more */}
-        <div className="d-flex gap-3 mt-4">
-          {/* Date input with icon */}
-          <div className="date-input-wrapper position-relative">
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              placeholderText={placeholder}
-              dateFormat="dd/MM/yyyy"
-              minDate={minDate}
-              maxDate={maxDate}
-              className="custom-date-input"
-            />
-          </div>
+      
+      <div
+  className="d-flex align-items-end gap-3 mt-4 flex-wrap"
+  style={{
+    background: '#ecf1f6',
+    padding: '20px',
+    borderRadius: '6px',
+  }}
+>
+  {/* From Date */}
+  <div style={{ minWidth: "200px" }}>
+    <label className="form-label fw-bold text-dark">From</label>
+    <input
+      type="date"
+      className="form-control"
+      placeholder="dd-mm-yyyy"
+      value={formData.fromDate}
+      onChange={(e) => handleChange("fromDate", e.target.value)}
+    />
+  </div>
 
-          <div className="">
-            {" "}
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              placeholderText={placeholder}
-              dateFormat="dd/MM/yyyy"
-              minDate={minDate}
-              maxDate={maxDate}
-              className="custom-date-input"
-            />
-          </div>
-          <div className="">
-            <button className="xbtn button-green1 px-2 ">Search</button>
-          </div>
-        </div>
-        <div style={{ marginBottom: "30px" }} className="p fw-600">
+  {/* To Date */}
+  <div style={{ minWidth: "200px" }}>
+    <label className="form-label fw-bold text-dark">To</label>
+    <input
+      type="date"
+      className="form-control"
+      placeholder="dd-mm-yyyy"
+      value={formData.toDate}
+      onChange={(e) => handleChange("toDate", e.target.value)}
+    />
+  </div>
+
+  {/* Search Button */}
+  <div className="">
+    <button
+      type="button"
+      className="xbtn-search mt-5"
+      
+      onClick={handleSubmit}
+    >
+      Search
+    </button>
+  </div>
+</div>
+
+
+
+       
+        <div style={{ marginBottom: "30px" }} className="p ">
           <PaginationTable data={dataRows} columns={dataColumns} />
         </div>
       </div>
