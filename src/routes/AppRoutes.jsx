@@ -5,6 +5,7 @@ import Home from "../pages/home/Homepage";
 import Appui from "../pages/home/Appui";
 import Layout from "../layout/Layout";
 import Tickets from "../pages/more/tickets/tickets";
+import Deposits from "../pages/more/deposits/deposit";
 import MoreHome from "../pages/more/moreHome";
 import SportsLayout from "../layout/SportsLayout";
 import Sports from "../pages/sports/Sports";

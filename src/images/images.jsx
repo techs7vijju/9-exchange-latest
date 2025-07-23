@@ -89,6 +89,7 @@ export const Images = {
   set: "./assets/games/set.svg",
   account: "./assets/games/account.svg",
   tickets: "./assets/games/tickets.svg",
+  basketball: "./assets/games/basketball.svg",
   /*PageNotFound*/
   pageNotFound: "../assets/404/page-not-found.svg",
  page404:"../assets/404/404.svg"
