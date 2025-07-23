@@ -81,7 +81,7 @@ const TextInput = ({
         {showLoading && <span>...</span>}
 
         {showCheckmark && (
-          <span className="text-success border-none">
+          <span className="icon border-none">
             <FaCheck />
           </span>
         )}

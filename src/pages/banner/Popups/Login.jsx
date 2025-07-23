@@ -1,105 +1,218 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button, Form } from "react-bootstrap";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 import ForgotPassword from "./ForgotPassword";
+import * as Yup from "yup";
+import { userLogin } from "../api/apiMethods";
+import { encryptData } from "../utils/cryptoUtils";
+import { handleApiError } from "../utils/handleError";
 
-const Login = ({ showLogin, setShowLogin, setShowForgot }) => {
-  const handleCancel = () => {
-    
-    setShowLogin(false);
-  };
+const validationSchema = Yup.object({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
+
+const Login = ({
+  setLoginModal,
+  loginModal,
+  setRegisterModal,
+  registerModal,
+  setForgotPasswordModal,
+  setAdminResetPopup,
+  adminResetPopup,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [apiErrors, setApiErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const [validationErrors, setValidationErrors] = useState({
+    username: "",
+    password: "",
+  });
 
-  // const [userData, setUserData] = useState({
-  //   userName: "",
-  //   password: "",
-  // });
+  const handleChange = async (name, value) => {
+    setFormData({ ...formData, [name]: value });
+    try {
+      await validationSchema.validateAt(name, { [name]: value });
+      setValidationErrors((prev) => ({ ...prev, [name]: "" }));
+    } catch (err) {
+      setValidationErrors((prev) => ({ ...prev, [name]: err.message }));
+    }
+  };
 
-  const [userName, setUserName] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [showPasswordError, setShowPasswordError] = useState("");
-  const [userNameError, setUserNameError] = useState("");
+  const handleLogin = async () => {
+    setLoading(true);
+    setApiErrors([]);
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      setValidationErrors({});
+
+      const response = await userLogin({
+        login_name: formData.username,
+        password: formData.password,
+      });
+
+      if (response.status === true) {
+        localStorage.setItem("jwt_token", response?.token);
+        const userData = {
+          userId: response?.user?.id,
+          userName: response?.user?.userid,
+          county_id: response?.user?.county_id,
+          created_admin_panel_id: response?.user?.created_admin_panel_id,
+          created_by: response?.user?.created_by,
+          web_site_id: response?.user?.web_site_id,
+          currency_id: response?.user?.currency_id,
+          email: response?.user?.email,
+          phone_no: response?.user?.phone_no,
+          photo: response?.user?.photo,
+        };
+        localStorage.setItem("user_data", encryptData(userData));
+        localStorage.setItem("welcomeBonusId", response?.user?.promoId);
+
+        // Reset form and close modal
+        setLoading(false);
+        setShowPassword(false);
+        setFormData({ username: "", password: "" });
+        setValidationErrors({ username: "", password: "" });
+        setApiErrors([]);
+        setShowLogin(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      const { validationErrors: newValidationErrors, apiErrors: newApiErrors } =
+        handleApiError(error);
+
+      if (newValidationErrors) {
+        setValidationErrors(newValidationErrors);
+      }
+      if (newApiErrors) {
+        setApiErrors(newApiErrors);
+      }
+    }
+  };
 
   const handleForgot = () => {
     setShowForgot(true);
-    onHide();
+    setShowLogin(false);
   };
 
-  const userLogin = () => {
-    if (!userName) {
-      setUserNameError("username is Required");
-    }
-
-    if (!userPassword) {
-      setShowPasswordError("Password is required");
-    }
+  const handleClose = () => {
+    setFormData({ username: "", password: "" });
+    setValidationErrors({ username: "", password: "" });
+    setLoading(false);
+    setShowPassword(false);
+    setApiErrors([]);
+    setShowLogin(false);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter" && showLogin) {
+        handleLogin();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [formData, showLogin]);
 
   return (
+    <Modal
+      show={showLogin}
+      centered
+      className="custom-popup-modal"
+      size="sm"
+      onHide={handleClose}
+    >
+      <div className="modal-header-fixed">
+        <button
+          className="btn-close"
+          onClick={handleClose}
+          aria-label="Close"
+        ></button>
 
-      <Modal
-        show={showLogin}
-        onHide={handleCancel}
-        centered
-        className="custom-popup-modal"
-      >
-        <h3 className="thank-title text-center mb-2">LOGIN</h3>
-
-        <div className="thank-bar big mx-auto mb-1"></div>
-        <div className="thank-bar small mx-auto mb-3"></div>
-
-
-        <div>
-          <div>
-            <div className="mb-3">
-              <div className="custom-label">User Name</div>
-              <input
-                className="custom-input"
-                type="text"
-                placeholder="Enter"
-                onChange={(e) => setUserName(e.target.value)}
-                maxLength={15}
-              />
-              
-              <div className="error-font">{userNameError}</div>
-            </div>
-
-            <div className="mb-3 position-relative">
-              <div className="custom-label">Password</div>
-              <input
-                className="custom-input pe-5"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter"
-                onChange={(e) => setUserPassword(e.target.value)}
-                maxLength={36}
-              />
-              <div
-                className="eye-icon"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </div>
-              <div className="error-font">{showPasswordError}</div>
-            </div>
-
-            <div className="text-end">
-              <a href="#" className="forgot-password" onClick={handleForgot}>
-                FORGOT YOUR PASSWORD?
-              </a>
-            </div>
-
-            <button className="w-100 mt-3 login-button" onClick={userLogin}>
-              LOGIN
-            </button>
-          </div>
-
-          <div className="text-center mt-3 registration-text">
-            Don’t have an account yet? <a href="#">REGISTRATION</a>
-          </div>
+        <h5 className="model-label pt-3">LOGIN</h5>
+        <div className="d-flex flex-col flex-center w-100 gap-2">
+          <span className="thank-bar w-15"></span>
+          <span className="thank-bar w-10"></span>
         </div>
-      </Modal>
 
+        {apiErrors.length > 0 && (
+          <div className="alert alert-danger mt-2 mb-0">
+            {apiErrors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="popup-scroll blue-color4">
+        <form onSubmit={handleSubmit}>
+          <div className="col-md-6">
+            <TextInput
+              type="text"
+              label="User Name"
+              name="user_name"
+              placeholder="Enter"
+              value={formData.user_name}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
+                  handleChange(e);
+                }
+              }}
+              error={validationErrors.user_name}
+              showLoading={isUsernameLoading}
+              showCheckmark={
+                !isUsernameLoading &&
+                formData.user_name.length >= 5 &&
+                !userError
+              }
+            />
+          </div>
+
+          <div className="col-md-6">
+            <TextInput
+              type={showPassword ? "text" : "password"}
+              label="Password"
+              name="password"
+              placeholder="Enter"
+              value={formData.password}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 36) {
+                  handleChange(e);
+                }
+              }}
+              error={validationErrors.password}
+              togglePassword={() => setShowPassword(!showPassword)}
+              showPassword={showPassword}
+            />
+          </div>
+        </form>
+
+        <div className="text-end">
+          <a href="#" className="forgot-password" onClick={handleForgot}>
+            FORGOT YOUR PASSWORD?
+          </a>
+        </div>
+
+        <button
+          className="w-100 mt-3 login-button"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "LOADING..." : "LOGIN"}
+        </button>
+
+        <div className="text-center mt-3 registration-text">
+          Don't have an account yet? <a href="#">REGISTRATION</a>
+        </div>
+      </div>
+    </Modal>
   );
 };
 
