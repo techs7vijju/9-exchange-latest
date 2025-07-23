@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import * as Yup from "yup";
-import {
-  FaUserFriends,
-  FaEye,
-  FaEyeSlash,
-  FaBolt,
-  FaRegCalendarAlt,
-  FaUser,
-  FaCheck,
-  FaCalendarAlt,
-} from "react-icons/fa";
-import { IoEye, IoEyeOff, IoClose } from "react-icons/io5";
+import { FaUserFriends, FaBolt } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import TextInput from "../../../components/form-elements/TextInput";
 import SelectInput from "../../../components/form-elements/SelectInput";
+import {
+  getSecurityQuestions,
+  getUserCountries,
+  verifyUsername,
+} from "../../../api/apiMethods";
 
 const emailRegex =
   /^(([a-z\d+_\-][a-z\d+'._\-]*[a-z\d+_\-])|([a-z\d+_\-]{1,2}))@((([a-z\d][a-z\d\-]{0,100}[a-z\d])|([a-z\d]))\.)+[a-z]{2,}$/i;
@@ -125,13 +120,12 @@ const Register = ({
   const [countries, setCountries] = useState([]);
   const [countrySearchTerm, setCountrySearchTerm] = useState("");
   const [currencySearchTerm, setCurrencySearchTerm] = useState("");
-  const [selectedForm, setSelectedForm] = useState("register");
   const [currencies, setCurrencies] = useState([]);
   const [checkBoxes, setCheckBoxes] = useState({
     age_agree: false,
     agree_policy: false,
   });
-
+  console.log("countries", countries);
   useEffect(() => {
     setCheckBoxes((prev) => ({
       ...prev,
@@ -154,7 +148,8 @@ const Register = ({
     email: "",
     securityQuestions: [],
   });
-
+  console.log("secQuError", secQuError);
+  console.log("formData", formData);
   const validationSchema2 = Yup.object().test(
     "at-least-3-answers",
     "You must answer at least 3 security questions",
@@ -311,6 +306,7 @@ const Register = ({
   };
 
   const handleCountryChange = (selectedCountry) => {
+    console.log("selectedCountry", selectedCountry)
     setFormData((prev) => ({
       ...prev,
       country_id: selectedCountry.id,
@@ -373,16 +369,20 @@ const Register = ({
         return false;
       }
     } catch (error) {
-      const { apiErrors } = handleApiError(error);
-      if (Array.isArray(apiErrors) && apiErrors.length > 0) {
-        setUserError(apiErrors[0].message || "Something went wrong");
-      } else {
-        setUserError("Something went wrong");
-      }
-
-      return false;
-    } finally {
       setIsUsernameLoading(false);
+      console.log("Validation error:", error);
+
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
+      }
     }
   };
 
@@ -527,10 +527,8 @@ const Register = ({
       }
     }
   };
-  console.log("setValidationErrors", validationErrors);
 
   const handleClose = () => {
-    handleApiError("");
     setApiErrors([]);
     setSelectedCountryItem("");
     setCountrydropdownOpen(false);
@@ -571,13 +569,13 @@ const Register = ({
     });
     setUserError("");
     setActiveButton(1);
-    showRegister(false);
+    setShowRegister(false);
     navigate("/");
   };
 
   const handleTerms = () => {
     setTermsPopup(true);
-    showRegister(false);
+    setShowRegister(false);
     setLoginModal(false);
   };
 
@@ -640,7 +638,6 @@ const Register = ({
 
         setLoading(false);
         setMessage(response.message);
-        handleApiError("");
         setApiErrors([]);
         setSelectedCountryItem("");
         setCountrydropdownOpen(false);
@@ -666,19 +663,22 @@ const Register = ({
         setActiveButton(1);
         setActiveStatus(1);
         setRegistrationSuccessfull(true);
-        showRegister(false);
+        setShowRegister(false);
       }
     } catch (error) {
       setLoading(false);
-      const { validationErrors: newValidationErrors, apiErrors: newApiErrors } =
-        handleApiError(error);
+      console.log("Validation error:", error);
 
-      if (newValidationErrors) {
-        setValidationErrors(newValidationErrors);
-      }
-
-      if (newApiErrors) {
-        setApiErrors(newApiErrors);
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
       }
     }
   };
@@ -707,7 +707,6 @@ const Register = ({
     setUserError("");
     setShowConfirmPassword(false);
     setShowPassword(false);
-    handleApiError("");
     setApiErrors([]);
     setSelectedCountryItem("");
     setCountrydropdownOpen(false);
@@ -743,67 +742,107 @@ const Register = ({
 
   const dropdownRef = useRef(null);
 
-  // useEffect(() => {
-  //   function handleClickOutside(event) {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-  //       setCountrydropdownOpen(false);
-  //       setCurrencydropdownOpen(false);
-  //     }
-  //   }
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
+  const renderSecurityQuestions = () => (
+    <div className="my-2">
+      {securityQuestions.map((question, index) => {
+        const questionKey = `question_${question.question_id}`;
+        const currentAnswer =
+          formData.securityQuestions.find(
+            (q) => q.question_id === question.question_id
+          )?.answer || "";
+
+        return (
+          <div key={question.question_id} className="flex-column mt-2">
+            <div>
+              <TextInput
+                type="text"
+                label={`Q${index + 1}. ${question.questions}`}
+                name={questionKey}
+                placeholder="Enter your answer"
+                value={currentAnswer}
+                onChange={handleChange}
+                error={validationErrors[questionKey]}
+              />
+            </div>
+          </div>
+        );
+      })}
+      {secQuError && <div className="text-danger small mt-2">{secQuError}</div>}
+    </div>
+  );
+
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0];
+  };
 
   return (
-    <Modal show={showRegister} centered className="custom-popup-modal" size="lg">
-      <div className="d-flex flex-col blue-color4 p-2 popup-scroll position-relative">
+    <Modal
+      show={showRegister}
+      centered
+      className="custom-popup-modal"
+      size="lg"
+      onHide={handleClose}
+    >
+      <div className="modal-header-fixed">
         <button
           className="btn-close"
-          onClick={() => setShowRegister(false)}
+          onClick={handleClose}
           aria-label="Close"
         ></button>
 
-        <h5 className="flex-center fw-600 mt-3">REGISTRATION</h5>
-        <div className="d-flex flex-col flex-center w-100 gap-2 mt-1">
-          <span className="thank-bar w-20"></span>
+        <h5 className="model-label pt-3">REGISTRATION</h5>
+        <div className="d-flex flex-col flex-center w-100 gap-2">
           <span className="thank-bar w-15"></span>
+          <span className="thank-bar w-10"></span>
         </div>
 
-        <div className="d-flex flex-center py-2 gap-10 large-font">
+        <div className="d-flex flex-center py-2 gap-3 large-font">
           <button
-            className="d-flex flex-between xbtn button-blue "
-            onClick={() => setSelectedForm("register")}
+            className={`d-flex flex-between xbtn ${
+              activeButton === 1 ? "button-blue" : "grey-8-btn blue-color4"
+            }`}
+            onClick={() => handleButtonChange(1)}
           >
             <FaUserFriends className="me-2" />
             SIGN UP / REGISTER
           </button>
 
-          <button className="d-flex flex-between xbtn grey-8-btn blue-color4">
+          <button
+            className={`d-flex flex-between xbtn ${
+              activeButton === 2 ? "button-blue" : "grey-8-btn blue-color4"
+            }`}
+            onClick={() => handleButtonChange(2)}
+          >
             <FaBolt className="me-2" />
             ONE CLICK
           </button>
         </div>
 
         {apiErrors.length > 0 && (
-          <div className="alert alert-danger">
+          <div className="alert alert-danger mt-2 mb-0">
             {apiErrors.map((error, index) => (
               <div key={index}>{error}</div>
             ))}
           </div>
         )}
-
-        {selectedForm === "register" ? (
+      </div>
+      <div className="popup-scroll blue-color4">
+        {activeButton === 1 ? (
           <form onSubmit={handleSubmit}>
-            <div className="row mb-3">
+            <div className="row ">
               <div className="col-md-6">
                 <TextInput
                   type="text"
                   label="Name"
                   name="name"
+                  placeholder="Enter"
                   value={formData.name}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^[a-zA-Z]*$/.test(value) && value.length <= 60) {
+                      handleChange(e);
+                    }
+                  }}
                   error={validationErrors?.name}
                 />
               </div>
@@ -813,8 +852,14 @@ const Register = ({
                   type="text"
                   label="User Name"
                   name="user_name"
+                  placeholder="Enter"
                   value={formData.user_name}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
+                      handleChange(e);
+                    }
+                  }}
                   error={validationErrors.user_name}
                   showLoading={isUsernameLoading}
                   showCheckmark={
@@ -826,14 +871,20 @@ const Register = ({
               </div>
             </div>
 
-            <div className="row mb-3">
+            <div className="row">
               <div className="col-md-6">
                 <TextInput
                   type={showPassword ? "text" : "password"}
                   label="Password"
                   name="password"
+                  placeholder="Enter"
                   value={formData.password}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 36) {
+                      handleChange(e);
+                    }
+                  }}
                   error={validationErrors.password}
                   togglePassword={() => setShowPassword(!showPassword)}
                   showPassword={showPassword}
@@ -844,8 +895,14 @@ const Register = ({
                   type={showConfirmPassword ? "text" : "password"}
                   label="Confirm Password"
                   name="confirmPassword"
+                  placeholder="Enter"
                   value={formData.confirmPassword}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 36) {
+                      handleChange(e);
+                    }
+                  }}
                   error={validationErrors.confirmPassword}
                   togglePassword={() =>
                     setShowConfirmPassword(!showConfirmPassword)
@@ -855,7 +912,7 @@ const Register = ({
               </div>
             </div>
 
-            <div className="row mb-3">
+            <div className="row">
               <div className="col-md-6">
                 <TextInput
                   type="text"
@@ -866,28 +923,28 @@ const Register = ({
                 />
               </div>
               <div className="col-md-6">
-                <label>Date of Birth</label>
-                <div className="input-group">
-                  <TextInput
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={(e) => handleChange("dob", e.target.value)}
-                    error={validationErrors.dob}
-                  />
-                  <span className="input-group-text">
-                    <FaCalendarAlt />
-                  </span>
-                </div>
-                {validationErrors.dob && (
-                  <div className="invalid-feedback d-block">
-                    {validationErrors.dob}
-                  </div>
-                )}
+                <TextInput
+                  type="date"
+                  label="Date of Birth"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={(e) => handleChange("dob", e.target.value)}
+                  error={validationErrors.dob}
+                  minDate={formatDate(
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 100)
+                    )
+                  )}
+                  maxDate={formatDate(
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 18)
+                    )
+                  )}
+                />
               </div>
             </div>
 
-            <div className="row mb-3">
+            <div className="row">
               <div className="col-md-6">
                 <SelectInput
                   label="Country"
@@ -906,11 +963,11 @@ const Register = ({
                 <SelectInput
                   label="Currency"
                   name="currency_id"
-                  value={currencies?.find((c) => c.id === formData.currency_id)}
+                  value={currencies.find((c) => c.id === formData.currency_id)}
                   onChange={(selected) => handleCurrencyChange(selected)}
-                  options={currencies?.map((c) => ({
-                    value: c.id,
-                    label: c.name,
+                  options={countries.map((country) => ({
+                    value: country.id,
+                    label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
                   }))}
                   error={validationErrors.currency_id}
                   required
@@ -918,7 +975,7 @@ const Register = ({
               </div>
             </div>
 
-            <div className="mb-3">
+            <div className="">
               <TextInput
                 type="email"
                 label="Email (Optional)"
@@ -928,11 +985,11 @@ const Register = ({
                 error={validationErrors.email}
               />
             </div>
-
-            <div className="mb-3">
-              <h5>Security Questions</h5>
-              {/* Render security questions here */}
+            <div class="custom-line"></div>
+            <div className="d-flex flex-center flex-col m-2">
+              <h5 className="fw-600">Set Your Security Questions</h5>
             </div>
+            {renderSecurityQuestions()}
 
             <div className="form-check mb-3">
               <input
@@ -968,7 +1025,7 @@ const Register = ({
           </form>
         ) : (
           <form onSubmit={handleOneClickSubmit}>
-            <div className="row mb-3">
+            <div className="row">
               <div className="col-md-6">
                 <SelectInput
                   label="Country"
@@ -989,9 +1046,9 @@ const Register = ({
                   name="currency_id"
                   value={currencies.find((c) => c.id === formData.currency_id)}
                   onChange={(selected) => handleCurrencyChange(selected)}
-                  options={currencies.map((c) => ({
-                    value: c.id,
-                    label: c.name,
+                  options={countries.map((country) => ({
+                    value: country.id,
+                    label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
                   }))}
                   error={validationErrors.currency_id}
                   required
@@ -1005,7 +1062,12 @@ const Register = ({
                 label="Master/Parent ID (Optional)"
                 name="masterID"
                 value={formData.masterID}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
+                    handleChange(e);
+                  }
+                }}
               />
             </div>
 
