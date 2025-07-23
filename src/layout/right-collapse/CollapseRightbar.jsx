@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import BetSlip from "../bet-slip/BetSlip";
 
 const CollapseRightbar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const rightbarWidth = collapsed ? 50 : 250;
+  const rightbarWidth = collapsed ? 50 : 280;
 
   return (
     <div
@@ -25,6 +26,7 @@ const CollapseRightbar = () => {
             />
           </div>
         ) : (
+          <>
           <button
             className="xbtn d-flex gap-2 items-center justify-center"
             onClick={() => setCollapsed((c) => !c)}
@@ -32,6 +34,8 @@ const CollapseRightbar = () => {
             Collapse
             <FaAnglesRight size={18} />
           </button>
+        <BetSlip/>
+          </>
         )}
       </div>
     </div>
