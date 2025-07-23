@@ -12,7 +12,7 @@ const Layout = () => {
     <div>
       <Header />
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
       {isMobile && <BottomTabNavigator />}
     </div>
   );
