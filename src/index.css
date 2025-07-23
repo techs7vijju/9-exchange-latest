@@ -1359,7 +1359,6 @@ form .textarea-group small,
   background-color: var(--blue-color15);
 }
 
-
 .collapse-right-bar-container button:hover {
   transform: scale(1);
 }
@@ -1403,4 +1402,35 @@ form .textarea-group small,
   bottom: -12%;
   left: 26%;
   color: var(--grey-color11);
+}
+
+.bottom-tab-navigator {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  padding: 8px 0;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #23527c;
+  font-size: 14px;
+  cursor: pointer;
+}
+.tab-item.active {
+  color: #fff;
+}
+.tab-item.active svg {
+  background: #00aef3;
+  border-radius: 50%;
+  padding: 8px;
 }
