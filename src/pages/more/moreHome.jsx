@@ -256,7 +256,7 @@ function MoreHome() {
       ) : (
         <div
           className="p-2 d-flex flex-between w-100 gap-2"
-          style={{ height: "40rem" }}
+          style={{ height: "30rem" }}
         >
           <div className="w-20 h-100">
             <MoreSidebar />

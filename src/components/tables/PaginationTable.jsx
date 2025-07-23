@@ -16,9 +16,9 @@ function PaginationTable({ data, columns }) {
   };
 
   return (
-    <div className="page-table-container">
-      <div className="table-scroll-container">
-        <table className="table-container">
+    <div className="page-table-container ">
+      <div className="table-scroll-container p-2 br-3 ">
+        <table className="table-container table-grey-border ">
           <thead>
             <tr>
               {columns.map((col, index) => (
@@ -49,7 +49,7 @@ function PaginationTable({ data, columns }) {
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          Previous
+          Back
         </button>
         <div className="">
           <button className="wbtn">1</button>

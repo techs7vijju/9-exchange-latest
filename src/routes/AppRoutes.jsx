@@ -5,6 +5,7 @@ import Home from "../pages/home/Homepage";
 import Appui from "../pages/home/Appui";
 import Layout from "../layout/Layout";
 import Tickets from "../pages/more/tickets/tickets";
+import Deposits from "../pages/more/deposits/deposit";
 import MoreHome from "../pages/more/moreHome";
 
 function AppRoutes() {
@@ -17,7 +18,7 @@ function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/more" element={<MoreHome />}>
             <Route index element={<DefaultMoreContent />} />
-            {/* <Route path="deposits" element={<Deposits />} /> */}
+             <Route path="deposits" element={<Deposits />} />
             {/* <Route path="withdrawals" element={<Withdrawals />} /> */}
             <Route path="tickets" element={<Tickets />} />
             {/* <Route path="profile" element={<Profile />} /> */}
