@@ -1689,7 +1689,7 @@ form .textarea-group small,
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: var(--blue-color16);
+  color: var(--blue-color17);
   font-size: 14px;
   cursor: pointer;
 }
@@ -1755,7 +1755,7 @@ form .textarea-group small,
   align-items: center;
   gap: 10px;
   padding: 12px 24px;
-  color: var(--blue-color16);
+  color: var(--blue-color17);
   font-size: 16px;
   cursor: pointer;
   border-bottom: 1px solid var(--grey-color7);
