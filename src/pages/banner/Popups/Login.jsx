@@ -37,12 +37,12 @@ const Login = ({ showLogin, setShowLogin, setShowForgot }) => {
   };
 
   return (
-    <>
+
       <Modal
         show={showLogin}
         onHide={handleCancel}
         centered
-        className="custom-login-modal"
+        className="custom-popup-modal"
       >
         <h3 className="thank-title text-center mb-2">LOGIN</h3>
 
@@ -99,7 +99,7 @@ const Login = ({ showLogin, setShowLogin, setShowForgot }) => {
           </div>
         </div>
       </Modal>
-    </>
+
   );
 };
 

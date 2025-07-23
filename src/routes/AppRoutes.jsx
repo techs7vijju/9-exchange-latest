@@ -7,27 +7,31 @@ import Layout from "../layout/Layout";
 import Tickets from "../pages/more/tickets/tickets";
 import Deposits from "../pages/more/deposits/deposit";
 import MoreHome from "../pages/more/moreHome";
+import SportsLayout from "../layout/SportsLayout";
+import Sports from "../pages/sports/Sports";
+import PageNotFound from "../pages/page-not-found/PageNotFound";
 
 function AppRoutes() {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
   const body = isMobile ? "body1" : "body";
   return (
     <div className={body}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
+          {/* Main pages with right bar */}
+          <Route element={<SportsLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/sports" element={<Sports />} />
+          </Route>
           <Route path="/more" element={<MoreHome />}>
             <Route index element={<DefaultMoreContent />} />
-             <Route path="deposits" element={<Deposits />} />
-            {/* <Route path="withdrawals" element={<Withdrawals />} /> */}
             <Route path="tickets" element={<Tickets />} />
-            {/* <Route path="profile" element={<Profile />} /> */}
-            {/* <Route path="privacy-policy" element={<PrivacyPolicy />} /> */}
-            {/* <Route path="terms-of-service" element={<TermsOfService />} /> */}
           </Route>
         </Route>
-
         <Route path="/appui" element={<Appui />} />
+
+        <Route path="appui" element={<Appui />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );

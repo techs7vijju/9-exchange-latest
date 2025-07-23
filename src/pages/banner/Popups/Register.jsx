@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Modal } from "react-bootstrap";
 import * as Yup from "yup";
-import {
-  FaUserFriends,
-  FaEye,
-  FaEyeSlash,
-  FaBolt,
-  FaRegCalendarAlt,
-  FaUser,
-  FaCheck,
-  FaCalendarAlt,
-} from "react-icons/fa";
-import { IoEye, IoEyeOff, IoClose } from "react-icons/io5";
+import { FaUserFriends, FaBolt } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import TextInput from "../../../components/form-elements/TextInput";
+import SelectInput from "../../../components/form-elements/SelectInput";
+import {
+  getSecurityQuestions,
+  getUserCountries,
+  verifyUsername,
+} from "../../../api/apiMethods";
 
 const emailRegex =
   /^(([a-z\d+_\-][a-z\d+'._\-]*[a-z\d+_\-])|([a-z\d+_\-]{1,2}))@((([a-z\d][a-z\d\-]{0,100}[a-z\d])|([a-z\d]))\.)+[a-z]{2,}$/i;
@@ -31,7 +28,7 @@ const validationSchema1 = Yup.object({
       /^[A-Za-z0-9_]+$/,
       "User Name can only contain letters, numbers, and Underscore"
     )
-    .min(5, "User Name must be at least 5 characters long")
+    .min(5, "User Name must be at least 5 characters")
     .max(15, "User Name must not exceed 15 characters"),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
@@ -123,12 +120,12 @@ const Register = ({
   const [countries, setCountries] = useState([]);
   const [countrySearchTerm, setCountrySearchTerm] = useState("");
   const [currencySearchTerm, setCurrencySearchTerm] = useState("");
-  const [selectedForm, setSelectedForm] = useState("register");
+  const [currencies, setCurrencies] = useState([]);
   const [checkBoxes, setCheckBoxes] = useState({
     age_agree: false,
     agree_policy: false,
   });
-
+  console.log("countries", countries);
   useEffect(() => {
     setCheckBoxes((prev) => ({
       ...prev,
@@ -151,7 +148,8 @@ const Register = ({
     email: "",
     securityQuestions: [],
   });
-
+  console.log("secQuError", secQuError);
+  console.log("formData", formData);
   const validationSchema2 = Yup.object().test(
     "at-least-3-answers",
     "You must answer at least 3 security questions",
@@ -308,6 +306,7 @@ const Register = ({
   };
 
   const handleCountryChange = (selectedCountry) => {
+    console.log("selectedCountry", selectedCountry)
     setFormData((prev) => ({
       ...prev,
       country_id: selectedCountry.id,
@@ -370,20 +369,26 @@ const Register = ({
         return false;
       }
     } catch (error) {
-      const { apiErrors } = handleApiError(error);
-      if (Array.isArray(apiErrors) && apiErrors.length > 0) {
-        setUserError(apiErrors[0].message || "Something went wrong");
-      } else {
-        setUserError("Something went wrong");
-      }
-
-      return false;
-    } finally {
       setIsUsernameLoading(false);
+      console.log("Validation error:", error);
+
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
+      }
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    console.log("hitting");
     setApiErrors([]);
     try {
       await validationSchema1.validate(formData, { abortEarly: false });
@@ -479,7 +484,6 @@ const Register = ({
 
         setMessage(response.message);
 
-        handleApiError("");
         setApiErrors([]);
         setSelectedCountryItem("");
         setCountrydropdownOpen(false);
@@ -508,20 +512,23 @@ const Register = ({
       }
     } catch (error) {
       setLoading(false);
-      const { validationErrors: newValidationErrors, apiErrors: newApiErrors } =
-        handleApiError(error);
+      console.log("Validation error:", error);
 
-      if (newValidationErrors) {
-        setValidationErrors(newValidationErrors);
-      }
-      if (newApiErrors) {
-        setApiErrors(newApiErrors);
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
       }
     }
   };
 
   const handleClose = () => {
-    handleApiError("");
     setApiErrors([]);
     setSelectedCountryItem("");
     setCountrydropdownOpen(false);
@@ -562,13 +569,13 @@ const Register = ({
     });
     setUserError("");
     setActiveButton(1);
-    showRegister(false);
+    setShowRegister(false);
     navigate("/");
   };
 
   const handleTerms = () => {
     setTermsPopup(true);
-    showRegister(false);
+    setShowRegister(false);
     setLoginModal(false);
   };
 
@@ -631,7 +638,6 @@ const Register = ({
 
         setLoading(false);
         setMessage(response.message);
-        handleApiError("");
         setApiErrors([]);
         setSelectedCountryItem("");
         setCountrydropdownOpen(false);
@@ -657,19 +663,22 @@ const Register = ({
         setActiveButton(1);
         setActiveStatus(1);
         setRegistrationSuccessfull(true);
-        showRegister(false);
+        setShowRegister(false);
       }
     } catch (error) {
       setLoading(false);
-      const { validationErrors: newValidationErrors, apiErrors: newApiErrors } =
-        handleApiError(error);
+      console.log("Validation error:", error);
 
-      if (newValidationErrors) {
-        setValidationErrors(newValidationErrors);
-      }
-
-      if (newApiErrors) {
-        setApiErrors(newApiErrors);
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
       }
     }
   };
@@ -698,7 +707,6 @@ const Register = ({
     setUserError("");
     setShowConfirmPassword(false);
     setShowPassword(false);
-    handleApiError("");
     setApiErrors([]);
     setSelectedCountryItem("");
     setCountrydropdownOpen(false);
@@ -734,387 +742,372 @@ const Register = ({
 
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setCountrydropdownOpen(false);
-        setCurrencydropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const renderSecurityQuestions = () => (
+    <div className="my-2">
+      {securityQuestions.map((question, index) => {
+        const questionKey = `question_${question.question_id}`;
+        const currentAnswer =
+          formData.securityQuestions.find(
+            (q) => q.question_id === question.question_id
+          )?.answer || "";
+
+        return (
+          <div key={question.question_id} className="flex-column mt-2">
+            <div>
+              <TextInput
+                type="text"
+                label={`Q${index + 1}. ${question.questions}`}
+                name={questionKey}
+                placeholder="Enter your answer"
+                value={currentAnswer}
+                onChange={handleChange}
+                error={validationErrors[questionKey]}
+              />
+            </div>
+          </div>
+        );
+      })}
+      {secQuError && <div className="text-danger small mt-2">{secQuError}</div>}
+    </div>
+  );
+
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0];
+  };
 
   return (
     <Modal
       show={showRegister}
-      // onHide={handleCancel}
       centered
-      // className="custom-login-modal"
+      className="custom-popup-modal"
+      size="lg"
+      onHide={handleClose}
     >
-      <div className="d-flex flex-col blue-color4 py-2">
-        <h3 className="flex-center">REGISTRATION</h3>
-        
-          <div className="d-flex items-center justify-items-center px-10">
-            <button
-              className="d-flex flex-between xbtn button-blue"
-              onClick={() => setSelectedForm("register")}
-            >
-              <FaUserFriends className="me-2" />
-              SIGN UP / REGISTER
-            </button>
+      <div className="modal-header-fixed">
+        <button
+          className="btn-close"
+          onClick={handleClose}
+          aria-label="Close"
+        ></button>
 
-            <button
-              className="d-flex flex-between xbtn grey-8-btn"
-            >
-              <FaBolt className="me-2" />
-              ONE CLICK
-            </button>
+        <h5 className="model-label pt-3">REGISTRATION</h5>
+        <div className="d-flex flex-col flex-center w-100 gap-2">
+          <span className="thank-bar w-15"></span>
+          <span className="thank-bar w-10"></span>
+        </div>
+
+        <div className="d-flex flex-center py-2 gap-3 large-font">
+          <button
+            className={`d-flex flex-between xbtn ${
+              activeButton === 1 ? "button-blue" : "grey-8-btn blue-color4"
+            }`}
+            onClick={() => handleButtonChange(1)}
+          >
+            <FaUserFriends className="me-2" />
+            SIGN UP / REGISTER
+          </button>
+
+          <button
+            className={`d-flex flex-between xbtn ${
+              activeButton === 2 ? "button-blue" : "grey-8-btn blue-color4"
+            }`}
+            onClick={() => handleButtonChange(2)}
+          >
+            <FaBolt className="me-2" />
+            ONE CLICK
+          </button>
+        </div>
+
+        {apiErrors.length > 0 && (
+          <div className="alert alert-danger mt-2 mb-0">
+            {apiErrors.map((error, index) => (
+              <div key={index}>{error}</div>
+            ))}
           </div>
-
-          {apiErrors.length > 0 && (
-            <div className="alert alert-danger">
-              {apiErrors.map((error, index) => (
-                <div key={index}>{error}</div>
-              ))}
-            </div>
-          )}
-
-          {selectedForm === "register" ? (
-            <form onSubmit={handleSubmit}>
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.name ? "is-invalid" : ""
-                    }`}
-                  />
-                  {validationErrors.name && (
-                    <div className="invalid-feedback">
-                      {validationErrors.name}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>User Name</label>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      name="user_name"
-                      value={formData.user_name}
-                      onChange={handleChange}
-                      className={`form-control ${
-                        validationErrors.user_name || userError
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    />
-                    {isUsernameLoading && (
-                      <span className="input-group-text">...</span>
-                    )}
-                    {!isUsernameLoading &&
-                      formData.user_name.length >= 5 &&
-                      !userError && (
-                        <span className="input-group-text text-success">
-                          <FaCheck />
-                        </span>
-                      )}
-                  </div>
-                  {(validationErrors.user_name || userError) && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.user_name || userError}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Password</label>
-                  <div className="input-group">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className={`form-control ${
-                        validationErrors.password ? "is-invalid" : ""
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {validationErrors.password && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.password}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>Confirm Password</label>
-                  <div className="input-group">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className={`form-control ${
-                        validationErrors.confirmPassword ? "is-invalid" : ""
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-outline-secondary"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
-                    >
-                      {showConfirmPassword ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {validationErrors.confirmPassword && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.confirmPassword}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Master/Parent ID (Optional)</label>
-                  <input
-                    type="text"
-                    name="masterID"
-                    value={formData.masterID}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label>Date of Birth</label>
-                  <div className="input-group">
-                    <input
-                      type="date"
-                      name="dob"
-                      value={formData.dob}
-                      onChange={(e) => handleDateChange(e.target.value)}
-                      className={`form-control ${
-                        validationErrors.dob ? "is-invalid" : ""
-                      }`}
-                    />
-                    <span className="input-group-text">
-                      <FaCalendarAlt />
-                    </span>
-                  </div>
-                  {validationErrors.dob && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.dob}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Country</label>
-                  <select
-                    name="country_id"
-                    value={formData.country_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.country_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Country</option>
-                    {/* Populate with actual countries */}
-                  </select>
-                  {validationErrors.country_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.country_id}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>Currency</label>
-                  <select
-                    name="currency_id"
-                    value={formData.currency_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.currency_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Currency</option>
-                    {/* Populate with actual currencies */}
-                  </select>
-                  {validationErrors.currency_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.currency_id}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label>Email (Optional)</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`form-control ${
-                    validationErrors.email ? "is-invalid" : ""
-                  }`}
-                />
-                {validationErrors.email && (
-                  <div className="invalid-feedback d-block">
-                    {validationErrors.email}
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-3">
-                <h5>Security Questions</h5>
-                {/* Render security questions here */}
-              </div>
-
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isChecked}
-                  onChange={() => setIsChecked(!isChecked)}
-                />
-                <label className="form-check-label">
-                  Yes, I am 18+ Years Old
-                </label>
-              </div>
-
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAgreed}
-                  onChange={() => setIsAgreed(!isAgreed)}
-                />
-                <label className="form-check-label">
-                  I agree to the Terms and Conditions and Privacy Policy
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading}
-              >
-                {loading ? "Registering..." : "REGISTER"}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleOneClickSubmit}>
-              <div className="row mb-3">
-                <div className="col-md-6">
-                  <label>Country</label>
-                  <select
-                    name="country_id"
-                    value={formData.country_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.country_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Country</option>
-                    {/* Populate with actual countries */}
-                  </select>
-                  {validationErrors.country_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.country_id}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6">
-                  <label>Currency</label>
-                  <select
-                    name="currency_id"
-                    value={formData.currency_id}
-                    onChange={handleChange}
-                    className={`form-control ${
-                      validationErrors.currency_id ? "is-invalid" : ""
-                    }`}
-                  >
-                    <option value="">Select Currency</option>
-                    {/* Populate with actual currencies */}
-                  </select>
-                  {validationErrors.currency_id && (
-                    <div className="invalid-feedback d-block">
-                      {validationErrors.currency_id}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label>Master/Parent ID (Optional)</label>
-                <input
+        )}
+      </div>
+      <div className="popup-scroll blue-color4">
+        {activeButton === 1 ? (
+          <form onSubmit={handleSubmit}>
+            <div className="row ">
+              <div className="col-md-6">
+                <TextInput
                   type="text"
+                  label="Name"
+                  name="name"
+                  placeholder="Enter"
+                  value={formData.name}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^[a-zA-Z]*$/.test(value) && value.length <= 60) {
+                      handleChange(e);
+                    }
+                  }}
+                  error={validationErrors?.name}
+                />
+              </div>
+
+              <div className="col-md-6">
+                <TextInput
+                  type="text"
+                  label="User Name"
+                  name="user_name"
+                  placeholder="Enter"
+                  value={formData.user_name}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
+                      handleChange(e);
+                    }
+                  }}
+                  error={validationErrors.user_name}
+                  showLoading={isUsernameLoading}
+                  showCheckmark={
+                    !isUsernameLoading &&
+                    formData.user_name.length >= 5 &&
+                    !userError
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-6">
+                <TextInput
+                  type={showPassword ? "text" : "password"}
+                  label="Password"
+                  name="password"
+                  placeholder="Enter"
+                  value={formData.password}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 36) {
+                      handleChange(e);
+                    }
+                  }}
+                  error={validationErrors.password}
+                  togglePassword={() => setShowPassword(!showPassword)}
+                  showPassword={showPassword}
+                />
+              </div>
+              <div className="col-md-6">
+                <TextInput
+                  type={showConfirmPassword ? "text" : "password"}
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  placeholder="Enter"
+                  value={formData.confirmPassword}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 36) {
+                      handleChange(e);
+                    }
+                  }}
+                  error={validationErrors.confirmPassword}
+                  togglePassword={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
+                  showPassword={showConfirmPassword}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-6">
+                <TextInput
+                  type="text"
+                  label="Master/Parent ID (Optional)"
                   name="masterID"
                   value={formData.masterID}
                   onChange={handleChange}
-                  className="form-control"
                 />
               </div>
-
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isChecked}
-                  onChange={() => setIsChecked(!isChecked)}
+              <div className="col-md-6">
+                <TextInput
+                  type="date"
+                  label="Date of Birth"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={(e) => handleChange("dob", e.target.value)}
+                  error={validationErrors.dob}
+                  minDate={formatDate(
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 100)
+                    )
+                  )}
+                  maxDate={formatDate(
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 18)
+                    )
+                  )}
                 />
-                <label className="form-check-label">
-                  Yes, I am 18+ Years Old
-                </label>
               </div>
+            </div>
 
-              <div className="form-check mb-3">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAgreed}
-                  onChange={() => setIsAgreed(!isAgreed)}
+            <div className="row">
+              <div className="col-md-6">
+                <SelectInput
+                  label="Country"
+                  name="country_id"
+                  value={countries.find((c) => c.id === formData.country_id)}
+                  onChange={(selected) => handleCountryChange(selected)}
+                  options={countries.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  error={validationErrors.country_id}
+                  required
                 />
-                <label className="form-check-label">
-                  I agree to the Terms and Conditions and Privacy Policy
-                </label>
               </div>
+              <div className="col-md-6">
+                <SelectInput
+                  label="Currency"
+                  name="currency_id"
+                  value={currencies.find((c) => c.id === formData.currency_id)}
+                  onChange={(selected) => handleCurrencyChange(selected)}
+                  options={countries.map((country) => ({
+                    value: country.id,
+                    label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
+                  }))}
+                  error={validationErrors.currency_id}
+                  required
+                />
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={loading}
-              >
-                {loading ? "Registering..." : "REGISTER"}
-              </button>
-            </form>
-          )}
+            <div className="">
+              <TextInput
+                type="email"
+                label="Email (Optional)"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={validationErrors.email}
+              />
+            </div>
+            <div class="custom-line"></div>
+            <div className="d-flex flex-center flex-col m-2">
+              <h5 className="fw-600">Set Your Security Questions</h5>
+            </div>
+            {renderSecurityQuestions()}
 
-          <div className="mt-3 text-center">
-            Already have an account? <a href="#">LOGIN</a>
-          </div>
-       
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+              />
+              <label className="form-check-label">
+                Yes, I am 18+ Years Old
+              </label>
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isAgreed}
+                onChange={() => setIsAgreed(!isAgreed)}
+              />
+              <label className="form-check-label">
+                I agree to the Terms and Conditions and Privacy Policy
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "REGISTER"}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleOneClickSubmit}>
+            <div className="row">
+              <div className="col-md-6">
+                <SelectInput
+                  label="Country"
+                  name="country_id"
+                  value={countries.find((c) => c.id === formData.country_id)}
+                  onChange={(selected) => handleCountryChange(selected)}
+                  options={countries.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  error={validationErrors.country_id}
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <SelectInput
+                  label="Currency"
+                  name="currency_id"
+                  value={currencies.find((c) => c.id === formData.currency_id)}
+                  onChange={(selected) => handleCurrencyChange(selected)}
+                  options={countries.map((country) => ({
+                    value: country.id,
+                    label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
+                  }))}
+                  error={validationErrors.currency_id}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <TextInput
+                type="text"
+                label="Master/Parent ID (Optional)"
+                name="masterID"
+                value={formData.masterID}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
+                    handleChange(e);
+                  }
+                }}
+              />
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+              />
+              <label className="form-check-label">
+                Yes, I am 18+ Years Old
+              </label>
+            </div>
+
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={isAgreed}
+                onChange={() => setIsAgreed(!isAgreed)}
+              />
+              <label className="form-check-label">
+                I agree to the Terms and Conditions and Privacy Policy
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "REGISTER"}
+            </button>
+          </form>
+        )}
+
+        <div className="mt-3 text-center">
+          Already have an account? <a href="#">LOGIN</a>
+        </div>
       </div>
     </Modal>
   );

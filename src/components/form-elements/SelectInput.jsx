@@ -1,10 +1,9 @@
 import React from "react";
 import Select from "react-select";
-import { customStyles } from "../styles/ReactSelectStyles";
+// import "./SelectInput.css"; // Your CSS file with the above styles
 
 const SelectInput = ({
   label,
-  
   options,
   value,
   onChange,
@@ -14,18 +13,19 @@ const SelectInput = ({
 }) => {
   return (
     <div className="select-group">
-      <label htmlFor="select">{label}
-      {required && <span className="span ">*</span>}
+      <label htmlFor="select">
+        {label}
+        {required && <span className="span">*</span>}
       </label>
       <Select
-      
+        classNamePrefix="react-select"
         placeholder={placeholder}
-        styles={customStyles}
         id="select"
         value={value}
         onChange={onChange}
         options={options}
         isSearchable={true}
+        className={error ? "is-invalid" : ""}
       />
       {error && <small className="error">{error}</small>}
     </div>

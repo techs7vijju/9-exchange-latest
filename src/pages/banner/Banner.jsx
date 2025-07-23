@@ -8,13 +8,12 @@ import { FaPlay } from "react-icons/fa";
 import { Images } from "../../images/images";
 import { Carousel } from "react-bootstrap";
 import { useMediaQuery } from "react-responsive";
-import CollapsePage from "./Collapse";
 
 function Banner() {
   console.log("opened");
   const navigate = useNavigate();
   const [dropdown, setdropdown] = useState(false);
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
 
   const getUserData = () => {
     const storedData = localStorage.getItem("user_data");
@@ -249,14 +248,14 @@ function Banner() {
                 direction=""
                 className="large-font mx-1 w-100"
               >
-                Welcom to 9-exchange
+                Welcome to 9-exchange
               </marquee>
             </div>
           </div>
         </>
       ) : (
         <div className="p-2 d-flex flex-between w-100 gap-2">
-          <div className="w-85">
+          <div>
             <div
               className="d-flex flex-between gap-2 w-100"
               style={{ height: "15.625rem" }}
@@ -348,7 +347,7 @@ function Banner() {
             </div>
 
             <div className="p-1">
-              <div className="d-flex flex-row w-100 scroll-xaxis1 white-color medium-font py-2">
+              <div className="d-flex flex-row w-100 scroll-xaxis1 white-color large-font py-2">
                 <div className="scroll-card blue-color10-bg">
                   <img
                     src={Images.cricket1}
@@ -405,13 +404,10 @@ function Banner() {
                   direction=""
                   className="xl-large-font mx-1 w-100"
                 >
-                  Welcom to 9-exchange
+                  Welcome to 9-exchange
                 </marquee>
               </div>
             </div>
-          </div>
-          <div className="w-15">
-            <CollapsePage />
           </div>
         </div>
       )}

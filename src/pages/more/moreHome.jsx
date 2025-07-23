@@ -13,7 +13,7 @@ function MoreHome() {
   console.log("opened");
   const navigate = useNavigate();
   const [dropdown, setdropdown] = useState(false);
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
 
   const getUserData = () => {
     const storedData = localStorage.getItem("user_data");
