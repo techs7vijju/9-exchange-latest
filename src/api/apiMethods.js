@@ -8,3 +8,5 @@ export const getUserCountries = (data) => apiRequest("getUserCountries", data);
 
 export const getSecurityQuestions = (data) =>
   apiRequest("getSecurityQuestions", data);
+
+export const verifyUsername = (data) => apiRequest("verifyUsername", data);

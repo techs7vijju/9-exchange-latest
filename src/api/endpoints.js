@@ -21,6 +21,11 @@ const endpoints = {
     method: "get",
     url: `/website/${websiteId}/user/securityQuestions`,
   },
+
+  verifyUsername: {
+    method: "post",
+    url: `/website/${websiteId}/user/verify/username`,
+  },
 };
 
 export default endpoints;

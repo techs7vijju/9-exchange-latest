@@ -221,6 +221,7 @@ input[type="number"] {
   --blue-color13: #205583;
   --blue-color14: #30334d;
   --blue-color15: #205582;
+  --blue-color16: #276aa566;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -256,7 +257,7 @@ input[type="number"] {
   src: url(https://fonts.gstatic.com/s/robotocondensed/v30/ieVW2ZhZI2eCN5jzbjEETS9weq8-19ehAyvMum7nfDB64f8N1X1pLOSK.woff2);
 }
 /* body  App.js */
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap"); */
 
 body,
 * {
@@ -289,14 +290,40 @@ body,
   overflow: hidden;
   border-radius: 5px;
 }
-
+.custom-popup-modal.modal-header-fixed {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+.custom-popup-modal .modal-header-fixed .model-label {
+  font-size: 1.5rem;
+  color: var(--blue-color4);
+  text-align: center;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
 .popup-scroll {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 1rem;
-  max-height: calc(90vh - 100px);
+  padding: 0 1.5rem 1.5rem;
+  max-height: calc(100vh - 200px);
 }
-
+.custom-line {
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor,
+    currentColor 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  color: var(--blue-color16);
+  margin: 1rem 0;
+}
 .btn-close {
   position: absolute;
   top: 0;
@@ -307,6 +334,11 @@ body,
   border: none;
   font-size: 1rem;
   cursor: pointer;
+}
+@media (max-width: 768px) {
+  .custom-popup-modal .modal-header-fixed .model-label {
+    font-size: 1.2rem;
+  }
 }
 
 /* h-tags */
@@ -342,6 +374,20 @@ p {
 }
 p.p-grey {
   color: var(--grey-color10);
+}
+.p-2 {
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.px-5 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.px-2 {
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 /* gaps */
@@ -478,6 +524,9 @@ p.p-grey {
 .fw-600 {
   font-weight: 600;
 }
+.fw-700 {
+  font-weight: 700;
+}
 
 /* borders */
 .border-none {
@@ -604,9 +653,11 @@ form .input-group,
 form .input-group label,
 .form .input-group label {
   font-size: 16px;
-  color: #276aa5;
+  font-weight: 600;
+  color: var(--blue-color4);
   margin-bottom: 10px;
 }
+
 form .input-group span,
 .form .input-group span {
   color: var(--red-color1);
@@ -682,45 +733,128 @@ form .input-group .input-section svg,
   margin-right: 16px;
 }
 
+/* calender */
+form .input-group input[type="date"],
+.form .input-group input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  color: var(--blue-color4);
+  flex-grow: 1;
+  padding: 14px 16px;
+  width: 100%;
+  height: 100%;
+  line-height: normal;
+  min-height: 48px;
+}
+form .input-group input[type="date"]::-webkit-calendar-picker-indicator,
+.form .input-group input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  background: none;
+}
+.form .input-group .input-section .input,
+.form
+  .input-group
+  .input-section
+  .input[type="date"]:not(:focus):not(:valid)::before {
+  content: attr(placeholder);
+  color: var(--blue-color4);
+}
+.form .input-group .input-section .icon,
+.form .input-group .input-section .icon[data-type="date"] {
+  margin-right: 16px;
+  color: var(--blue-color1);
+  cursor: pointer;
+}
+.form .input-group .input-section,
+.form .input-group .input-section[type="date"]:focus {
+  outline: none;
+}
+
 /* select input group */
 form .select-group,
 .form .select-group {
   position: relative;
   padding-bottom: 20px;
+  width: 100%;
 }
-
 form .select-group label,
 .form .select-group label {
   font-size: 16px;
+  font-weight: 600;
   color: var(--blue-color4);
-  margin-left: 10px;
   margin-bottom: 10px;
+  display: block;
 }
 form .select-group label span,
 .form .select-group label span {
   color: var(--red-color1);
   margin-left: 3px;
 }
-
-form .select-group select,
-.form .select-group select {
+form .select-group .react-select__control,
+.form .select-group .react-select__control {
+  border: 2px solid #276aa599;
+  border-radius: 5px;
+  min-height: 48px;
   font-size: 16px;
-  line-height: 2px;
-  color: var(--grey-color1);
-  background-color: var(--white-color);
-  border: none;
-  border-radius: 10px;
-  padding: 14px 16px;
-  width: inherit;
-  outline: none;
-  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  color: var(--blue-color4);
+  box-shadow: none;
+}
+form .select-group .react-select__control--is-focused,
+.form .select-group .react-select__control--is-focused {
+  border-color: var(--blue-color4);
+}
+form .select-group .react-select__input input,
+.form .select-group .react-select__input .input {
+  color: var(--blue-color4);
 }
 
+form .select-group .react-select__menu,
+.form .select-group .react-select__menu {
+  margin-top: 0;
+  border-radius: 0 0 5px 5px;
+  border: 2px solid var(--blue-color4);
+  border-top: none;
+  box-shadow: none;
+}
+form .select-group .react-select__option,
+.form .select-group .react-select__option {
+  padding: 10px 16px;
+  color: var(--blue-color4);
+}
+form .select-group .react-select__option--is-selected,
+.form .select-group .react-select__option--is-selected {
+  background-color: #276aa520;
+  color: var(--blue-color4);
+}
+form .select-group .react-select__option--is-focused,
+.form .select-group .react-select__option--is-focused {
+  background-color: #276aa510;
+}
+form .select-group .react-select__placeholder,
+.form .select-group .react-select__placeholder {
+  color: var(--blue-color4);
+  font-size: 14px;
+}
+form .select-group .react-select__single-value,
+.form .select-group .react-select__single-value {
+  color: var(--blue-color4);
+}
+form .select-group .react-select__dropdown-indicator,
+.form .select-group .react-select__dropdown-indicator {
+  color: var(--blue-color1);
+  padding: 8px;
+}
+form .select-group .react-select__control--is-invalid,
+.form .select-group .react-select__control--is-invalid {
+  border-color: var(--red-color1);
+}
 form .select-group small,
 .form .select-group small {
   position: absolute;
   bottom: 8px;
-  left: 0px;
+  left: 0;
   font-size: 12px;
   line-height: 2px;
   color: var(--red-color1);
@@ -1358,7 +1492,6 @@ form .textarea-group small,
   width: 100%;
   background-color: var(--blue-color15);
 }
-
 
 .collapse-right-bar-container button:hover {
   transform: scale(1);
