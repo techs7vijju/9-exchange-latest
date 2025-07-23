@@ -33,29 +33,33 @@ function LanguageDropdown({ selectedLanguage, onSelectLanguage }) {
   });
 
   return (
-    <div className="position-relative" ref={dropdownRef}>
+    <div className="Language-selector d-flex items-center position-relative" ref={dropdownRef}>
       <div
-        className="d-flex align-items-center py-2 px-2 bg-blue2 rounded-1 pointer me-2"
+        className="d-flex align-items-center py-2 rounded-1 pointer me-2"
         onClick={toggleLanguageDropdown}
       >
-        <CiGlobe size={18} className="me-1 stroke1 zoom-on-hover" />
-        <span className="mx-1">{selectedLanguage}</span>
-        {showLanguages ? <FaChevronUp /> : <FaChevronDown />}
+        <CiGlobe size={18} className="me-1 stroke1" />
+        <p className="me-2">{selectedLanguage}</p>
+        {showLanguages ? (
+          <FaChevronUp size={16} />
+        ) : (
+          <FaChevronDown size={16} />
+        )}
       </div>
 
       {showLanguages && (
         <div
-          className="position-absolute top-100 mt-1 bg-white rounded shadow-sm language-dropdown shadow-lg"
-          style={{ width: "220px", zIndex: 1000, right: 8 }}
+          className="language-dropdown position-absolute top-100 mt-1 bg-white rounded shadow-sm shadow-lg"
+          style={{ width: "220px", zIndex: 1000, left: 0 }}
         >
           <div className="p-3">
-            <div className="d-flex align-items-center lite-bg-blue1 mb-3 px-2 border-blue1 rounded-1">
-              <FiSearch className="text-blue1 me-2" size={18} />
+            <div className="input-container px-2 mb-2 rounded-1 d-flex items-center">
+              <FiSearch className="icon" size={18} />
               <input
                 type="text"
-                className="py-2 all-none text-blue1 blue-placeholder lite-bg-blue1"
+                className="ps-2 py-2 border-0"
                 placeholder="Search.."
-                style={{ border: "none" }}
+                style={{ border: "none", outline: "none" }}
               />
             </div>
 

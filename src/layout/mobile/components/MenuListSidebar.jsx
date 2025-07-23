@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FaTimes, FaChevronDown } from "react-icons/fa";
 import { TiHome } from "react-icons/ti";
+import LanguageDropdown from "./LanguageDropdown";
+import { BiSolidMessageDetail } from "react-icons/bi";
+import { CloseButton } from "react-bootstrap";
+import { IoMdClose } from "react-icons/io";
 
 const sportsList = [
   { id: 1, name: "Cricket" },
@@ -29,6 +33,7 @@ const accountMenuItems = [
 
 const MenuListSidebar = ({ open, onClose }) => {
   const [showSports, setShowSports] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("EN");
 
   const toggleSports = () => {
     setShowSports((prev) => !prev);
@@ -37,10 +42,19 @@ const MenuListSidebar = ({ open, onClose }) => {
   return (
     <div className={`menulist-sidebar-container${open ? " open" : ""}`}>
       <div className="sidebar-header">
-        <span>EN</span>
-        <button className="sidebar-close-btn" onClick={onClose}>
-          <FaTimes size={18} />
-        </button>
+        <LanguageDropdown
+          selectedLanguage={selectedLanguage}
+          onSelectLanguage={setSelectedLanguage}
+        />
+
+        <div className="d-flex gap-2 items-center">
+          <div className="message-wrapper rounded-1">
+            <BiSolidMessageDetail className="icon" size={22} />
+          </div>
+          <button className="sidebar-close-btn" onClick={onClose}>
+            <IoMdClose className="icon" size={22} />
+          </button>
+        </div>
       </div>
 
       <div className="menuList-sidebar-content">
@@ -51,7 +65,7 @@ const MenuListSidebar = ({ open, onClose }) => {
               className={`sidebar-link ${item.active ? "active" : ""}`}
             >
               <span
-                className="sidebar-icon"
+                className="d-fkex align-items-center"
                 aria-label={item.name.toLowerCase()}
               >
                 {item.icon}
