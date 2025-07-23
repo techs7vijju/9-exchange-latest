@@ -22,6 +22,7 @@ import Success from "../../pages/banner/Popups/Success";
 import Blocked from "../../pages/banner/Popups/Blocked";
 import Register from "../../pages/banner/Popups/Register";
 import Thanks from "../../pages/banner/Popups/Thanks";
+import DropdownMenu from "../../components/common/DropdownMenu";
 
 function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const navigate = useNavigate();
@@ -67,20 +68,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     setShowRegister(true);
   };
 
-  //   const handleNavigate = () => {
-  //     navigate("/casino");
-  //   };
-
-  //   const handleOpenLiveMatches = (game) => {
-  //     navigate(`/live-matches/${game}`);
-  //   };
-
-  //   const handleLogout = () => {
-  //     localStorage.clear();
-  //     navigate("/home", { replace: true });
-  //     window.location.reload();
-  //   };
-
   const imagePaths = [
     Images.ezugicasino,
     Images.img2,
@@ -107,66 +94,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     Images.img23,
     Images.img24,
   ];
-
-  //   useEffect(() => {
-  //     const fetchUserWalletDetails = async () => {
-  //       try {
-  //         const response = await getWalletDetails();
-  //         if (response?.records) {
-  //           const res = Array.isArray(response.records)
-  //             ? response.records[0]
-  //             : response.records;
-  //           setWalletDetails({ ...res });
-  //         } else {
-  //           setError(["Something went wrong"]);
-  //         }
-  //       } catch (err) {
-  //         handleError(err, setError);
-  //       }
-  //     };
-  //     fetchUserWalletDetails();
-  //   }, []);
-  //   const balanceAmount = useMemo(() => {
-  //     return (
-  //       (Number(walletDetails?.avil_chips) || 0) +
-  //       (Number(walletDetails?.netpl) || 0) -
-  //       (Number(walletDetails?.exposer) || 0)
-  //     );
-  //   }, [walletDetails]);
-
-  //   const handleFancyExposer = useCallback(
-  //     (data) => {
-  //       if (userData?.userId && Number(userData.userId) === Number(data.userId)) {
-  //         setWalletDetails((prev) => ({
-  //           ...prev,
-  //           exposer: (Number(prev.exposer) || 0) + Number(data.exposer),
-  //         }));
-  //       }
-  //     },
-  //     [userData?.userId]
-  //   );
-
-  //   const handleOddsExposer = useCallback(
-  //     (data) => {
-  //       if (userData?.userId && Number(userData.userId) === Number(data.userId)) {
-  //         setWalletDetails((prev) => ({
-  //           ...prev,
-  //           exposer: Number(data.exposer),
-  //         }));
-  //       }
-  //     },
-  //     [userData?.userId]
-  //   );
-
-  //   useEffect(() => {
-  //     socketService.on("fancyExposer", handleFancyExposer);
-  //     return () => socketService.off("fancyExposer", handleFancyExposer);
-  //   }, [handleFancyExposer]);
-
-  //   useEffect(() => {
-  //     socketService.on("oddsExposer", handleOddsExposer);
-  //     return () => socketService.off("oddsExposer", handleOddsExposer);
-  //   }, [handleOddsExposer]);
   const notificationData = [
     {
       image: Images.profile1,
@@ -188,6 +115,31 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     },
   ];
 
+  const sportsItems = [
+    { img: Images.bat, name: "Cricket" },
+    { img: Images.ball, name: "Football" },
+    { img: Images.tennis, name: "Tennis" },
+    { img: Images.horse, name: "Horse Racing" },
+    { img: Images.grey, name: "Greyhound" },
+    { img: Images.baseball, name: "Baseball" },
+  ];
+  const liveItems = [
+    {  name: "Cricket Live" },
+    {  name: "Football Live" },
+    {  name: "Tennis Live" },
+    {  name: "Horse Racing Live" },
+    {  name: "Greyhound Live" },
+    { name: "Baseball Live" },
+  ];
+  const moreItems = [
+    { img: Images.bets, name: "My Bets" },
+    { img: Images.wallet, name: "My Wallet" },
+    { img: Images.tickets, name: "Tickets" },
+    { img: Images.account, name: "Account Statement" },
+    { img: Images.pl, name: "P/L Statement" },
+    { img: Images.account, name: "commission Report" },
+    { img: Images.set, name: "Set Button Variables" },
+  ];
   return (
     <div className="header">
       {isMobile ? (
@@ -245,8 +197,13 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 <span className="large-font">CRICKET</span>
               </Dropdown.Toggle>
             </Dropdown>
-
-            <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
+            <DropdownMenu
+              title="SPORTS"
+              open={openSports}
+              onToggle={() => setOpenSports(!openSports)}
+              items={sportsItems}
+            />
+            {/* <Dropdown show={openSports} onToggle={() => handleToggle("sports")}>
               <Dropdown.Toggle className="d-flex justify-content-between align-items-center custom-dropdown pointer w-100">
                 <span className="large-font">SPORTS</span>
                 {openSports ? (
@@ -280,9 +237,14 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
-            </Dropdown>
-
-            <Dropdown show={openLive} onToggle={() => handleToggle("live")}>
+            </Dropdown> */}
+            <DropdownMenu
+              title="LIVE"
+              open={openLive}
+              onToggle={() => setOpenLive(!openLive)}
+              items={liveItems}
+            />
+            {/* <Dropdown show={openLive} onToggle={() => handleToggle("live")}>
               <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer ">
                 <span className="large-font">LIVE</span>
                 {openLive ? (
@@ -292,62 +254,49 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 )}
               </Dropdown.Toggle>
               <Dropdown.Menu className="casino-dropdown-menu1 large-font">
-                <Dropdown.Item
-                //   onClick={() => handleOpenLiveMatches("cricket")}
-                >
+                <Dropdown.Item>
                   <div className="d-flex justify-content-between border-bottom-grey">
                     Cricket Live
                     <FaChevronRight className=" my-1 arow-clr" />
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                //   onClick={() => handleOpenLiveMatches("football")}
-                >
+                <Dropdown.Item>
                   <div className="d-flex justify-content-between border-bottom-grey">
                     Football Live
                     <FaChevronRight className=" my-1 arow-clr" />
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                //   onClick={() => handleOpenLiveMatches("tennis")}
-                >
+                <Dropdown.Item>
                   <div className="d-flex justify-content-between border-bottom-grey">
                     Tennis Live
                     <FaChevronRight className=" my-1 arow-clr" />
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                //   onClick={() => handleOpenLiveMatches("horse")}
-                >
+                <Dropdown.Item>
                   <div className="d-flex justify-content-between border-bottom-grey">
                     Horse Racing Live
                     <FaChevronRight className=" my-1 arow-clr" />
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                // onClick={() => handleOpenLiveMatches("grey-hound")}
-                >
+                <Dropdown.Item>
                   <div className="d-flex justify-content-between border-bottom-grey">
                     GreyHound Live
                     <FaChevronRight className=" my-1 arow-clr" />
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                //   onClick={() => handleOpenLiveMatches("kabaddi")}
-                >
+                <Dropdown.Item>
                   <div className="d-flex justify-content-between">
                     Kabaddi Live
                     <FaChevronRight className=" my-1 arow-clr" />
                   </div>
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
-
+            </Dropdown> */}
             <div className="d-flex justify-content-center">
               <Dropdown
                 show={openCasino}
@@ -383,8 +332,13 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-
-            <Dropdown show={openMore} onToggle={() => handleToggle("more")}>
+            <DropdownMenu
+              title="MORE"
+              open={openMore}
+              onToggle={() => setOpenMore(!openMore)}
+              items={moreItems}
+            />
+            {/* <Dropdown show={openMore} onToggle={() => handleToggle("more")}>
               <Dropdown.Toggle className="d-flex flex-between custom-dropdown pointer">
                 <span className="large-font">MORE</span>
                 {openMore ? (
@@ -396,7 +350,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               <Dropdown.Menu className="custom-dropdown1 large-font">
                 <Dropdown.Item
                   className="ps-0 pe-2"
-                  // onClick={() => navigate("/my-bets")}
                   onMouseEnter={() => setOpenCasino(true)}
                   onMouseLeave={() => setOpenCasino(false)}
                 >
@@ -413,10 +366,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                  className="ps-0 pb-2 pe-2"
-                  // onClick={() => navigate("/my-wallet")}
-                >
+                <Dropdown.Item className="ps-0 pb-2 pe-2">
                   <div className="d-flex justify-content-between align-items-center p-1 border-bottom-grey">
                     <div>
                       <img
@@ -430,10 +380,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                  className="ps-0 pb-2 pe-2"
-                  // onClick={() => navigate("/tickets")}
-                >
+                <Dropdown.Item className="ps-0 pb-2 pe-2">
                   <div className="d-flex justify-content-between align-items-center p-1 border-bottom-grey">
                     <div>
                       <img
@@ -447,10 +394,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                  className="ps-0 pb-2 pe-2"
-                  // onClick={() => navigate("/account-statement")}
-                >
+                <Dropdown.Item className="ps-0 pb-2 pe-2">
                   <div className="d-flex justify-content-between align-items-center p-1 border-bottom-grey">
                     <div>
                       <img
@@ -464,10 +408,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                  className="ps-0 pb-2 pe-2"
-                  // onClick={() => navigate("/pl-statement")}
-                >
+                <Dropdown.Item className="ps-0 pb-2 pe-2">
                   <div className="d-flex justify-content-between align-items-center p-1 border-bottom-grey">
                     <div>
                       <img
@@ -481,27 +422,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
 
-                {/* <Dropdown.Item
-                className="ps-0 pb-2 pe-2"
-                onClick={() => navigate("/commission-report")}
-              >
-                <div className="d-flex justify-content-between align-items-center p-1 border-bottom-grey">
-                  <div>
-                    <img
-                      src={Images.Logo}
-                      className="mx-2 icon"
-                      alt="Commission Report"
-                    />
-                    Commission Report
-                  </div>
-                  <FaChevronRight className=" arow-clr" />
-                </div>
-              </Dropdown.Item> */}
-
-                <Dropdown.Item
-                  className="ps-0 p-1 pe-2"
-                  // onClick={() => navigate("/set-button-variables")}
-                >
+                <Dropdown.Item className="ps-0 p-1 pe-2">
                   <div className="d-flex justify-content-between align-items-center p-1 border-bottom-grey">
                     <div>
                       <img
@@ -515,10 +436,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
 
-                <Dropdown.Item
-                  className="ps-0 pe-2"
-                  // onClick={() => navigate("/promotions")}
-                >
+                <Dropdown.Item className="ps-0 pe-2">
                   <div className="d-flex justify-content-between p-1 align-items-center">
                     <div>
                       <img
@@ -532,9 +450,8 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                   </div>
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
-
           <div className="flex-evenly w-30 p-2">
             {isLogin ? (
               <div className="d-flex flex-between w-100 gap-1">
@@ -547,14 +464,12 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                     onClick={toggleMessages}
                   >
                     <MdOutlineChat />
-
                     {showMessages && (
                       <div className="message-dropdown shadow rounded">
                         <div className="dropdown-arrow-up" />
                         <div className="fw-bold px-3 pt-3 pb-2 text-primary border-bottom">
                           Your Messsages
                         </div>
-
                         {notificationData.map((item, i) => (
                           <div
                             className="d-flex align-items-start px-3 py-3 border-bottom"
@@ -603,24 +518,15 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </div>
             )}
           </div>
-
           <div className="flex-evenly w-20 gap-2 white-font large-font mx-2">
             {isLogin && (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
                   <div className="d-flex flex-end">
                     <div style={{ textAlign: "right" }}>
-                      Sports Bal:{" "}
-                      <span className="green-clr fw-600">
-                        {/* {Number(balanceAmount || 0).toFixed(2)} */}
-                        1000
-                      </span>
+                      Sports Bal: <span className="green-clr fw-600">1000</span>
                       <br />
-                      Exp:{" "}
-                      <span className="green-clr fw-600">
-                        {/* {Number(walletDetails?.exposer || 0).toFixed(2)} */}
-                        1000
-                      </span>
+                      Exp: <span className="green-clr fw-600">1000</span>
                     </div>
                   </div>
                 </div>
@@ -628,17 +534,9 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
                   <div className="d-flex flex-end">
                     <div style={{ textAlign: "right" }}>
-                      Casino Bal:{" "}
-                      <span className="green-clr fw-600">
-                        {/* {Number(balanceAmount || 0).toFixed(2)} */}
-                        1000
-                      </span>
+                      Casino Bal: <span className="green-clr fw-600">1000</span>
                       <br />
-                      Exp:{" "}
-                      <span className="green-clr fw-600">
-                        {/* {Number(walletDetails?.exposer || 0).toFixed(2)} */}
-                        1000
-                      </span>
+                      Exp: <span className="green-clr fw-600">1000</span>
                     </div>
                   </div>
                 </div>
@@ -656,30 +554,11 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                     <IoChevronDownSharp className="ms-1 xl-large-font" />
                   )}
                 </Dropdown.Toggle>
-                {/* <Dropdown.Menu className="custom-dropdown large-font"> */}
               </Dropdown>
             </div>
           </div>
         </div>
       )}
-
-      {/* {openRegistation && (
-        <Registration
-          openRegistation={openRegistation}
-          setRegistation={setRegistation}
-          setOpenSign={setOpenSign}
-          setUserData={setUserData}
-          openOneClick={openOneClick}
-          setOpenClick={setOpenClick}
-        />
-      )}
-      {openSign && (
-        <Login
-          openSign={openSign}
-          setOpenSign={setOpenSign}
-          setRegistation={setRegistation}
-        />
-      )} */}
       <Register
         showRegister={showRegister}
         setShowRegister={setShowRegister}

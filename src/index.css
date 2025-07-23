@@ -593,7 +593,106 @@ p.p-grey {
 }
 /* 6 . fORM Started*/
 /* --------------------------  */
+/*Dropdown Menu*/
+.dropdown-container {
+  width: 100%;
+}
 
+.dropdown-container .dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background:none;
+  border: none;
+  padding: 10px 10px;
+  margin-left:0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 70%;
+}
+.dropdown-container .dropdown-header:hover {
+  background:none;
+
+}
+.dropdown-container .dropdown-title {
+  font-size: 1rem;
+  font-weight: 500;
+ 
+}
+.dropdown-container .dropdown-toggle-icon {
+  font-size: 1.2rem;
+  color:#fff;
+}
+
+.dropdown-container .dropdown-menu-custom {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-top: 5px;
+  max-height: 220px; 
+  overflow-y: auto; 
+  overflow-x: hidden;
+  border-radius: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.dropdown-menu-custom::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dropdown-menu-custom::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.dropdown-menu-custom::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.dropdown-menu-custom::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+.dropdown-container .dropdown-item-custom {
+  padding: 8px 12px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.dropdown-container .dropdown-item-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.dropdown-container .dropdown-item-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+ 
+}
+
+.dropdown-container .dropdown-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.dropdown-container.dropdown-label {
+  font-size: 0.95rem;
+  color:  #4D4D4D;
+  font-weight: 500;
+}
+
+.dropdown-container .dropdown-arrow {
+  color:  #4D4D4D;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+/*---------------*/
 /* text input group */
 form .input-group,
 .form .input-group {
