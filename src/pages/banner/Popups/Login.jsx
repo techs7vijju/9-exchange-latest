@@ -4,9 +4,9 @@ import { Button, Form } from "react-bootstrap";
 import { FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 import ForgotPassword from "./ForgotPassword";
 import * as Yup from "yup";
-import { userLogin } from "../api/apiMethods";
-import { encryptData } from "../utils/cryptoUtils";
-import { handleApiError } from "../utils/handleError";
+import { userLogin } from "../../../api/apiMethods";
+import { encryptData } from "../../../utils/cryptoUtils";
+// import { handleApiError } from "../../../utils/cryptoUtils";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),

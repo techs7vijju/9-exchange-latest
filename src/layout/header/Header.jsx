@@ -15,7 +15,7 @@ import { ImExit } from "react-icons/im";
 // import socketService from "../utils/socketService";
 import { useMediaQuery } from "react-responsive";
 import { Images } from "../../images/images";
-import Login from "../../pages/banner/Popups/Login";
+// import Login from "../../pages/banner/Popups/Login";
 import ForgotPassword from "../../pages/banner/Popups/ForgotPassword";
 import NewPassword from "../../pages/banner/Popups/NewPassword";
 import Success from "../../pages/banner/Popups/Success";
@@ -141,11 +141,11 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     { img: Images.baseball, name: "Baseball" },
   ];
   const liveItems = [
-    {  name: "Cricket Live" },
-    {  name: "Football Live" },
-    {  name: "Tennis Live" },
-    {  name: "Horse Racing Live" },
-    {  name: "Greyhound Live" },
+    { name: "Cricket Live" },
+    { name: "Football Live" },
+    { name: "Tennis Live" },
+    { name: "Horse Racing Live" },
+    { name: "Greyhound Live" },
     { name: "Baseball Live" },
   ];
 
@@ -158,11 +158,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     { img: Images.account, name: "commission Report" },
     { img: Images.set, name: "Set Button Variables" },
   ];
-  const EnItems = [
-    {  name: "English" },
-    {  name: "Spanish" },
-  
-  ];
+  const EnItems = [{ name: "English" }, { name: "Spanish" }];
   return (
     <div className="header">
       {isMobile ? (
@@ -234,7 +230,10 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               items={liveItems}
             />
             <div className="d-flex justify-content-center">
-              <div className="dropdown-container" style={{ position: 'relative' }}>
+              <div
+                className="dropdown-container"
+                style={{ position: "relative" }}
+              >
                 <button
                   className="dropdown-header"
                   type="button"
@@ -373,12 +372,12 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </>
             )}
             <div className="d-flex flex-end w-40">
-            <DropdownMenu
-              title="ENG"
-              open={openEn}
-              onToggle={() => setOpenEn(!openEn)}
-              items={EnItems}
-            />
+              <DropdownMenu
+                title="ENG"
+                open={openEn}
+                onToggle={() => setOpenEn(!openEn)}
+                items={EnItems}
+              />
             </div>
           </div>
         </div>
@@ -397,7 +396,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setRegistrationSuccessfull={setRegistrationSuccessfull}
         getWelcome={getWelcomeBonus}
       />
-      <LoginPopup
+      {/* <LoginPopup
         setLoginModal={setLoginPopup}
         loginModal={loginPopup}
         setRegisterModal={setRegisterpopup}
@@ -405,13 +404,13 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setForgotPasswordModal={setForgotPasswordModal}
         setAdminResetPopup={setAdminResetPopup}
         adminResetPopup={adminResetPopup}
-      />
+      /> */}
       <Thanks showThanks={showThanks} setShowThanks={setShowThanks} />
-      <Login
+      {/* <Login
         showLogin={showLogin}
         setShowLogin={setShowLogin}
         setShowForgot={setShowForgot}
-      />
+      /> */}
       <ForgotPassword
         showForgot={showForgot}
         setShowForgot={setShowForgot}

@@ -36,7 +36,7 @@ const endpoints = {
     method: "post",
     url: () => `/website/${websiteId}/user/oneClickLogin`,
   },
-  userLogin: { method: "post", url: `/website/${websiteNewId}/user/login` },
+  userLogin: { method: "post", url: `/website/${websiteId}/user/login` },
 };
 
 export default endpoints;
