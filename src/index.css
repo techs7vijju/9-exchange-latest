@@ -228,6 +228,7 @@ input[type="number"] {
   --blue-color19: #2f5a84;
   --blue-color20: #065ca8;
   --blue-color21: #badeff;
+  --blue-color22: #EFF4FF;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -244,16 +245,20 @@ input[type="number"] {
   --red-color2: #ff5145;
   --red-color3: #ffcdc9;
   --red-color4: #ff1818;
+  --red-color5: #FF5045;
   --green-color1: #8dcc3b;
   --green-color2: #28a745;
   --green-color3: #80c02d;
   --green-color4: #dcffaf;
+  --green-color5: #85C333;
   --yellow-color1: #f7c91d;
   --yellow-color2: #f4c690;
+  --yellow-color3: #F3BA15;
   --orange-color1: #f2870a;
   --orange-color2: #ef6d07;
   --orange-color3: #ffe8d6;
   --header-bg: #205583;
+
 }
 
 @font-face {
@@ -338,12 +343,13 @@ body,
   );
   color: var(--blue-color16);
   margin: 1rem 0;
+  
 }
 .btn-close {
   position: absolute;
-  top: 0;
+  top: 15px;
   right: 0;
-  margin: 0.5rem;
+  margin: 0.2rem;
   color: var(--grey-color10);
   background: none;
   border: none;
@@ -1938,3 +1944,89 @@ form .textarea-group small,
   border-radius: 0.5rem;
 }
 /*----------------------------------*/
+.withdrawal{
+  padding: 1px;
+}
+.withdrawal-bluefont{
+  color: var(--blue-color6);
+  font-weight: 600;
+  font-size: 16px;
+}
+.withdrawal-cancelled{
+  background-color: var(--red-color3);
+  color:var(--red-color5) ;
+  border-radius: 5px;
+  font-weight: 600;
+  line-height: 1;
+}
+.withdrawal-Usd{
+  background-color: var(--red-color5);
+  color: var(--white-color);
+  font-weight: 600;
+  border-radius: 5px;
+  line-height: 1;
+}
+.withdrawal-bluefont-usd{
+  color: var(--blue-color7);
+  font-weight: 500;
+  font-size: 16px;
+}
+.withdrawal-bluefont-usd.font{
+  color: var(--blue-color7);
+  font-weight: 500;
+  font-size: 14px;
+}
+.withdrawal-bluefont.num{
+  font-weight: 500;
+  font-size: 16px;
+}
+.withdrawal-greenfont{
+  color: var(--green-color5);
+  border-radius: 5px;
+}
+.withdrawal-bluefont.num.color{
+  color: var(--yellow-color3);
+}
+.withdraw-flex{
+  display: flex;
+  align-items: center;
+}
+.withdrawal-redfont{
+  color: var(--red-color5);
+}
+.withdrawal-greenfont{
+  color: var(--green-color3);
+  background-color: var(--green-color4);
+}
+.withdrawal-greenbg{
+  background-color: var(--green-color1);
+  color: var(--white-color);
+  border-radius: 5px;
+}
+.withdrawal.custom-line {
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor,
+    currentColor 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  color: var(--grey-color7);
+  margin: 0.8rem 0;
+  
+}
+.wallet{
+  color: var(--blue-color6);
+}
+.wallet.blue{
+  background-color: var(--blue-color22);
+}
+.wallet.bluefont{
+  color:var(--blue-color7) ;
+  font-size: 13px;
+}
+.check-bg{
+  color: yellow;
+}
