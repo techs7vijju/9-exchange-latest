@@ -11,7 +11,11 @@ const Layout = () => {
   return (
     <div>
       <Header />
-      <Outlet />
+
+      {/* Main content area */}
+      <div className="layout-main-content">
+        <Outlet />
+      </div>
       {/* <Footer /> */}
       {isMobile && <BottomTabNavigator />}
     </div>

@@ -61,7 +61,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const toggleMessages = () => {
     setShowMessages((prev) => !prev);
   };
-  const isMobile = useMediaQuery({ maxWidth: 1023 });
+  const isMobile = useMediaQuery({ maxWidth: 991 });
   const [showLogin, setShowLogin] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);

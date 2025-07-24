@@ -1265,6 +1265,10 @@ form .textarea-group small,
   line-height: 2;
 }
 
+.layout-main-content {
+  padding: 75px 20px 20px 20px;
+}
+
 /* --------------------------  */
 /* 8 . Global Classes Ended */
 /* --------------------------  */
@@ -1458,9 +1462,15 @@ form .textarea-group small,
   font-weight: 700px;
 }
 
+/*header*/
+.header {
+  position: fixed;
+  height: 70px;
+}
+
 @media (max-width: 480px) {
   .header {
-    height: 3.45rem;
+    /* height: 100px; */
     width: 100%;
     background-color: var(--header-bg);
     display: flex;
@@ -1491,9 +1501,8 @@ form .textarea-group small,
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 991px) {
   .header {
-    height: 3.45rem;
     width: 100%;
     background-color: var(--header-bg);
     display: flex;
@@ -1502,14 +1511,12 @@ form .textarea-group small,
     padding: 0.2rem;
   }
   .logo-img {
-  
-    height:50px !important;
+    height: 50px !important;
   }
 }
 
 @media (min-width: 1024px) and (max-width: 1200px) {
   .header {
-    height: 4rem;
     width: 100%;
     background-color: var(--header-bg);
     display: flex;
@@ -1521,12 +1528,10 @@ form .textarea-group small,
   .logo-img {
     height: 45px !important;
   }
-
 }
 
 @media (min-width: 1201px) and (max-width: 1600px) {
   .header {
-    height: 4rem;
     width: 100%;
     background-color: var(--header-bg);
     display: flex;
@@ -1538,7 +1543,6 @@ form .textarea-group small,
   .logo-img {
     height: 50px !important;
   }
- 
 }
 
 @media (min-width: 1601px) and (max-width: 1920px) {
@@ -1591,10 +1595,6 @@ form .textarea-group small,
   }
 }
 
-/*header*/
-.header{
-  position: fixed;
-}
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -1608,15 +1608,13 @@ form .textarea-group small,
 
 /*------------------------*/
 
-
 /* collapse right bar styling */
 
 .collapse-right-bar-container {
-  margin: 8px 5px;
+  /* margin: 8px 5px 8px 0px; */
   background-color: #30334d;
   transition: width 0.3s;
-  position: relative;
-  height: 100vh;
+  height: calc(100vh - 70px);
 }
 
 .collapse-right-bar-container button {
@@ -1961,29 +1959,25 @@ form .textarea-group small,
 }
 .bet-slip-container .mybets-content .mybets-content-header {
   background: var(--grey-color14);
- 
 }
 .bet-slip-container .mybets-content .mybets-content-header p {
   font-weight: 600;
- margin-top: 8px;
- padding: 8px;
- line-height: 0;
-
+  margin-top: 8px;
+  padding: 8px;
+  line-height: 0;
 }
 .bet-slip-container .mybets-content .mybets-content-body {
   border-radius: 10px;
 }
 .bet-slip-container .mybets-content-body .mybets-content-item {
   background: var(--blue-color21);
-  
 }
-.bet-slip-container .mybets-content-body .mybets-content-item p{
+.bet-slip-container .mybets-content-body .mybets-content-item p {
   color: var(--blue-color6);
   font-weight: 600;
   margin-top: 8px;
   padding: 8px;
   line-height: 0;
-  
 }
 .bet-slip-container .mybets-content .mybets-content-border {
   height: 15px;
