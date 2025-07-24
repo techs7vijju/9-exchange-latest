@@ -160,7 +160,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   ];
   const EnItems = [{ name: "English" }, { name: "Spanish" }];
   return (
-    <div className="header">
+    <div className="header flex items-center">
       <div className="header-container">
       {isMobile ? (
         <div className=" flex justify-content-between align-items-center">

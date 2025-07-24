@@ -1468,16 +1468,12 @@ form .textarea-group small,
 .header {
   position: fixed;
   height: 70px;
+  width: 100%;
+  background-color: var(--header-bg);
 }
 
 @media (max-width: 480px) {
   .header {
-    /* height: 100px; */
-    width: 100%;
-    background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0.2rem;
   }
 
@@ -1489,12 +1485,6 @@ form .textarea-group small,
 
 @media (min-width: 481px) and (max-width: 767px) {
   .header {
-    height: 3.45rem;
-    width: 100%;
-    background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0.2rem;
   }
   .logo-img {
@@ -1503,13 +1493,9 @@ form .textarea-group small,
   }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (max-width: 991px) {
   .header {
-    width: 100%;
-    background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    height: 50px;
     padding: 0.2rem;
   }
   .logo-img {
@@ -1521,9 +1507,6 @@ form .textarea-group small,
   .header {
     width: 100%;
     background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0.2rem;
   }
 
@@ -1536,9 +1519,6 @@ form .textarea-group small,
   .header {
     width: 100%;
     background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0.2rem;
   }
 
@@ -1552,9 +1532,6 @@ form .textarea-group small,
     height: 4rem;
     width: 100%;
     background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0.2rem;
   }
 
@@ -1569,9 +1546,6 @@ form .textarea-group small,
     height: 5rem;
     width: 100%;
     background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0.2rem;
   }
 
@@ -1586,8 +1560,6 @@ form .textarea-group small,
     height: 5rem;
     width: 100%;
     background-color: var(--header-bg);
-    display: flex;
-    align-items: center;
     padding: 0.2rem;
   }
 
@@ -2022,7 +1994,7 @@ form .textarea-group small,
 
 .sports-tab-navigator.mobile {
   position: fixed;
-  top: 0;
+  /* top: 0; */
   left: 0;
   right: 0;
   /* z-index: 1000; */
