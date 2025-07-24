@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-// import "./SelectInput.css"; // Your CSS file with the above styles
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 const SelectInput = ({
   label,
@@ -11,11 +11,23 @@ const SelectInput = ({
   required,
   placeholder,
 }) => {
+  const DropdownIndicator = (props) => {
+    return (
+      <div {...props.innerProps} className="react-select__dropdown-indicator">
+        {props.selectProps.menuIsOpen ? (
+          <FaChevronUp className="react-select__chevron" />
+        ) : (
+          <FaChevronDown className="react-select__chevron" />
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="select-group">
       <label htmlFor="select">
         {label}
-        {required && <span className="span">*</span>}
+        {required && <span>*</span>}
       </label>
       <Select
         classNamePrefix="react-select"
@@ -26,6 +38,7 @@ const SelectInput = ({
         options={options}
         isSearchable={true}
         className={error ? "is-invalid" : ""}
+        components={{ DropdownIndicator }}
       />
       {error && <small className="error">{error}</small>}
     </div>

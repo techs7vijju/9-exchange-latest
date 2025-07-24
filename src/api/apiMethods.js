@@ -16,3 +16,6 @@ export const signUpUser = (data) => apiRequest("signUpUser", data);
 export const oneClickSignup = (data) => apiRequest("oneClickSignup", data);
 
 export const userLogin = (data) => apiRequest("userLogin", data);
+
+export const getWelcomeBonusAvail = (id, data) =>
+  apiRequest("getWelcomeBonusAvail", data, id);
