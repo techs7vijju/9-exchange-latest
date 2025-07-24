@@ -1708,17 +1708,6 @@ form .textarea-group small,
   }
 }
 
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.header-container-before {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 /*------------------------*/
 
 /* collapse right bar styling */
