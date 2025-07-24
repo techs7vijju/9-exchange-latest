@@ -76,20 +76,20 @@ function Banner() {
     // setVideoUrl(index);
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const result = await getFromIndexedDB(id);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getFromIndexedDB(id);
 
-  //       if (Array.isArray(result) && result.length > 0) {
-  //         setInplayImages(result);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error retrieving from IndexedDB:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+        if (Array.isArray(result) && result.length > 0) {
+          setInplayImages(result);
+        }
+      } catch (error) {
+        console.error("Error retrieving from IndexedDB:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="d-flex w-100 flex-column">
@@ -129,7 +129,7 @@ function Banner() {
                                 color: "white",
                                 cursor: "pointer",
                                 background: "rgba(0, 0, 0, 0.5)",
-                                padding: "10px",
+                                padding: "0px",
                                 borderRadius: "50%",
                               }}
                             />
@@ -163,7 +163,7 @@ function Banner() {
               )}
             </div>
           </div>
-          <div className="p-2">
+          {/* <div className="p-2">
             <div className="d-flex flex-row w-100 scroll-xaxis white-bg blue-color6 medium-font py-2">
               <div className="scroll-card">
                 <img
@@ -179,7 +179,7 @@ function Banner() {
                   src={Images.football2}
                   className="w-100 p-1 "
                   alt="Tennis"
-                  // onClick={() => navigate("/tennis")}
+                  onClick={() => navigate("/tennis")}
                 />
                 <div className="flex-center fw-600">Football</div>
               </div>
@@ -188,7 +188,7 @@ function Banner() {
                   src={Images.tennis2}
                   className="w-100 p-1"
                   alt="Tennis"
-                  // onClick={() => navigate("/tennis")}
+                  onClick={() => navigate("/tennis")}
                 />
                 <div className="flex-center fw-600">Tennis</div>
               </div>
@@ -197,7 +197,7 @@ function Banner() {
                   src={Images.casino2}
                   className="w-100 p-1"
                   alt="Casino"
-                  // onClick={() => navigate("/badmaintaininplay")}
+                  onClick={() => navigate("/badmaintaininplay")}
                 />
                 <div className="flex-center fw-600">Casino</div>
               </div>
@@ -206,7 +206,7 @@ function Banner() {
                   src={Images.casino2}
                   className="w-100 p-1"
                   alt="Casino"
-                  // onClick={() => navigate("/badmaintaininplay")}
+                  onClick={() => navigate("/badmaintaininplay")}
                 />
                 <div className="flex-center fw-600">Casino</div>
               </div>
@@ -215,7 +215,7 @@ function Banner() {
                   src={Images.casino2}
                   className="w-100 p-1"
                   alt="Casino"
-                  // onClick={() => navigate("/badmaintaininplay")}
+                  onClick={() => navigate("/badmaintaininplay")}
                 />
                 <div className="flex-center fw-600">Casino</div>
               </div>
@@ -251,7 +251,7 @@ function Banner() {
                 Welcome to 9-exchange
               </marquee>
             </div>
-          </div>
+          </div> */}
         </>
       ) : (
         <div className="p-2 d-flex flex-between w-100 gap-2">
@@ -260,10 +260,10 @@ function Banner() {
               className="d-flex flex-between gap-2 w-100"
               style={{ height: "15.625rem" }}
             >
-              <div className="w-5 h-100">
+              {/* <div className="w-5 h-100">
                 <Sidebarbtn />
-              </div>
-              <div className="w-95 h-100">
+              </div> */}
+              <div className="w-100 h-100">
                 {inplayImages?.length > 0 ? (
                   <Carousel
                     interval={5000}
@@ -346,7 +346,7 @@ function Banner() {
               </div>
             </div>
 
-            <div className="p-1">
+            {/* <div className="p-1">
               <div className="d-flex flex-row w-100 scroll-xaxis1 white-color large-font py-2">
                 <div className="scroll-card blue-color10-bg">
                   <img
@@ -407,7 +407,7 @@ function Banner() {
                   Welcome to 9-exchange
                 </marquee>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

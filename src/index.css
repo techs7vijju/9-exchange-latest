@@ -1267,10 +1267,15 @@ form .textarea-group small,
   line-height: 2;
 }
 
-.layout-main-content {
-  padding: 75px 20px 20px 20px;
-}
+  .layout-main-content {
+    padding: 75px 20px 20px 20px;
+  }
+@media (max-width: 991px) {
 
+  .layout-main-content {
+    padding: 78px 10px 20px 10px;
+  }
+}
 /* --------------------------  */
 /* 8 . Global Classes Ended */
 /* --------------------------  */
