@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { Images } from "../../../images/images";
+import { Images } from "../../images/images";
 const Blocked = ({ showBlocked, setShowBlocked }) => {
   return (
     <Modal

@@ -78,15 +78,17 @@ const TextInput = ({
 
         {type === "date" && <FaCalendar size={18} className="icon" />}
 
-        {showLoading && <span>...</span>}
-
-        {showCheckmark && (
-          <span className="icon border-none">
-            <FaCheck />
-          </span>
+        {showLoading && (
+          <span className="spinner-border spinner-border-sm blue-color"></span>
         )}
 
-        {svgIcon && svgIcon()}
+        {showCheckmark && <FaCheck className="icon" />}
+
+        {svgIcon && (
+          <span className="icon">
+            <img src={icon} />
+          </span>
+        )}
       </div>
 
       {!hideErrorMessage && error && <small className="error">{error}</small>}

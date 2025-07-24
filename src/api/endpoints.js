@@ -36,7 +36,15 @@ const endpoints = {
     method: "post",
     url: () => `/website/${websiteId}/user/oneClickLogin`,
   },
+  
   userLogin: { method: "post", url: `/website/${websiteId}/user/login` },
+
+  getWelcomeBonusAvail: {
+    method: "get",
+    url: (id) => {
+      return `/website/${websiteNewId}/getWelcomeBonusCard/${id}`;
+    },
+  },
 };
 
 export default endpoints;

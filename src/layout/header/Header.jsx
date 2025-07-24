@@ -7,7 +7,6 @@ import { MdOutlineChat } from "react-icons/md";
 import { ImExit } from "react-icons/im";
 // import MessagePopup from "../pages/popup/MessagePopup";
 // import Registration from "../pages/registration/Registration";
-// import Login from "../pages/popup/login/Login";
 // import "./styles.css";
 // import "./common.css";
 // import { getWalletDetails } from "../api/apiMethods";
@@ -15,15 +14,15 @@ import { ImExit } from "react-icons/im";
 // import socketService from "../utils/socketService";
 import { useMediaQuery } from "react-responsive";
 import { Images } from "../../images/images";
-// import Login from "../../pages/banner/Popups/Login";
-import ForgotPassword from "../../pages/banner/Popups/ForgotPassword";
-import NewPassword from "../../pages/banner/Popups/NewPassword";
-import Success from "../../pages/banner/Popups/Success";
-import Blocked from "../../pages/banner/Popups/Blocked";
-import Register from "../../pages/banner/Popups/Register";
-import Thanks from "../../pages/banner/Popups/Thanks";
-import RegistrationSuccessfull from "../../pages/banner/Popups/RegistrationSuccessfull";
+import Login from "../../pages/Popups/Login";
+import ForgotPassword from "../../pages/Popups/ForgotPassword";
+import NewPassword from "../../pages/Popups/NewPassword";
+import Success from "../../pages/Popups/Success";
+import Blocked from "../../pages/Popups/Blocked";
+import Register from "../../pages/Popups/Register";
+import Thanks from "../../pages/Popups/Thanks";
 import DropdownMenu from "../../components/common/DropdownMenu";
+import ThanksSignup from "../../pages/Popups/ThanksSignup";
 
 function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const navigate = useNavigate();
@@ -38,7 +37,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
 
   // popups
   const [showMsgPopup, setShowMsgPopup] = useState(false);
-  const [registrationSuccessfull, setRegistrationSuccessfull] = useState(false);
   const [welcomeBonusPopup, setWelcomeBonusPopup] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
 
@@ -69,6 +67,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const [showBlocked, setShowBlocked] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showThanks, setShowThanks] = useState(false);
+  const [showThanksSignup, setShowThanksSignup] = useState(false);
   const handleLoginClick = () => {
     setShowLogin(true);
   };
@@ -76,14 +75,14 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     setShowRegister(true);
   };
 
-  const getWelcomeBonus = async () => {
-    const welcomeId = localStorage.getItem("welcomeBonusId");
+  // const getWelcomeBonus = async () => {
+  //   const welcomeId = localStorage.getItem("welcomeBonusId");
 
-    if (!welcomeId || welcomeId === "undefined" || welcomeId === "null") {
-      return <Navigate to="/" />;
-    }
-    setWelcomeBonusPopup(true);
-  };
+  //   if (!welcomeId || welcomeId === "undefined" || welcomeId === "null") {
+  //     return <Navigate to="/" />;
+  //   }
+  //   setWelcomeBonusPopup(true);
+  // };
 
   const imagePaths = [
     Images.ezugicasino,
@@ -387,15 +386,12 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         showRegister={showRegister}
         setShowRegister={setShowRegister}
         setShowThanks={setShowThanks}
+        setShowThanksSignup={setShowThanksSignup}
         setMessage={setMessage}
-        setRegistrationSuccessfull={setRegistrationSuccessfull}
         setShowSuccess={setShowSuccess}
+        setShowLogin={setShowLogin}
       />
-      <RegistrationSuccessfull
-        registrationSuccessfull={registrationSuccessfull}
-        setRegistrationSuccessfull={setRegistrationSuccessfull}
-        getWelcome={getWelcomeBonus}
-      />
+
       {/* <LoginPopup
         setLoginModal={setLoginPopup}
         loginModal={loginPopup}
@@ -406,11 +402,15 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         adminResetPopup={adminResetPopup}
       /> */}
       <Thanks showThanks={showThanks} setShowThanks={setShowThanks} />
-      {/* <Login
+      <ThanksSignup
+        showThanksSignup={showThanksSignup}
+        setShowThanksSignup={setShowThanksSignup}
+      />
+      <Login
         showLogin={showLogin}
         setShowLogin={setShowLogin}
         setShowForgot={setShowForgot}
-      /> */}
+      />
       <ForgotPassword
         showForgot={showForgot}
         setShowForgot={setShowForgot}
