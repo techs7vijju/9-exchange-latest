@@ -7,7 +7,6 @@ import { MdOutlineChat } from "react-icons/md";
 import { ImExit } from "react-icons/im";
 // import MessagePopup from "../pages/popup/MessagePopup";
 // import Registration from "../pages/registration/Registration";
-// import Login from "../pages/popup/login/Login";
 // import "./styles.css";
 // import "./common.css";
 // import { getWalletDetails } from "../api/apiMethods";
@@ -15,15 +14,15 @@ import { ImExit } from "react-icons/im";
 // import socketService from "../utils/socketService";
 import { useMediaQuery } from "react-responsive";
 import { Images } from "../../images/images";
-// import Login from "../../pages/banner/Popups/Login";
-import ForgotPassword from "../../pages/banner/Popups/ForgotPassword";
-import NewPassword from "../../pages/banner/Popups/NewPassword";
-import Success from "../../pages/banner/Popups/Success";
-import Blocked from "../../pages/banner/Popups/Blocked";
-import Register from "../../pages/banner/Popups/Register";
-import Thanks from "../../pages/banner/Popups/Thanks";
-import RegistrationSuccessfull from "../../pages/banner/Popups/RegistrationSuccessfull";
+import Login from "../../pages/Popups/Login";
+import ForgotPassword from "../../pages/Popups/ForgotPassword";
+import NewPassword from "../../pages/Popups/NewPassword";
+import Success from "../../pages/Popups/Success";
+import Blocked from "../../pages/Popups/Blocked";
+import Register from "../../pages/Popups/Register";
+import Thanks from "../../pages/Popups/Thanks";
 import DropdownMenu from "../../components/common/DropdownMenu";
+import ThanksSignup from "../../pages/Popups/ThanksSignup";
 
 function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const navigate = useNavigate();
@@ -38,7 +37,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
 
   // popups
   const [showMsgPopup, setShowMsgPopup] = useState(false);
-  const [registrationSuccessfull, setRegistrationSuccessfull] = useState(false);
   const [welcomeBonusPopup, setWelcomeBonusPopup] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
 
@@ -61,7 +59,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const toggleMessages = () => {
     setShowMessages((prev) => !prev);
   };
-  const isMobile = useMediaQuery({ maxWidth: 1023 });
+  const isMobile = useMediaQuery({ maxWidth: 991 });
   const [showLogin, setShowLogin] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -69,6 +67,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const [showBlocked, setShowBlocked] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showThanks, setShowThanks] = useState(false);
+  const [showThanksSignup, setShowThanksSignup] = useState(false);
   const handleLoginClick = () => {
     setShowLogin(true);
   };
@@ -76,14 +75,14 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     setShowRegister(true);
   };
 
-  const getWelcomeBonus = async () => {
-    const welcomeId = localStorage.getItem("welcomeBonusId");
+  // const getWelcomeBonus = async () => {
+  //   const welcomeId = localStorage.getItem("welcomeBonusId");
 
-    if (!welcomeId || welcomeId === "undefined" || welcomeId === "null") {
-      return <Navigate to="/" />;
-    }
-    setWelcomeBonusPopup(true);
-  };
+  //   if (!welcomeId || welcomeId === "undefined" || welcomeId === "null") {
+  //     return <Navigate to="/" />;
+  //   }
+  //   setWelcomeBonusPopup(true);
+  // };
 
   const imagePaths = [
     Images.ezugicasino,
@@ -160,14 +159,15 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   ];
   const EnItems = [{ name: "English" }, { name: "Spanish" }];
   return (
-    <div className="header">
+    <div className="header flex items-center">
+      <div className="header-container">
       {isMobile ? (
-        <div className="flex-between w-100">
+        <div className=" flex justify-content-between align-items-center">
           <div>
             <img src={Images.Logo} alt="logo" className="logo-img w-100" />
           </div>
 
-          <div className="flex-evenly gap-2 mx-2">
+          <div className="">
             {isLogin ? (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
@@ -205,30 +205,34 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
           </div>
         </div>
       ) : (
-        <div className="flex-between w-100">
-          <div className="flex-evenly w-10">
+        <div className="header-container-before ">
+          <div className="flex  align-items-center">
+          <div className="">
             <img src={Images.Logo} alt="logo" className="logo-img w-100" />
           </div>
-          <div className="flex-evenly w-40">
-            <DropdownMenu
+           <div> <DropdownMenu
               title="CRICKET"
               open={false}
               onToggle={() => {}}
               items={[]}
               showImages={false}
-            />
-            <DropdownMenu
+            /></div>
+           <div>
+           <DropdownMenu
               title="SPORTS"
               open={openSports}
               onToggle={() => setOpenSports(!openSports)}
               items={sportsItems}
             />
+           </div>
+            <div>
             <DropdownMenu
               title="LIVE"
               open={openLive}
               onToggle={() => setOpenLive(!openLive)}
               items={liveItems}
             />
+            </div>
             <div className="d-flex justify-content-center">
               <div
                 className="dropdown-container"
@@ -273,14 +277,17 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 )}
               </div>
             </div>
+            <div>
             <DropdownMenu
               title="MORE"
               open={openMore}
               onToggle={() => setOpenMore(!openMore)}
               items={moreItems}
             />
-          </div>
-          <div className="flex-evenly w-30 p-2">
+            </div>
+          </div>  
+          <div className="flex justify-content-between align-items-center">
+          <div className="flex w-100">
             {isLogin ? (
               <div className="d-flex flex-between w-100 gap-1">
                 <div className="xbtn green-color large-font w-50 pointer ">
@@ -331,22 +338,26 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </div>
             ) : (
               <div className="d-flex flex-between gap-1 w-100">
-                <div
-                  className="xbtn button-blue large-font w-60"
-                  onClick={handleRegister}
-                >
-                  REGISTRATION
+                <div className="registration-container">
+                  <div
+                    className="xbtn button-blue large-font w-100"
+                    onClick={handleRegister}
+                  >
+                    REGISTRATION
+                  </div>
                 </div>
+              
                 <div
                   className="xbtn login large-font w-40"
                   onClick={handleLoginClick}
                 >
                   LOGIN
                 </div>
+            
               </div>
             )}
           </div>
-          <div className="flex-evenly w-20 gap-2 white-font large-font mx-2">
+          <div className="flex">
             {isLogin && (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
@@ -380,22 +391,20 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               />
             </div>
           </div>
-        </div>
+          </div>
+          </div>
       )}
 
       <Register
         showRegister={showRegister}
         setShowRegister={setShowRegister}
         setShowThanks={setShowThanks}
+        setShowThanksSignup={setShowThanksSignup}
         setMessage={setMessage}
-        setRegistrationSuccessfull={setRegistrationSuccessfull}
         setShowSuccess={setShowSuccess}
+        setShowLogin={setShowLogin}
       />
-      <RegistrationSuccessfull
-        registrationSuccessfull={registrationSuccessfull}
-        setRegistrationSuccessfull={setRegistrationSuccessfull}
-        getWelcome={getWelcomeBonus}
-      />
+
       {/* <LoginPopup
         setLoginModal={setLoginPopup}
         loginModal={loginPopup}
@@ -406,11 +415,15 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         adminResetPopup={adminResetPopup}
       /> */}
       <Thanks showThanks={showThanks} setShowThanks={setShowThanks} />
-      {/* <Login
+      <ThanksSignup
+        showThanksSignup={showThanksSignup}
+        setShowThanksSignup={setShowThanksSignup}
+      />
+      <Login
         showLogin={showLogin}
         setShowLogin={setShowLogin}
         setShowForgot={setShowForgot}
-      /> */}
+      />
       <ForgotPassword
         showForgot={showForgot}
         setShowForgot={setShowForgot}
@@ -427,6 +440,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setShowBlocked={setShowBlocked}
       />
       <Blocked showBlocked={showBlocked} setShowBlocked={setShowBlocked} />
+      </div>
     </div>
   );
 }

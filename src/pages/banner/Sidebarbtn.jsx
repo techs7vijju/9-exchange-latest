@@ -10,8 +10,8 @@ import { FaUser } from "react-icons/fa6";
 import { Images } from "../../images/images";
 import { IoMdThumbsUp } from "react-icons/io";
 import { LiaThumbsUpSolid } from "react-icons/lia";
-import PrivacyPolicy from "./Popups/PrivacyPolicy";
-import TermsService from "./Popups/TermsService";
+import PrivacyPolicy from "../Popups/PrivacyPolicy";
+import TermsService from "../Popups/TermsService";
 
 const Sidebarbtn = () => {
   const navigate = useNavigate();

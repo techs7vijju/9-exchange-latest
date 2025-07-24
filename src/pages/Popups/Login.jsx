@@ -4,8 +4,9 @@ import { Button, Form } from "react-bootstrap";
 import { FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 import ForgotPassword from "./ForgotPassword";
 import * as Yup from "yup";
-import { userLogin } from "../../../api/apiMethods";
-import { encryptData } from "../../../utils/cryptoUtils";
+import { userLogin } from "../../api/apiMethods";
+import { encryptData } from "../../utils/cryptoUtils";
+import TextInput from "../../components/form-elements/TextInput";
 // import { handleApiError } from "../../../utils/cryptoUtils";
 
 const validationSchema = Yup.object({
@@ -21,6 +22,10 @@ const Login = ({
   setForgotPasswordModal,
   setAdminResetPopup,
   adminResetPopup,
+
+  showLogin,
+  setShowLogin,
+  setShowForgot,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
@@ -44,7 +49,8 @@ const Login = ({
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    if (e) e.preventDefault();
     setLoading(true);
     setApiErrors([]);
     try {
@@ -83,14 +89,17 @@ const Login = ({
       }
     } catch (error) {
       setLoading(false);
-      const { validationErrors: newValidationErrors, apiErrors: newApiErrors } =
-        handleApiError(error);
 
-      if (newValidationErrors) {
-        setValidationErrors(newValidationErrors);
-      }
-      if (newApiErrors) {
-        setApiErrors(newApiErrors);
+      if (error.name === "ValidationError") {
+        const errors = {};
+        error.inner.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+        setValidationErrors(errors);
+      } else {
+        setApiErrors([
+          error.message || "An error occurred during registration",
+        ]);
       }
     }
   };
@@ -125,7 +134,7 @@ const Login = ({
       show={showLogin}
       centered
       className="custom-popup-modal"
-      size="sm"
+      size="md"
       onHide={handleClose}
     >
       <div className="modal-header-fixed">
@@ -150,27 +159,18 @@ const Login = ({
         )}
       </div>
       <div className="popup-scroll blue-color4">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <div className="col-md-6">
             <TextInput
               type="text"
               label="User Name"
-              name="user_name"
+              name="username"
               placeholder="Enter"
-              value={formData.user_name}
+              value={formData.username}
               onChange={(e) => {
-                const value = e.target.value;
-                if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
-                  handleChange(e);
-                }
+                handleChange(e);
               }}
-              error={validationErrors.user_name}
-              showLoading={isUsernameLoading}
-              showCheckmark={
-                !isUsernameLoading &&
-                formData.user_name.length >= 5 &&
-                !userError
-              }
+              error={validationErrors.username}
             />
           </div>
 
@@ -192,22 +192,20 @@ const Login = ({
               showPassword={showPassword}
             />
           </div>
+
+          <div className="text-end">
+            <p className="p-blue1" onClick={handleForgot}>
+              FORGOT YOUR PASSWORD?
+            </p>
+          </div>
+
+          <button className="xbtn button-blue w-100" disabled={loading}>
+            {loading && (
+              <span className="spinner-border spinner-border-sm me-2"></span>
+            )}
+            {loading ? "LOADING..." : "LOGIN"}
+          </button>
         </form>
-
-        <div className="text-end">
-          <a href="#" className="forgot-password" onClick={handleForgot}>
-            FORGOT YOUR PASSWORD?
-          </a>
-        </div>
-
-        <button
-          className="w-100 mt-3 login-button"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "LOADING..." : "LOGIN"}
-        </button>
-
         <div className="text-center mt-3 registration-text">
           Don't have an account yet? <a href="#">REGISTRATION</a>
         </div>

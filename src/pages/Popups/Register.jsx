@@ -3,16 +3,16 @@ import { Modal } from "react-bootstrap";
 import * as Yup from "yup";
 import { FaUserFriends, FaBolt } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import TextInput from "../../../components/form-elements/TextInput";
-import SelectInput from "../../../components/form-elements/SelectInput";
+import TextInput from "../../components/form-elements/TextInput";
+import SelectInput from "../../components/form-elements/SelectInput";
 import {
   getSecurityQuestions,
   getUserCountries,
   oneClickSignup,
   signUpUser,
   verifyUsername,
-} from "../../../api/apiMethods";
-import { encryptData } from "../../../utils/cryptoUtils";
+} from "../../api/apiMethods";
+import { encryptData } from "../../utils/cryptoUtils";
 
 const emailRegex =
   /^(([a-z\d+_\-][a-z\d+'._\-]*[a-z\d+_\-])|([a-z\d+_\-]{1,2}))@((([a-z\d][a-z\d\-]{0,100}[a-z\d])|([a-z\d]))\.)+[a-z]{2,}$/i;
@@ -91,7 +91,9 @@ const Register = ({
   setShowRegister,
   setTermsPopup,
   setMessage,
-  setRegistrationSuccessfull,
+  setShowThanks,
+  setShowThanksSignup,
+  setShowLogin,
   setShowSuccess,
 }) => {
   const navigate = useNavigate();
@@ -564,7 +566,8 @@ const Register = ({
           agree_policy: false,
         });
         setActiveButton(1);
-        setRegistrationSuccessfull(true);
+        setShowThanks(true);
+        setShowThanksSignup(false);
         setShowRegister(false);
       }
     } catch (error) {
@@ -583,138 +586,6 @@ const Register = ({
       }
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   if (e) e.preventDefault();
-  //   setApiErrors([]);
-  //   try {
-  //     await validationSchema1.validate(formData, { abortEarly: false });
-
-  //     const answeredQuestions = formData.securityQuestions.filter(
-  //       (q) => q.answer && q.answer.trim() !== ""
-  //     );
-
-  //     if (answeredQuestions.length < 3) {
-  //       setSecQuError("You must answer at least 3 security questions.");
-  //       return;
-  //     }
-
-  //     setLoading(true);
-
-  //     const {
-  //       securityQuestions,
-  //       confirmPassword,
-  //       ...formDataWithoutQuestions
-  //     } = formData;
-
-  //     let formattedDob = "";
-  //     if (formDataWithoutQuestions.dob) {
-  //       const date = new Date(formDataWithoutQuestions.dob);
-  //       const year = date.getFullYear();
-  //       const month = String(date.getMonth() + 1).padStart(2, "0");
-  //       const day = String(date.getDate()).padStart(2, "0");
-  //       formattedDob = `${year}-${month}-${day}`;
-  //     }
-
-  //     const filteredFormData = Object.fromEntries(
-  //       Object.entries(formDataWithoutQuestions).filter(
-  //         ([_, value]) => value !== undefined && value !== null && value !== ""
-  //       )
-  //     );
-
-  //     if (formattedDob) {
-  //       filteredFormData.dob = formattedDob;
-  //     }
-
-  //     const payload = {
-  //       ...filteredFormData,
-  //       securityQuestions: answeredQuestions,
-  //       confirm_password: confirmPassword,
-  //     };
-
-  //     if (!confirmPassword) {
-  //       delete payload.confirm_password;
-  //     }
-
-  //     const response = await signUpUser(payload);
-
-  //     if (response.status === true) {
-  //       const userInfo = response?.user;
-  //       const userData = {
-  //         userId: userInfo?.id,
-  //         userName: userInfo?.userid,
-  //         county_id: userInfo?.county_id,
-  //         created_admin_panel_id: userInfo?.created_admin_panel_id,
-  //         created_by: userInfo?.created_by,
-  //         web_site_id: userInfo?.web_site_id,
-  //         currency_id: userInfo?.currency_id,
-  //         is_updated_password: userInfo?.is_updated_password,
-  //         email: userInfo?.email,
-  //         phone_no: userInfo?.phone_no,
-  //         photo: userInfo?.photo,
-  //       };
-
-  //       localStorage.setItem("user_data", encryptData(userData));
-
-  //       localStorage.setItem("jwt_token", response?.token);
-  //       localStorage.setItem("welcomeBonusId", userInfo?.promoId);
-
-  //       setShowSuccess(true);
-
-  //       setLoading(false);
-  //       setFormData({
-  //         name: "",
-  //         lastName: "",
-  //         user_name: "",
-  //         password: "",
-  //         confirmPassword: "",
-  //         masterID: "",
-  //         dob: "",
-  //         country_id: "",
-  //         currency_id: "",
-  //         email: "",
-  //         securityQuestions: [],
-  //       });
-
-  //       setMessage(response.message);
-
-  //       setApiErrors([]);
-  //       setSelectedCountryItem("");
-  //       setSelectedCurrencyItem("");
-  //       setCurrencydropdownOpen(false);
-
-  //       setValidationErrors({
-  //         name: "",
-  //         lastName: "",
-  //         user_name: "",
-  //         password: "",
-  //         confirmPassword: "",
-  //         dob: "",
-  //         country_id: "",
-  //         currency_id: "",
-  //         email: "",
-  //         age_agree: false,
-  //         agree_policy: false,
-  //       });
-  //       setActiveButton(1);
-  //       showRegister(false);
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-
-  //     if (error.name === "ValidationError") {
-  //       const errors = {};
-  //       error.inner.forEach((err) => {
-  //         errors[err.path] = err.message;
-  //       });
-  //       setValidationErrors(errors);
-  //     } else {
-  //       setApiErrors([
-  //         error.message || "An error occurred during registration",
-  //       ]);
-  //     }
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -885,6 +756,8 @@ const Register = ({
           agree_policy: false,
         });
         setActiveButton(1);
+        setShowThanks(false);
+        setShowThanksSignup(true);
         showRegister(false);
       }
     } catch (error) {
@@ -902,6 +775,11 @@ const Register = ({
         ]);
       }
     }
+  };
+
+  const handleLogin = () => {
+    setShowLogin(true);
+    handleClose();
   };
 
   const handleClose = () => {
@@ -972,7 +850,7 @@ const Register = ({
         <div className="d-flex flex-center py-2 gap-3 large-font">
           <button
             className={`d-flex flex-between xbtn ${
-              activeButton === 1 ? "button-blue" : "grey-8-btn blue-color4"
+              activeButton === 1 ? "button-blue" : "grey-9-btn"
             }`}
             onClick={() => handleButtonChange(1)}
           >
@@ -982,7 +860,7 @@ const Register = ({
 
           <button
             className={`d-flex flex-between xbtn ${
-              activeButton === 2 ? "button-blue" : "grey-8-btn blue-color4"
+              activeButton === 2 ? "button-blue" : "grey-9-btn"
             }`}
             onClick={() => handleButtonChange(2)}
           >
@@ -1130,7 +1008,6 @@ const Register = ({
                     value: c,
                   }))}
                   error={validationErrors.country_id}
-                  required
                 />
               </div>
               <div className="col-md-6">
@@ -1145,7 +1022,6 @@ const Register = ({
                     label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
                   }))}
                   error={validationErrors.currency_id}
-                  required
                 />
               </div>
             </div>
@@ -1160,49 +1036,51 @@ const Register = ({
                 error={validationErrors.email}
               />
             </div>
-            <div className="custom-line"></div>
+
+            <div className="custom-line custom-line-blue-color"></div>
+
             <div className="d-flex flex-center flex-col m-2">
-              <h5 className="fw-600">Set Your Security Questions</h5>
+              <h5 className="h5-blue">Set Your Security Questions</h5>
             </div>
             {renderSecurityQuestions()}
 
-            <div className="form-check d-flex flex-row gap-2 mb-3">
+            <div className="form d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
-                className="form-check-input"
+                className="check-input"
+                id="ageCheck"
                 checked={isChecked}
                 onChange={() => {
                   setIsCheckedError(false);
                   setIsChecked(!isChecked);
                 }}
               />
-              <label className="form-check-label">
+              <label className="check-label" htmlFor="ageCheck">
                 Yes, I am 18+ Years Old
               </label>
               <div className="">{isCheckedError}</div>
             </div>
 
-            <div className="form-check d-flex flex-row gap-2 mb-3">
+            <div className="form d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
-                className="form-check-input"
+                className="check-input"
                 checked={isAgreed}
                 onChange={() => {
                   setIsAgreedError(false);
                   setIsAgreed(!isAgreed);
                 }}
               />
-              <label className="form-check-label">
+              <label className="check-label">
                 I agree to the Terms and Conditions and Privacy Policy
               </label>
               <div>{isAgreedError}</div>
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-primary w-100"
-              disabled={loading}
-            >
+            <button className="xbtn button-blue w-100" disabled={loading}>
+              {loading && (
+                <span className="spinner-border spinner-border-sm me-2"></span>
+              )}
               {loading ? "Registering..." : "REGISTER"}
             </button>
           </form>
@@ -1221,7 +1099,6 @@ const Register = ({
                     value: c,
                   }))}
                   error={validationErrors.country_id}
-                  required
                 />
               </div>
               <div className="col-md-6">
@@ -1236,7 +1113,6 @@ const Register = ({
                     label: `${country.currency_name} (${country.currency_symbol}) - ${country.name}`,
                   }))}
                   error={validationErrors.currency_id}
-                  required
                 />
               </div>
             </div>
@@ -1256,50 +1132,65 @@ const Register = ({
               />
             </div>
 
-            <div className="form-check d-flex flex-row gap-2 mb-3">
+            <div className="form d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
-                className="form-check-input"
+                className="check-input"
+                id="ageCheck"
                 checked={isChecked}
                 onChange={() => {
                   setIsCheckedError(false);
                   setIsChecked(!isChecked);
                 }}
               />
-              <label className="form-check-label">
+              <label className="check-label" htmlFor="ageCheck">
                 Yes, I am 18+ Years Old
               </label>
               <div className="">{isCheckedError}</div>
             </div>
 
-            <div className="form-check d-flex flex-row gap-2 mb-3">
+            <div className="form d-flex flex-row gap-2 mb-3">
               <input
                 type="checkbox"
-                className="form-check-input"
+                className="check-input"
                 checked={isAgreed}
                 onChange={() => {
                   setIsAgreedError(false);
                   setIsAgreed(!isAgreed);
                 }}
               />
-              <label className="form-check-label">
+              <label className="check-label">
                 I agree to the Terms and Conditions and Privacy Policy
               </label>
               <div>{isAgreedError}</div>
             </div>
-            <button
-              type="submit"
-              className="btn btn-primary w-100"
-              disabled={loading}
-            >
+
+            <button className="xbtn button-blue w-100" disabled={loading}>
+              {loading && (
+                <span className="spinner-border spinner-border-sm me-2"></span>
+              )}
               {loading ? "Registering..." : "REGISTER"}
             </button>
           </form>
         )}
 
-        <div className="mt-3 text-center">
-          Already have an account? <a href="#">LOGIN</a>
-        </div>
+        <p className="mt-5 text-center p-grey4">
+          This site is protected by reCAPTCHA and the Google
+          <span className="p-blue1">Privacy Policy</span>and
+          <span className="p-blue1">Terms of Service</span>apply.
+        </p>
+        <p className="mt-3 text-center p-grey4 px-5">
+          By clicking this button you confirm that you have read and agree to
+          the<span className="p-blue1">Terms and Conditions</span>and
+          <span className="p-blue1">Privacy Policy</span>of the company and
+          confirm that you are of legal age
+        </p>
+        <p className="mt-5 text-center p-blue4">
+          Already have an account?
+          <span className="p-blue1" onClick={handleLogin}>
+            LOGIN
+          </span>
+        </p>
       </div>
     </Modal>
   );
