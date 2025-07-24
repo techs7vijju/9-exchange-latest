@@ -3,9 +3,9 @@ import { FaEye } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PaginationTable from "../../../components/tables/PaginationTable";
-import Withdrawal from "../../banner/Popups/Withdrawal";
-import { use } from "react";
-import WalletTransfer from "../../banner/Popups/WalletTransfer";
+import Withdrawal from "../../Popups/Withdrawal";
+
+import WalletTransfer from "../../Popups/WalletTransfer";
 
 // Utility: Format date to yyyy-mm-dd
 
@@ -47,13 +47,12 @@ import WalletTransfer from "../../banner/Popups/WalletTransfer";
 function Tickets() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showProgress, setShowProgress] = useState(false);
-const [typewalletmode, settypewalletmode] = useState()
+  const [typewalletmode, settypewalletmode] = useState();
   const handleProgress = (pranaya) => {
-    console.log(pranaya)
+    console.log(pranaya);
     setShowProgress(true);
-    settypewalletmode(pranaya)
+    settypewalletmode(pranaya);
   };
-
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -85,9 +84,9 @@ const [typewalletmode, settypewalletmode] = useState()
     setValidationErrors((prev) => ({ ...prev, [field]: "" }));
   };
   const [walletTransfer, setWalletTransfer] = useState(false);
-  const handleWalletTransfer=()=>{
-  setWalletTransfer(true);
-  }
+  const handleWalletTransfer = () => {
+    setWalletTransfer(true);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -238,7 +237,10 @@ const [typewalletmode, settypewalletmode] = useState()
             </div>
 
             <div>
-              <button className="xbtn button-blue nowrap px-4" onClick={handleWalletTransfer}>
+              <button
+                className="xbtn button-blue nowrap px-4"
+                onClick={handleWalletTransfer}
+              >
                 WALLET TRANSFER
               </button>
             </div>
@@ -303,7 +305,6 @@ const [typewalletmode, settypewalletmode] = useState()
         setWalletTransfer={setWalletTransfer}
         // typewalletmode={typewalletmode}
       />
-      
     </div>
   );
 }

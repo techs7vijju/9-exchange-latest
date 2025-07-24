@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { Images } from "../../../images/images";
+import { Images } from "../../images/images";
+// import { Images } from "../../../images/images";
 
 function Withdrawal({ showProgress, setShowProgress, typewalletmode }) {
   const handleClose = () => {
@@ -8,6 +9,7 @@ function Withdrawal({ showProgress, setShowProgress, typewalletmode }) {
   };
   return (
     <Modal
+    
       show={showProgress}
       centered
       className="custom-popup-modal"

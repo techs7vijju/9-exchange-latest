@@ -1,8 +1,9 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { Images } from "../../../images/images";
-import SelectInput from "../../../components/form-elements/SelectInput";
-import TextInput from "../../../components/form-elements/TextInput";
+// import { Images } from "../../../images/images";
+import SelectInput from "../../components/form-elements/SelectInput";
+import TextInput from "../../components/form-elements/TextInput";
+import { Images } from "../../images/images";
 
 function WalletTransfer({ walletTransfer, setWalletTransfer }) {
   const handleClose = () => {
