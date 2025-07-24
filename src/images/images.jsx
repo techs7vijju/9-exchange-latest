@@ -13,6 +13,7 @@ export const Images = {
   football2: "./assets/banner/football2.svg",
   tennis1: "./assets/banner/tennis1.svg",
   tennis2: "./assets/banner/tennis2.svg",
+  bird: "/public/assets/banner/bird.svg",
 
   //icons
   bellIcon1: "./assets/icons/bell1.svg",
@@ -42,6 +43,10 @@ export const Images = {
   blocked: "./assets/icons/blocked.svg",
   bonus: "./assets/icons/bonus.svg",
   wallet: "./assets/icons/wallet.svg",
+  walletransfer: "/public/assets/icons/walletransfer.svg",
+  wallet2: "/public/assets/icons/wallet2.svg",
+
+
 
   //games
   ezugicasino: "./assets/games/ezugicasino.svg",
