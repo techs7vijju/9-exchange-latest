@@ -230,6 +230,7 @@ input[type="number"] {
   --blue-color22: #286aa6;
   --blue-color21: #badeff;
   --blue-color23: #417aaf;
+  --blue-color24: #dff0ff;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -384,7 +385,7 @@ body,
   align-items: center;
   font-size: 20px;
   border-radius: 50px;
-  background-color: var(--blue-color23);
+  background-color: var(--blue-color24);
   color: var(--blue-color4);
 }
 .copy-text {
@@ -1196,7 +1197,6 @@ form .textarea-group small,
   gap: 2px;
   justify-items: start;
 }
-
 
 .justify-start {
   justify-content: flex-start;
