@@ -106,13 +106,14 @@ function Banner() {
                   {inplayImages.map((item, index) => (
                     <Carousel.Item key={index}>
                       {isVideoBanner ? (
-                        <div className="w-100">
+                        <div className="">
                           <video
                             autoPlay
                             muted
                             loop
                             playsInline
                             poster="/fallback-image.jpg"
+                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                           >
                             <source src={mediaUrl} type="video/mp4" />
                           </video>
@@ -251,165 +252,103 @@ function Banner() {
                 Welcome to 9-exchange
               </marquee>
             </div>
-          </div> */}
+          </div>
+          */}
         </>
       ) : (
-        <div className="p-2 d-flex flex-between w-100 gap-2">
-          <div>
-            <div
-              className="d-flex flex-between gap-2 w-100"
-              style={{ height: "15.625rem" }}
-            >
-              {/* <div className="w-5 h-100">
-                <Sidebarbtn />
-              </div> */}
-              <div className="w-100 h-100">
-                {inplayImages?.length > 0 ? (
-                  <Carousel
-                    interval={5000}
-                    controls={inplayImages.length > 1}
-                    indicators={inplayImages.length > 1}
-                  >
-                    {inplayImages.map((item, index) => {
-                      let mediaUrl = "";
-                      let isVideoBanner = false;
-                      let videoUrl = "";
-
-                      if (item.video_banner) {
-                        mediaUrl = `${imgUrl}/banner/${item.video_banner}`;
-                        videoUrl = item.video
-                          ? `${imgUrl}/banner/${item.video}`
-                          : "";
-                        isVideoBanner = true;
-                      } else if (item.image) {
-                        mediaUrl = `${imgUrl}/banner/${item.image}`;
-                      }
-
-                      return (
-                        <Carousel.Item key={index}>
-                          {isVideoBanner ? (
-                            <div className="w-100">
-                              <video
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                poster="/fallback-image.jpg"
-                              >
-                                <source src={mediaUrl} type="video/mp4" />
-                              </video>
-
-                              {videoUrl && (
-                                <FaPlay
-                                  onClick={() => handleFullScreen(videoUrl)}
-                                  style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%, -50%)",
-                                    fontSize: "2rem",
-                                    color: "white",
-                                    cursor: "pointer",
-                                    background: "rgba(0, 0, 0, 0.5)",
-                                    padding: "10px",
-                                    borderRadius: "50%",
-                                  }}
-                                />
-                              )}
-                            </div>
-                          ) : (
-                            <img
-                              loading="lazy"
-                              className="w-100"
-                              src={mediaUrl}
-                              alt="Game Banner"
-                            />
-                          )}
-                        </Carousel.Item>
-                      );
-                    })}
-                  </Carousel>
-                ) : (
-                  <Carousel interval={5000} controls indicators>
-                    {defaultBanners.map((banner, index) => (
-                      <Carousel.Item key={index}>
-                        <img
-                          loading="lazy"
-                          className="w-100"
-                          src={banner}
-                          alt="Default Game Banner"
-                        />
-                      </Carousel.Item>
-                    ))}
-                  </Carousel>
-                )}
-              </div>
-            </div>
-
-            {/* <div className="p-1">
-              <div className="d-flex flex-row w-100 scroll-xaxis1 white-color large-font py-2">
-                <div className="scroll-card blue-color10-bg">
-                  <img
-                    src={Images.cricket1}
-                    className="w-100"
-                    alt="Cricket"
-                    // onClick={() => navigate("/cricket")}
-                  />
-                  <div className="flex-center fw-600 py-2">Cricket</div>
-                </div>
-                <div className="scroll-card blue-color10-bg">
-                  <img
-                    src={Images.cricket1}
-                    className="w-100"
-                    alt="Cricket"
-                    // onClick={() => navigate("/cricket")}
-                  />
-                  <div className="flex-center fw-600 py-2">Cricket</div>
-                </div>
-                <div className="scroll-card blue-color10-bg">
-                  <img
-                    src={Images.football1}
-                    className="w-100"
-                    alt="Football"
-                    // onClick={() => navigate("/footballinplay")}
-                  />
-                  <div className="flex-center fw-600 py-2">Football</div>
-                </div>
-                <div className="scroll-card blue-color10-bg">
-                  <img
-                    src={Images.tennis1}
-                    className="w-100"
-                    alt="Tennis"
-                    // onClick={() => navigate("/footballinplay")}
-                  />
-                  <div className="flex-center fw-600 py-2">Tennis</div>
-                </div>
-                <div className="scroll-card blue-color10-bg">
-                  <img
-                    src={Images.casino1}
-                    className="w-100"
-                    alt="Casino"
-                    // onClick={() => navigate("/footballinplay")}
-                  />
-                  <div className="flex-center fw-600 py-2">Casino</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-100 white-font blue-color13-bg">
-              <div className="d-flex flex-row flex-center py-1 mx-1">
-                <img src={Images.bellIcon1} className="bell-icon" />
-                <marquee
-                  behavior=""
-                  direction=""
-                  className="xl-large-font mx-1 w-100"
+      <div className="p-2 d-flex flex-between w-100 gap-2">
+      <div>
+        <div className="d-flex flex-between gap-2 w-100">
+          <div className="sidebar-btn">
+            <Sidebarbtn />
+          </div>
+          <div className="w-100">
+            <div className="carousel-wrapper">{/* ✅ Added wrapper */}
+              {inplayImages?.length > 0 ? (
+                <Carousel
+                  interval={5000}
+                  controls={inplayImages.length > 1}
+                  indicators={inplayImages.length > 1}
                 >
-                  Welcome to 9-exchange
-                </marquee>
-              </div>
-            </div> */}
+                  {inplayImages.map((item, index) => {
+                    let mediaUrl = "";
+                    let isVideoBanner = false;
+                    let videoUrl = "";
+
+                    if (item.video_banner) {
+                      mediaUrl = `${imgUrl}/banner/${item.video_banner}`;
+                      videoUrl = item.video
+                        ? `${imgUrl}/banner/${item.video}`
+                        : "";
+                      isVideoBanner = true;
+                    } else if (item.image) {
+                      mediaUrl = `${imgUrl}/banner/${item.image}`;
+                    }
+
+                    return (
+                      <Carousel.Item key={index}>
+                        {isVideoBanner ? (
+                          <div className="w-100">
+                            <video
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              poster="/fallback-image.jpg"
+                             
+                            >
+                              <source src={mediaUrl} type="video/mp4" />
+                            </video>
+
+                            {videoUrl && (
+                              <FaPlay
+                                onClick={() => handleFullScreen(videoUrl)}
+                                style={{
+                                  position: "absolute",
+                                  top: "50%",
+                                  left: "50%",
+                                  transform: "translate(-50%, -50%)",
+                                  fontSize: "2rem",
+                                  color: "white",
+                                  cursor: "pointer",
+                                  background: "rgba(0, 0, 0, 0.5)",
+                                  padding: "10px",
+                                  borderRadius: "50%",
+                                }}
+                              />
+                            )}
+                          </div>
+                        ) : (
+                          <img
+                            loading="lazy"
+                            className="w-100"
+                            src={mediaUrl}
+                            alt="Game Banner"
+                          />
+                        )}
+                      </Carousel.Item>
+                    );
+                  })}
+                </Carousel>
+              ) : (
+                <Carousel interval={5000} controls indicators>
+                  {defaultBanners.map((banner, index) => (
+                    <Carousel.Item key={index}>
+                      <img
+                        loading="lazy"
+                        className="w-100"
+                        src={banner}
+                        alt="Default Game Banner"
+                      />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              )}
+            </div>
           </div>
         </div>
+      </div>
+    </div>
       )}
 
       {/* <FullVideoPopup
