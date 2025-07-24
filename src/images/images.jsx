@@ -35,7 +35,7 @@ export const Images = {
   deposit: "./assets/icons/deposit.svg",
   money: "./assets/icons/money.svg",
   invite: "./assets/icons/invite.svg",
-  profile2: "./assets/icons/profile2.svg",
+  // profile2: "./assets/icons/profile2.svg",
   layer: "./assets/icons/layer.svg",
   privacy: "./assets/icons/privacy.svg",
   terms: "./assets/icons/terms.svg",

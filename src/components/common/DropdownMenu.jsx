@@ -8,6 +8,8 @@ const DropdownMenu = ({
   onToggle = () => {},
   items = [],
   showImages = true,
+  onItemClick = () => {},
+  trigger = null, // ✅ NEW PROP
 }) => {
   const dropdownRef = useRef(null);
 
@@ -26,24 +28,37 @@ const DropdownMenu = ({
 
   return (
     <div className="dropdown-container" ref={dropdownRef}>
-      <button
-        className="dropdown-header"
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => onToggle(!open)}
-      >
-        <span className="dropdown-title">{title}</span>
-        {open ? (
-          <IoChevronUpSharp className="dropdown-toggle-icon" />
-        ) : (
-          <IoChevronDownSharp className="dropdown-toggle-icon" />
-        )}
-      </button>
+      {trigger ? (
+        <div onClick={() => onToggle(!open)} className="pointer">
+          {trigger}
+        </div>
+      ) : (
+        <button
+          className="dropdown-header"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => onToggle(!open)}
+        >
+          <span className="dropdown-title">{title}</span>
+          {open ? (
+            <IoChevronUpSharp className="dropdown-toggle-icon" />
+          ) : (
+            <IoChevronDownSharp className="dropdown-toggle-icon" />
+          )}
+        </button>
+      )}
+
       {open && (
         <div className="dropdown-menu-custom" role="listbox">
           {items.map((item, index) => (
-            <div key={index} className="dropdown-item-custom" tabIndex={0} role="option">
+            <div
+              key={index}
+              className="dropdown-item-custom"
+              tabIndex={0}
+              role="option"
+              onClick={() => onItemClick(item.name)} // ✅ Handle item click
+            >
               <div className="dropdown-item-wrapper">
                 <div className="dropdown-item-content">
                   {showImages && item.img && (
