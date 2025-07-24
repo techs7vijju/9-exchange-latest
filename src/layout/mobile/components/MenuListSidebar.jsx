@@ -1,43 +1,86 @@
 import React, { useState } from "react";
-import { FaTimes, FaChevronDown } from "react-icons/fa";
-import { TiHome } from "react-icons/ti";
+import { FaChevronDown } from "react-icons/fa";
 import LanguageDropdown from "./LanguageDropdown";
 import { BiSolidMessageDetail } from "react-icons/bi";
-import { CloseButton } from "react-bootstrap";
 import { IoMdClose } from "react-icons/io";
+import { Images } from "../../../images/images";
 
-const sportsList = [
-  { id: 1, name: "Cricket" },
-  { id: 2, name: "Football" },
-  { id: 3, name: "Tennis" },
-  { id: 4, name: "Horse Racing" },
-  { id: 5, name: "Greyhound" },
-  { id: 6, name: "Kabaddi" },
-];
+// Data for dropdown sections
+const dropdownItems = {
+  live: [
+    { id: 1, name: "Live Casino" },
+    { id: 2, name: "Live Games" },
+    { id: 3, name: "Live Sports" },
+  ],
+  casino: [
+    { id: 1, name: "Slots" },
+    { id: 2, name: "Table Games" },
+    { id: 3, name: "Card Games" },
+    { id: 4, name: "Jackpots" },
+  ],
+  sports: [
+    { id: 1, name: "Cricket" },
+    { id: 2, name: "Football" },
+    { id: 3, name: "Tennis" },
+    { id: 4, name: "Horse Racing" },
+    { id: 5, name: "Greyhound" },
+    { id: 6, name: "Kabaddi" },
+  ],
+};
 
+// Main menu items with dropdown indicators
 const mainMenuItems = [
-  { id: 1, name: "Main Page", icon: <TiHome />, active: true },
-  { id: 2, name: "Live", icon: "🔴" },
-  { id: 3, name: "Casino", icon: "🎰" },
+  {
+    id: 1,
+    name: "Main Page",
+    icon: Images.homeIcon,
+    // active: true,
+    hasDropdown: false,
+  },
+  {
+    id: 2,
+    name: "Live",
+    icon: Images.liveIcon,
+    hasDropdown: true,
+    dropdownKey: "live",
+  },
+  {
+    id: 3,
+    name: "Casino",
+    icon: Images.casinoIcon,
+    hasDropdown: true,
+    dropdownKey: "casino",
+  },
+  {
+    id: 4,
+    name: "Sports",
+    icon: Images.sportsIcon,
+    hasDropdown: true,
+    dropdownKey: "sports",
+  },
 ];
 
+// Account menu items (all single items)
 const accountMenuItems = [
-  { id: 1, name: "More" },
-  { id: 2, name: "My Bets" },
-  { id: 3, name: "My Wallet" },
-  { id: 4, name: "Account Statement" },
-  { id: 5, name: "P/L Statement" },
-  { id: 6, name: "Commission Report" },
-  { id: 7, name: "Set Button Variables" },
+  { id: 1, name: "My Bets", icon: Images.myBets },
+  { id: 2, name: "My Wallet", icon: Images.myWallet },
+  { id: 3, name: "Account Statement", icon: Images.accountStatement },
+  { id: 4, name: "P/L Statement", icon: Images.plStatement },
+  { id: 5, name: "Commission Report", icon: Images.commissionReport },
+  { id: 6, name: "Set Button Variables", icon: Images.setButtonVariables },
 ];
 
 const MenuListSidebar = ({ open, onClose }) => {
-  const [showSports, setShowSports] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("EN");
+  const [openDropdowns, setOpenDropdowns] = useState({});
 
-  const toggleSports = () => {
-    setShowSports((prev) => !prev);
+  const toggleDropdown = (key) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
+
+  const [selectedLanguage, setSelectedLanguage] = useState("EN");
 
   return (
     <div className={`menulist-sidebar-container${open ? " open" : ""}`}>
@@ -58,51 +101,83 @@ const MenuListSidebar = ({ open, onClose }) => {
       </div>
 
       <div className="menuList-sidebar-content">
+        {/* Main Menu Section */}
         <div className="sidebar-section">
           {mainMenuItems.map((item) => (
-            <div
-              key={item.id}
-              className={`sidebar-link ${item.active ? "active" : ""}`}
-            >
-              <span
-                className="d-fkex align-items-center"
-                aria-label={item.name.toLowerCase()}
+            <React.Fragment key={item.id}>
+              <div
+                className={`sidebar-link ${item.active ? "active" : ""}`}
+                onClick={() =>
+                  item.hasDropdown && toggleDropdown(item.dropdownKey)
+                }
               >
-                {item.icon}
-              </span>
-              <span className="sidebar-text">{item.name}</span>
-            </div>
+                <div
+                  className="flex-center img-wrapper rounded-circle "
+                  aria-label={item.name.toLowerCase()}
+                >
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    className="sidebar-img-icon"
+                  />
+                </div>
+                <p className="m-0 sidebar-text">{item.name}</p>
+
+                {item.hasDropdown && (
+                  <span
+                    className={`sidebar-arrow ${
+                      openDropdowns[item.dropdownKey] ? "open" : ""
+                    }`}
+                  >
+                    <FaChevronDown size={14} />
+                  </span>
+                )}
+              </div>
+
+              {item.hasDropdown && openDropdowns[item.dropdownKey] && (
+                <ul className="sidebar-submenu">
+                  {dropdownItems[item.dropdownKey].map((subItem) => (
+                    <li key={subItem.id}>{subItem.name}</li>
+                  ))}
+                </ul>
+              )}
+            </React.Fragment>
           ))}
+        </div>
 
-          <div className="sidebar-link" onClick={toggleSports}>
-            <span className="sidebar-icon" aria-label="sports">
-              🏅
-            </span>
-            <span className="sidebar-text">Sports</span>
-            <span className={`sidebar-arrow ${showSports ? "open" : ""}`}>
-              <FaChevronDown size={14} />
-            </span>
-          </div>
-
-          {showSports && (
-            <ul className="sidebar-submenu">
-              {sportsList.map((sport) => (
-                <li key={sport.id}>{sport.name}</li>
-              ))}
-            </ul>
-          )}
+        <div className="more-item">
+          <p className="m-0"> More </p>
         </div>
 
         <div className="sidebar-section">
           {accountMenuItems.map((item) => (
             <div key={item.id} className="sidebar-link">
-              {item.name}
+              <div
+                className="flex-center img-wrapper rounded-circle"
+                aria-label={item.name.toLowerCase()}
+              >
+                <img
+                  src={item.icon}
+                  alt={item.name}
+                  className="sidebar-img-icon"
+                />
+              </div>
+              <p className="m-0">{item.name}</p>
             </div>
           ))}
         </div>
 
         <div className="sidebar-footer">
-          <div className="sidebar-link logout">Log Out</div>
+          <div className="sidebar-link">
+            <div className="flex-center img-wrapper rounded-circle">
+              <img
+                src={Images.logoutIcon}
+                alt="Log Out"
+                className="sidebar-img-icon"
+              />
+            </div>
+            <div className="sidebar-link logout">Log Out</div>
+          </div>
         </div>
       </div>
     </div>

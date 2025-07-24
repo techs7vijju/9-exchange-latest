@@ -92,5 +92,18 @@ export const Images = {
   basketball: "./assets/games/basketball.svg",
   /*PageNotFound*/
   pageNotFound: "../assets/404/page-not-found.svg",
- page404:"../assets/404/404.svg"
+  page404: "../assets/404/404.svg",
+
+  // Mobile Menu Icons
+  homeIcon: "/assets/icons/mobile-menu-list/home.svg",
+  liveIcon: "/assets/icons/mobile-menu-list/live.svg",
+  casinoIcon: "/assets/icons/mobile-menu-list/poker-chip.svg",
+  sportsIcon: "/assets/icons/mobile-menu-list/sports.svg",
+  myBets: "/assets/icons/mobile-menu-list/my-bets.svg",
+  myWallet: "/assets/icons/mobile-menu-list/my-wallet.svg",
+  accountStatement: "/assets/icons/mobile-menu-list/account-statement.svg",
+  plStatement: "/assets/icons/mobile-menu-list/p_l.svg",
+  commissionReport: "/assets/icons/mobile-menu-list/commision_report.svg",
+  setButtonVariables: "/assets/icons/mobile-menu-list/set_buttons.svg",
+  logoutIcon: "/assets/icons/mobile-menu-list/log_out.svg",
 };
