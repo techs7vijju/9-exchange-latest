@@ -59,7 +59,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const toggleMessages = () => {
     setShowMessages((prev) => !prev);
   };
-  const isMobile = useMediaQuery({ maxWidth: 1023 });
+  const isMobile = useMediaQuery({ maxWidth: 991 });
   const [showLogin, setShowLogin] = useState(false);
   const [showForgot, setShowForgot] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -160,13 +160,14 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const EnItems = [{ name: "English" }, { name: "Spanish" }];
   return (
     <div className="header">
+      <div className="header-container">
       {isMobile ? (
-        <div className="flex-between w-100">
+        <div className=" flex justify-content-between align-items-center">
           <div>
             <img src={Images.Logo} alt="logo" className="logo-img w-100" />
           </div>
 
-          <div className="flex-evenly gap-2 mx-2">
+          <div className="">
             {isLogin ? (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
@@ -204,30 +205,34 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
           </div>
         </div>
       ) : (
-        <div className="flex-between w-100">
-          <div className="flex-evenly w-10">
+        <div className="header-container-before ">
+          <div className="flex  align-items-center">
+          <div className="">
             <img src={Images.Logo} alt="logo" className="logo-img w-100" />
           </div>
-          <div className="flex-evenly w-40">
-            <DropdownMenu
+           <div> <DropdownMenu
               title="CRICKET"
               open={false}
               onToggle={() => {}}
               items={[]}
               showImages={false}
-            />
-            <DropdownMenu
+            /></div>
+           <div>
+           <DropdownMenu
               title="SPORTS"
               open={openSports}
               onToggle={() => setOpenSports(!openSports)}
               items={sportsItems}
             />
+           </div>
+            <div>
             <DropdownMenu
               title="LIVE"
               open={openLive}
               onToggle={() => setOpenLive(!openLive)}
               items={liveItems}
             />
+            </div>
             <div className="d-flex justify-content-center">
               <div
                 className="dropdown-container"
@@ -272,14 +277,17 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                 )}
               </div>
             </div>
+            <div>
             <DropdownMenu
               title="MORE"
               open={openMore}
               onToggle={() => setOpenMore(!openMore)}
               items={moreItems}
             />
-          </div>
-          <div className="flex-evenly w-30 p-2">
+            </div>
+          </div>  
+          <div className="flex justify-content-between align-items-center">
+          <div className="flex w-100">
             {isLogin ? (
               <div className="d-flex flex-between w-100 gap-1">
                 <div className="xbtn green-color large-font w-50 pointer ">
@@ -330,22 +338,26 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </div>
             ) : (
               <div className="d-flex flex-between gap-1 w-100">
-                <div
-                  className="xbtn button-blue large-font w-60"
-                  onClick={handleRegister}
-                >
-                  REGISTRATION
+                <div className="registration-container">
+                  <div
+                    className="xbtn button-blue large-font w-100"
+                    onClick={handleRegister}
+                  >
+                    REGISTRATION
+                  </div>
                 </div>
+              
                 <div
                   className="xbtn login large-font w-40"
                   onClick={handleLoginClick}
                 >
                   LOGIN
                 </div>
+            
               </div>
             )}
           </div>
-          <div className="flex-evenly w-20 gap-2 white-font large-font mx-2">
+          <div className="flex">
             {isLogin && (
               <>
                 <div className="flex-evenly gap-3 white-font large-font mx-2">
@@ -379,7 +391,8 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               />
             </div>
           </div>
-        </div>
+          </div>
+          </div>
       )}
 
       <Register
@@ -427,6 +440,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setShowBlocked={setShowBlocked}
       />
       <Blocked showBlocked={showBlocked} setShowBlocked={setShowBlocked} />
+      </div>
     </div>
   );
 }

@@ -87,7 +87,24 @@ const BetSlip = () => {
         )}
         {activeTab === "mybets" && (
           <div className="mybets-content">
-            <p>MY BETS Content goes here...</p>
+           <div className="d-flex align-items-center justify-content-between  mybets-content-header">
+            <p className="p-blue">Market</p>
+            <p className="p-blue">Odds</p>
+            <p className="p-blue">Stake</p>
+           </div>
+           <div className="mybets-content-body mt-2">
+           <div className="d-flex align-items-center justify-content-between  mybets-content-item">
+            <p className="p-blue">India</p>
+            <p className="p-blue">1.36</p>
+            <p className="p-blue">10000.00</p>
+            </div>
+            <div className="mybets-content-border">
+
+            </div>
+           </div>
+           <div className="mt-4 mb-2">
+                <button className="xbtn button-blue">View All</button>
+            </div>
           </div>
         )}
       </div>
