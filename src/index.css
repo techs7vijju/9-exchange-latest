@@ -240,6 +240,7 @@ input[type="number"] {
   --grey-color11: #666666;
   --grey-color12: #dbe4eb;
   --grey-color13: #dfe8f1;
+  --grey-color14: #d4dee8;
   --red-color1: #ff8282;
   --red-color2: #ff5145;
   --red-color3: #ffcdc9;
@@ -1501,8 +1502,8 @@ form .textarea-group small,
     padding: 0.2rem;
   }
   .logo-img {
-    padding: 0.5rem;
-    height: 3.45rem !important;
+  
+    height:50px !important;
   }
 }
 
@@ -1518,9 +1519,9 @@ form .textarea-group small,
   }
 
   .logo-img {
-    padding: 0.5rem;
-    height: 4rem !important;
+    height: 45px !important;
   }
+
 }
 
 @media (min-width: 1201px) and (max-width: 1600px) {
@@ -1535,9 +1536,9 @@ form .textarea-group small,
   }
 
   .logo-img {
-    padding: 0.5rem;
-    height: 4rem !important;
+    height: 50px !important;
   }
+ 
 }
 
 @media (min-width: 1601px) and (max-width: 1920px) {
@@ -1589,6 +1590,24 @@ form .textarea-group small,
     height: 5rem !important;
   }
 }
+
+/*header*/
+.header{
+  position: fixed;
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-container-before {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/*------------------------*/
+
 
 /* collapse right bar styling */
 
@@ -1769,7 +1788,6 @@ form .textarea-group small,
   font-weight: 600;
 }
 
-
 .menuList-sidebar-content .sidebar-submenu {
   list-style: none;
   margin: 8px 0 0 0;
@@ -1936,5 +1954,39 @@ form .textarea-group small,
   background: var(--blue-color21);
   padding: 0.5rem;
   border-radius: 0.5rem;
+}
+.bet-slip-container .mybets-content {
+  background: var(--grey-color1);
+  padding: 0.5rem;
+}
+.bet-slip-container .mybets-content .mybets-content-header {
+  background: var(--grey-color14);
+ 
+}
+.bet-slip-container .mybets-content .mybets-content-header p {
+  font-weight: 600;
+ margin-top: 8px;
+ padding: 8px;
+ line-height: 0;
+
+}
+.bet-slip-container .mybets-content .mybets-content-body {
+  border-radius: 10px;
+}
+.bet-slip-container .mybets-content-body .mybets-content-item {
+  background: var(--blue-color21);
+  
+}
+.bet-slip-container .mybets-content-body .mybets-content-item p{
+  color: var(--blue-color6);
+  font-weight: 600;
+  margin-top: 8px;
+  padding: 8px;
+  line-height: 0;
+  
+}
+.bet-slip-container .mybets-content .mybets-content-border {
+  height: 15px;
+  background: var(--white-color);
 }
 /*----------------------------------*/
