@@ -1268,11 +1268,10 @@ form .textarea-group small,
   line-height: 2;
 }
 
-  .layout-main-content {
-    padding: 75px 20px 20px 20px;
-  }
+.layout-main-content {
+  padding: 75px 20px 20px 20px;
+}
 @media (max-width: 991px) {
-
   .layout-main-content {
     padding: 78px 10px 20px 10px;
   }
@@ -1387,19 +1386,19 @@ form .textarea-group small,
 
 .carousel-control-next,
 .carousel-control-prev {
-  position: absolute ;
-  top: 0 ;
-  bottom: 0 ;
+  position: absolute;
+  top: 0;
+  bottom: 0;
   /* z-index: 1 ; */
-  display: flex ;
-  align-items: center ;
+  display: flex;
+  align-items: center;
   /* width: 2.5% !important; */
-  padding: 0 ;
-  color: #fff ;
-  filter: var(--bs-carousel-control-icon-filter) ;
-  border: 0 ;
-  opacity: 0.5 ;
-  transition: opacity 0.15s ease ;
+  padding: 0;
+  color: #fff;
+  filter: var(--bs-carousel-control-icon-filter);
+  border: 0;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
 }
 .carousel,
 .carousel-inner,
@@ -1427,9 +1426,6 @@ form .textarea-group small,
     display: block;
   }
 }
-
-
-
 
 .scroll-xaxis {
   overflow-x: auto;
@@ -1484,6 +1480,10 @@ form .textarea-group small,
   height: 100%;
   border-radius: 2px;
   cursor: pointer;
+}
+.sidebar-container .small-button .dropdown-container .dropdown-menu-custom {
+  left: 88px;
+  top: 145px;
 }
 /* popups */
 
@@ -1650,7 +1650,8 @@ form .textarea-group small,
 }
 
 .collapse-right-bar-container button {
-  padding: 10px 20px;
+  margin-top: 8px;
+  padding: 12px 20px;
   width: 100%;
   background-color: var(--blue-color15);
 }

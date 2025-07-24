@@ -263,7 +263,7 @@ function Banner() {
             <Sidebarbtn />
           </div>
           <div className="w-100">
-            <div className="carousel-wrapper">{/* ✅ Added wrapper */}
+            <div className="carousel-wrapper">
               {inplayImages?.length > 0 ? (
                 <Carousel
                   interval={5000}
@@ -288,14 +288,14 @@ function Banner() {
                     return (
                       <Carousel.Item key={index}>
                         {isVideoBanner ? (
-                          <div className="w-100">
+                          <div className="">
                             <video
                               autoPlay
                               muted
                               loop
                               playsInline
                               poster="/fallback-image.jpg"
-                             
+                             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                             >
                               <source src={mediaUrl} type="video/mp4" />
                             </video>

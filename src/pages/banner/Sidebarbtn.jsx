@@ -1,121 +1,56 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Dropdown } from "react-bootstrap";
-import { FaChevronRight, FaThumbsUp } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router";
-import { FaStar } from "react-icons/fa";
-import { FaAward } from "react-icons/fa6";
-import { ImPlay2 } from "react-icons/im";
-import { IoSettingsSharp } from "react-icons/io5";
-import { FaUser } from "react-icons/fa6";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import { Images } from "../../images/images";
-import { IoMdThumbsUp } from "react-icons/io";
-import { LiaThumbsUpSolid } from "react-icons/lia";
-import PrivacyPolicy from "./Popups/PrivacyPolicy";
-import TermsService from "./Popups/TermsService";
+// import PrivacyPolicy from "./Popups/PrivacyPolicy";
+// import TermsService from "./Popups/TermsService";
+import DropdownMenu from "../../components/common/DropdownMenu";
 
 const Sidebarbtn = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dropdownMenuRef = useRef(null);
 
-  const handlewithDraw = (id) => {
-    navigate(`/deposite-withdraw/${id}`);
+  // const [openPrivacy, setOpenPrivacy] = useState(false);
+  // const [openTerms, setOpenTerms] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleItemClick = (label) => {
+    switch (label) {
+      case "Privacy Policy":
+        setOpenPrivacy(true);
+        break;
+      case "Terms of Service":
+        setOpenTerms(true);
+        break;
+      case "Make a Deposit":
+        navigate("/deposite-withdraw/deposit");
+        break;
+      case "Withdraw Funds":
+        navigate("/deposite-withdraw/withdraw");
+        break;
+      // case "Invite Friends":
+      //   navigate("/invite");
+      //   break;
+      // case "Personal Profile":
+      //   navigate("/profile");
+      //   break;
+      // default:
+      //   break;
+    }
+    setDropdownOpen(false);
   };
-
-  const [dropdown, setdropdown] = useState(false);
-  const handledropdown = () => {
-    setdropdown(!dropdown);
-  };
-  const handleNavigate = (item) => {
-    navigate(item);
-    setdropdown(false);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownMenuRef.current &&
-        !dropdownMenuRef.current.contains(event.target)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const icons = [
-    { name: "star", component: FaStar },
-    { name: "award", component: FaAward },
-    { name: "play", component: ImPlay2 },
-    { name: "settings", component: IoSettingsSharp },
-  ];
-
-  const [openPrivacy, setOpenPrivacy] = useState(false);
-  const [openTerms, setOpenTerms] = useState(false);
-
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const options = [
-    {
-      label: "Make a Deposit",
-      icon: Images.deposit,
-    },
-    {
-      label: "Withdraw Funds",
-      icon: Images.money,
-    },
-    {
-      label: "Invite Friends",
-      icon: Images.invite,
-    },
-    {
-      label: "Personal Profile",
-      icon: Images.layer,
-    },
-    {
-      label: "Privacy Policy",
-      icon: Images.privacy,
-      onClick: () => setOpenPrivacy(true),
-    },
-
-    {
-      label: "Terms of Service",
-      icon: Images.terms,
-      onClick: () => setOpenTerms(true),
-    },
+    { name: "Make a Deposit", img: Images.deposit },
+    { name: "Withdraw Funds", img: Images.money },
+    { name: "Invite Friends", img: Images.invite },
+    { name: "Personal Profile", img: Images.layer },
+    // { name: "Privacy Policy", img: Images.privacy },
+    // { name: "Terms of Service", img: Images.terms },
   ];
 
-  const [activeIcon, setActiveIcon] = useState(
-    localStorage.getItem("activeIcon") || null
-  );
-
-  useEffect(() => {
-    if (activeIcon) {
-      localStorage.setItem("activeIcon", activeIcon);
-    }
-  }, [activeIcon]);
-
-  useEffect(() => {
-    if (location.pathname === "/live-matches") {
-      setActiveIcon("play");
-    } else {
-      setActiveIcon(null);
-    }
-  }, [location.pathname]);
-
-  const handleIconClick = (icon) => {
-    setActiveIcon(icon);
-    if (icon === "play") {
-      navigate(`/live-matches/${icon}`);
-    }
-  };
-
   return (
-    <div className="d-flex flex-col px-2 h-100">
+    <div className="sidebar-container">
+    <div className="d-flex flex-col h-100">
       <div className="small-button white-font pointer">
         <img src={Images.thump} className="payment-images" />
       </div>
@@ -128,44 +63,31 @@ const Sidebarbtn = () => {
       <div className="small-button white-font pointer">
         <img src={Images.settings} className="payment-images" />
       </div>
-      <div className="small-button position-relative" ref={dropdownMenuRef}>
-        <div
-          className="sidebar-icon white-font pointer "
-          onClick={() => setShowDropdown(!showDropdown)}
-        >
-          <img src={Images.personal} className="payment-images" />
-        </div>
 
-        {/* Dropdown */}
-        {showDropdown && (
-          <div className="exact-dropdown">
-            <div className="dropdown-pointer-left" />
-            {options.map((item, index) => (
-              <div
-                className="dropdown-row d-flex align-items-center"
-                key={index}
-                onClick={item.onClick}
-              >
-                <img
-                  src={item.icon}
-                  alt={item.label}
-                  className="dropdown-icon me-2"
-                />
-                <span className="flex-grow-1 fw-semibold">{item.label}</span>
-                <span className="fw-bold text-secondary">&gt;</span>
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="small-button">
+        <DropdownMenu
+          title=""
+          open={dropdownOpen}
+          onToggle={setDropdownOpen}
+          items={options}
+          showImages={true}
+          onItemClick={handleItemClick}
+          trigger={
+            <div className="pointer">
+              <img src={Images.personal} className="payment-images" />
+            </div>
+          }
+        />
       </div>
-      <PrivacyPolicy
+
+      {/* <PrivacyPolicy
         openPrivacy={openPrivacy}
         setOpenPrivacy={setOpenPrivacy}
       />
-      <TermsService openTerms={openTerms} setOpenTerms={setOpenTerms} />
+      <TermsService openTerms={openTerms} setOpenTerms={setOpenTerms} /> */}
+    </div>
     </div>
   );
 };
 
 export default Sidebarbtn;
-
