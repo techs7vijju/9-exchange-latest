@@ -74,8 +74,8 @@ function LanguageDropdown({ selectedLanguage, onSelectLanguage }) {
                 <span
                   className={`${
                     lang.code === selectedLanguage
-                      ? "text-blue2"
-                      : "text-dark pointer zoom-on-hover"
+                      ? ""
+                      : "text-dark pointer"
                   }`}
                 >
                   {lang.name}
@@ -83,7 +83,7 @@ function LanguageDropdown({ selectedLanguage, onSelectLanguage }) {
                 <div
                   className={`d-flex justify-content-center align-items-center rounded-circle border ${
                     lang.code === selectedLanguage
-                      ? "bg-warning border-warning gradient-bg-yellow1"
+                      ? "bg-warning border-warning"
                       : "border-primary"
                   }`}
                   style={{ width: "20px", height: "20px" }}
