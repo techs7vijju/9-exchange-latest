@@ -36,14 +36,29 @@ const endpoints = {
     method: "post",
     url: () => `/website/${websiteId}/user/oneClickLogin`,
   },
-  
+
   userLogin: { method: "post", url: `/website/${websiteId}/user/login` },
 
   getWelcomeBonusAvail: {
     method: "get",
     url: (id) => {
-      return `/website/${websiteNewId}/getWelcomeBonusCard/${id}`;
+      return `/website/${websiteId}/getWelcomeBonusCard/${id}`;
     },
+  },
+
+  getSecurityQuestionsById: {
+    method: "get",
+    url: (id) => `/website/${websiteId}/user/securityQuestions/${id}`,
+  },
+
+  verifySecurityQuestions: {
+    method: "post",
+    url: () => `/website/${websiteId}/user/verify/securityQuestions`,
+  },
+
+  forgotPassword: {
+    method: "post",
+    url: (id) => `/website/${websiteNewId}/user/forgotPassword`,
   },
 };
 

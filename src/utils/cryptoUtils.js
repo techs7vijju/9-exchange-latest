@@ -11,7 +11,6 @@ export const encryptData = (data) => {
 export const decryptData = (cipherText) => {
   try {
     if (!cipherText) {
-      console.warn("No data found to decrypt.");
       return null;
     }
     const decodedString = decodeURIComponent(escape(atob(cipherText)));

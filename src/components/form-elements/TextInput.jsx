@@ -33,6 +33,13 @@ const TextInput = ({
     }
   };
 
+  const getInputType = () => {
+    if (type === "password" && showPassword) {
+      return "text";
+    }
+    return type;
+  };
+
   return (
     <div className="input-group label">
       {label && (
@@ -55,7 +62,7 @@ const TextInput = ({
         <input
           ref={inputRef}
           id={name}
-          type={type}
+          type={getInputType()} 
           name={name}
           value={value}
           onChange={onChange}

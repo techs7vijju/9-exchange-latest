@@ -19,15 +19,13 @@ import ThanksSignup from "../../pages/Popups/ThanksSignup";
 function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
-  // const isLogin = localStorage.getItem("login");
-
-  const [openSign, setOpenSign] = useState(false);
-  const [walletDetails, setWalletDetails] = useState(null);
-
   const [error, setError] = useState({});
   const [message, setMessage] = useState("");
+  const [username, setUsername] = useState("");
 
   // popups
+  const [openSign, setOpenSign] = useState(false);
+  const [walletDetails, setWalletDetails] = useState(null);
   const [showMsgPopup, setShowMsgPopup] = useState(false);
   const [welcomeBonusPopup, setWelcomeBonusPopup] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
@@ -45,14 +43,17 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     setShowMessages((prev) => !prev);
   };
   const isMobile = useMediaQuery({ maxWidth: 991 });
+
+  // popups
   const [showLogin, setShowLogin] = useState(false);
-  const [showForgot, setShowForgot] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showBlocked, setShowBlocked] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showThanks, setShowThanks] = useState(false);
   const [showThanksSignup, setShowThanksSignup] = useState(false);
+
   const handleLoginClick = () => {
     setShowLogin(true);
   };
@@ -134,6 +135,31 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
     { img: Images.set, name: "Set Button Variables" },
   ];
   const EnItems = [{ name: "English" }, { name: "Spanish" }];
+
+  const checkLoginStatus = useCallback(() => {
+    const userData = localStorage.getItem("user_data");
+    const token = localStorage.getItem("jwt_token");
+    return !!(userData && token);
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    setIsLogin(false);
+    navigate("/");
+  }, [navigate]);
+
+  useEffect(() => {
+    setIsLogin(checkLoginStatus());
+
+    const handleStorageChange = () => {
+      setIsLogin(checkLoginStatus());
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [checkLoginStatus]);
+
   return (
     <div className="header flex items-center">
       {isMobile ? (
@@ -302,7 +328,10 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                         </div>
                       )}
                     </div>
-                    <div className="d-flex flex-between  xbtn login white-font pointer">
+                    <div
+                      className="d-flex flex-between  xbtn login white-font pointer"
+                      onClick={logout}
+                    >
                       <ImExit />
                     </div>
                   </div>
@@ -372,9 +401,8 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setShowRegister={setShowRegister}
         setShowThanks={setShowThanks}
         setShowThanksSignup={setShowThanksSignup}
-        setMessage={setMessage}
-        setShowSuccess={setShowSuccess}
         setShowLogin={setShowLogin}
+        onLoginSuccess={() => setIsLogin(true)}
       />
       <Thanks showThanks={showThanks} setShowThanks={setShowThanks} />
       <ThanksSignup
@@ -384,22 +412,30 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
       <Login
         showLogin={showLogin}
         setShowLogin={setShowLogin}
-        setShowForgot={setShowForgot}
+        setForgotPasswordModal={setForgotPasswordModal}
+        setShowRegister={setShowRegister}
+        onLoginSuccess={() => setIsLogin(true)}
       />
       <ForgotPassword
-        showForgot={showForgot}
-        setShowForgot={setShowForgot}
-        setShowNewPassword={setShowNewPassword}
+        forgotPasswordModal={forgotPasswordModal}
+        setForgotPasswordModal={setForgotPasswordModal}
+        setNewPassword={setNewPassword}
+        setUsername={setUsername}
+        username={username}
+
+        // setBlockModel,
       />
       <NewPassword
-        showNewPassword={showNewPassword}
-        setShowNewPassword={setShowNewPassword}
+        newPassword={newPassword}
+        setNewPassword={setNewPassword}
         setShowSuccess={setShowSuccess}
+        username={username}
+        setMessage={setMessage}
       />
       <Success
         showSuccess={showSuccess}
         setShowSuccess={setShowSuccess}
-        setShowBlocked={setShowBlocked}
+        message={message}
       />
       <Blocked showBlocked={showBlocked} setShowBlocked={setShowBlocked} />
     </div>

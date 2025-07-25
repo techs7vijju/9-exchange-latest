@@ -7,7 +7,6 @@ import * as Yup from "yup";
 import { userLogin } from "../../api/apiMethods";
 import { encryptData } from "../../utils/cryptoUtils";
 import TextInput from "../../components/form-elements/TextInput";
-// import { handleApiError } from "../../../utils/cryptoUtils";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
@@ -15,17 +14,15 @@ const validationSchema = Yup.object({
 });
 
 const Login = ({
-  setLoginModal,
-  loginModal,
-  setRegisterModal,
   registerModal,
-  setForgotPasswordModal,
   setAdminResetPopup,
   adminResetPopup,
 
   showLogin,
   setShowLogin,
-  setShowForgot,
+  setForgotPasswordModal,
+  setShowRegister,
+  onLoginSuccess,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
@@ -80,13 +77,18 @@ const Login = ({
         localStorage.setItem("user_data", encryptData(userData));
         localStorage.setItem("welcomeBonusId", response?.user?.promoId);
 
-        // Reset form and close modal
-        setLoading(false);
-        setShowPassword(false);
-        setFormData({ username: "", password: "" });
-        setValidationErrors({ username: "", password: "" });
-        setApiErrors([]);
+        if (Number(response?.user?.is_updated_password) === 2) {
+          sessionStorage.setItem(
+            "is_updated_password",
+            response?.user?.is_updated_password
+          );
+          setAdminResetPopup(true);
+          handleClose();
+        }
+
+        onLoginSuccess();
         setShowLogin(false);
+        handleClose();
       }
     } catch (error) {
       setLoading(false);
@@ -98,16 +100,18 @@ const Login = ({
         });
         setValidationErrors(errors);
       } else {
-        setApiErrors([
-          error.message || "An error occurred during registration",
-        ]);
+        setApiErrors([error || "An error occurred during registration"]);
       }
     }
   };
 
   const handleForgot = () => {
-    setShowForgot(true);
-    setShowLogin(false);
+    setForgotPasswordModal(true);
+    handleClose();
+  };
+  const handleRegistration = () => {
+    setShowRegister(true);
+    handleClose();
   };
 
   const handleClose = () => {
@@ -210,9 +214,13 @@ const Login = ({
             {loading ? "LOADING..." : "LOGIN"}
           </button>
         </form>
-        <div className="text-center mt-3 registration-text">
-          Don't have an account yet? <a href="#">REGISTRATION</a>
-        </div>
+
+        <p className="mt-3 text-center p-blue4">
+          Don't have an account yet?
+          <span className="p-blue1" onClick={handleRegistration}>
+            REGISTRATION
+          </span>
+        </p>
       </div>
     </Modal>
   );

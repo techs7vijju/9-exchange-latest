@@ -3,14 +3,15 @@ import { Modal } from "react-bootstrap";
 import { Images } from "../../images/images";
 import { useMediaQuery } from "react-responsive";
 import { decryptData } from "../../utils/cryptoUtils";
-import { MdContentCopy, MdFileDownload } from "react-icons/md";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-// import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { FaCopy } from "react-icons/fa";
 import { getWelcomeBonusAvail } from "../../api/apiMethods";
+import { imgUrl } from "../../api/baseUrl";
+import { useNavigate } from "react-router";
 
 const Thanks = ({ showThanks, setShowThanks }) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
   const isMobile = useMediaQuery({ maxWidth: 991 });
@@ -137,39 +138,40 @@ const Thanks = ({ showThanks, setShowThanks }) => {
     </Tooltip>
   );
 
-  // welcome Bonus
-
   const [welcomeData, setWelcomeData] = useState({});
   const hasFetched = useRef(false);
 
-  console.log("welcomeData", welcomeData);
-
-  const getWelcomeBonus = async () => {
+  useEffect(() => {
     const welcomeId = localStorage.getItem("welcomeBonusId");
-    if (!welcomeId) return;
-    try {
-      const response = await getWelcomeBonusAvail(welcomeId);
-      if (response.status === 200) {
-        setWelcomeData(response?.welcomeBonous[0]);
-      }
-    } catch (error) {}
-  };
+    if (!welcomeId || welcomeId === null) return;
+    const getWelcomeBonus = async () => {
+      try {
+        const response = await getWelcomeBonusAvail(welcomeId);
+        if (response.status === 200) {
+          setWelcomeData(response?.welcomeBonous[0] || {});
+        }
+      } catch (error) {}
+    };
+    getWelcomeBonus();
+  }, [showThanks]);
 
   const image = welcomeData?.image;
   const image_comp = welcomeData?.image_comp;
 
-  useEffect(() => {
-    if (hasFetched.current) return;
-    if (showThanks === true) {
-      hasFetched.current = true;
-      getWelcomeBonus();
-    }
-  }, [showThanks]);
+  // useEffect(() => {
+  //   if (hasFetched.current) return;
+  //   if (showThanks === true) {
+  //     hasFetched.current = true;
+  //     getWelcomeBonus();
+  //   }
+  // }, [showThanks]);
 
   const handleClose = () => {
     localStorage.removeItem("password");
     localStorage.removeItem("welcomeBonusId");
+    setWelcomeData({});
     setShowThanks(false);
+    navigate("/");
   };
 
   return (
@@ -299,14 +301,18 @@ const Thanks = ({ showThanks, setShowThanks }) => {
             ) : (
               <img className="w-100" src={Images.bonus} alt="" />
             )}
-            <div className="large-font fw-600">{welcomeData?.bones_amount}</div>
+            <h3 className="h3-blue fw-600">{welcomeData?.bones_amount}</h3>
             {welcomeData?.status === 2 ? (
-              <div className="copy-text">Welcome Bonus Added Successfully</div>
+              <div className=" mt-2 copy-text">
+                Welcome Bonus Added Successfully
+              </div>
             ) : (
-              <div className="copy-text">Welcome Bonus Will Be Added Soon</div>
+              <div className="mt-2 copy-text">
+                Welcome Bonus Will Be Added Soon
+              </div>
             )}
-            <div className="border-blue copy-value">
-              <span>This is valid only for 30 days</span>
+            <div className="mt-3 border-red copy-value text-center">
+              <p className="p-red">This is valid only for 30 days</p>
             </div>
           </div>
         )}
