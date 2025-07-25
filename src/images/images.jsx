@@ -46,8 +46,6 @@ export const Images = {
   walletransfer: "/public/assets/icons/walletransfer.svg",
   wallet2: "/public/assets/icons/wallet2.svg",
 
-
-
   //games
   ezugicasino: "./assets/games/ezugicasino.svg",
   img2: "./assets/games/img2.svg",
@@ -111,4 +109,35 @@ export const Images = {
   commissionReport: "/assets/icons/mobile-menu-list/commision_report.svg",
   setButtonVariables: "/assets/icons/mobile-menu-list/set_buttons.svg",
   logoutIcon: "/assets/icons/mobile-menu-list/log_out.svg",
+  /*footer*/
+  Provider1: "/assets/footer/provider-1.svg",
+  Provider2: "/assets/footer/provider-2.svg",
+  Provider3: "/assets/footer/provider-3.svg",
+  Provider4: "/assets/footer/provider-4.svg",
+  Provider5: "/assets/footer/provider-5.svg",
+  Provider6: "/assets/footer/provider-6.svg",
+  Provider7: "/assets/footer/provider-7.svg",
+  Provider1: "/assets/footer/provider-1.svg",
+  Provider2: "/assets/footer/provider-2.svg",
+  Provider3: "/assets/footer/provider-3.svg",
+  Provider4: "/assets/footer/provider-4.svg",
+  Provider5: "/assets/footer/provider-5.svg",
+  Provider6: "/assets/footer/provider-6.svg",
+  Provider7: "/assets/footer/provider-7.svg",
+  SocialMedia1: "/assets/footer/social-media-1.svg",
+  SocialMedia2: "/assets/footer/social-media-2.svg",
+  SocialMedia3: "/assets/footer/social-media-3.svg",
+  SocialMedia4: "/assets/footer/social-media-4.svg",
+  Payment1: "/assets/footer/payment-1.svg",
+  Payment2: "/assets/footer/payment-2.svg",
+  Payment3: "/assets/footer/payment-3.svg",
+
+  /*----*/
+  // Banners
+  banner1: "/public/assets/icons/banners/carousel1.png",
+  banner3: "/public/assets/icons/banners/carousel3.png",
+  banner4: "/public/assets/icons/banners/carousel4.png",
+  banner5: "/public/assets/icons/banners/carousel5.png",
+  banner6: "/public/assets/icons/banners/carousel6.png",
+  banner7: "/public/assets/icons/banners/carousel7.png",
 };
