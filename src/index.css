@@ -1411,14 +1411,6 @@ form .textarea-group small,
   line-height: 2;
 }
 
-.layout-main-content {
-  padding: 80px 20px 20px 20px;
-}
-@media (max-width: 991px) {
-  .layout-main-content {
-    padding: 78px 10px 20px 10px;
-  }
-}
 /* --------------------------  */
 /* 8 . Global Classes Ended */
 /* --------------------------  */
@@ -1628,6 +1620,7 @@ form .textarea-group small,
   left: 88px;
   top: 145px;
 }
+
 /* popups */
 
 .thank-bar {
@@ -1638,6 +1631,22 @@ form .textarea-group small,
 }
 
 /*header*/
+
+.layout-main-content {
+  padding: 80px 20px 20px 20px;
+}
+
+@media (max-width: 991px) {
+  .layout-main-content {
+    padding: 55px 10px 20px 10px;
+  }
+}
+
+@media (min-width: 991px) and (max-width: 1025px) {
+  .layout-main-content {
+    padding: 65px 10px 20px 10px;
+  }
+}
 
 .header {
   position: fixed;
