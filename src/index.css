@@ -2186,3 +2186,48 @@ form .textarea-group small,
     margin-bottom: 4px;
   }
 }
+/*footer*/
+.footer-container {
+  padding: 10px;
+}
+.footer-container .footer-header {
+  background-color: var(--blue-color17);
+  padding: 10px;
+  margin-bottom: 4px;
+}
+.footer-container .footer-header h5 {
+  margin-top: 10px;
+  font-weight: 600;
+}
+.footer-content {
+  background-color: var(--blue-color17);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+ /* or match image background */
+  color: white;
+}
+
+.footer-section {
+  flex: 1 1 150px;
+  margin: 10px;
+}
+
+.footer-section h6 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+
+/*-----------------------------------*/

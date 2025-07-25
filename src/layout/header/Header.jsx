@@ -124,7 +124,7 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   ];
 
   const moreItems = [
-    { img: Images.bets, name: "My Bets" },
+    { img: Images.bets, name: <div onClick={() => navigate("/my-bets")}>My Bets</div> },
     { img: Images.wallet, name: "My Wallet" },
     { img: Images.tickets, name: "Tickets" },
     { img: Images.account, name: "Account Statement" },
