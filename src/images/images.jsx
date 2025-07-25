@@ -119,5 +119,14 @@ export const Images = {
   Provider5:"/assets/footer/provider-5.svg",
   Provider6:"/assets/footer/provider-6.svg",
   Provider7:"/assets/footer/provider-7.svg",
+  SocialMedia1:"/assets/footer/social-media-1.svg",
+  SocialMedia2:"/assets/footer/social-media-2.svg",
+  SocialMedia3:"/assets/footer/social-media-3.svg",
+  SocialMedia4:"/assets/footer/social-media-4.svg",
+  Payment1:"/assets/footer/payment-1.svg",
+  Payment2:"/assets/footer/payment-2.svg",
+  Payment3:"/assets/footer/payment-3.svg",
+ 
+ 
   /*----*/
 };
