@@ -111,4 +111,13 @@ export const Images = {
   commissionReport: "/assets/icons/mobile-menu-list/commision_report.svg",
   setButtonVariables: "/assets/icons/mobile-menu-list/set_buttons.svg",
   logoutIcon: "/assets/icons/mobile-menu-list/log_out.svg",
+  /*footer*/
+  Provider1:"/assets/footer/provider-1.svg",
+  Provider2:"/assets/footer/provider-2.svg",
+  Provider3:"/assets/footer/provider-3.svg",
+  Provider4:"/assets/footer/provider-4.svg",
+  Provider5:"/assets/footer/provider-5.svg",
+  Provider6:"/assets/footer/provider-6.svg",
+  Provider7:"/assets/footer/provider-7.svg",
+  /*----*/
 };
