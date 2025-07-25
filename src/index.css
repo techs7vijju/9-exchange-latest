@@ -2326,8 +2326,6 @@ form .textarea-group small,
     padding: 6px 15px;
   }
 }
-<<<<<<< HEAD
-=======
 @media (max-width: 1440px) {
   .footer-bottom .footer-bottom-left {
     background-color: var(--blue-color17);
@@ -2560,6 +2558,5 @@ height: 0px;
   background: var(--blue-color17);
 }
 
->>>>>>> 6490ee1223ffc1cd661ec0d5f25288ab399e214d
 
 /*-----------------------------------*/
