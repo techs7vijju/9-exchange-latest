@@ -2,32 +2,46 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Images } from "../../images/images";
 const Blocked = ({ showBlocked, setShowBlocked }) => {
+  const handleClose = () => {
+    setShowBlocked(false);
+  };
   return (
     <Modal
       show={showBlocked}
-      onHide={() => setShowBlocked(false)}
       centered
-      className="custom-login-modal"
+      className="custom-popup-modal"
+      size="md"
+      onHide={handleClose}
     >
-      <div className="flex-center">
-        <img src={Images.blocked} />
-      </div>
-      <h3 className="thank-title flex-center">Blocked Account</h3>
+      <div className="modal-header-fixed">
+        <button
+          className="btn-close"
+          onClick={handleClose}
+          aria-label="Close"
+        ></button>
 
-        {/* two decorative bars */}
-        <div className="thank-bar big"></div>
-        <div className="thank-bar small"></div>
-      <div className="flex-center p-2 fw-600">
-        Your account has been permanently suspended.
-      </div>
-     <div className="flex-center p-2 fw-400 font-small text-center flex-column">
-  <div>You have exceeded the allowed attempts. Please contact customer support</div>
-  <div>to recover your account.</div>
-</div>
+        <div className="flex-center mt-5">
+          <img src={Images.blocked} />
+        </div>
 
-      <button className="w-100 mt-3 login-button" >
-        CONTACT US
-      </button>
+        <h5 className="model-label pt-3">Blocked Account</h5>
+        <div className="d-flex flex-col flex-center w-100 gap-2">
+          <span className="thank-bar w-15"></span>
+          <span className="thank-bar w-10"></span>
+        </div>
+      </div>
+
+      <div className="popup-scroll mt-3">
+        <div className="d-flex flex-center p-black">
+          Your account has been permanently suspended.
+        </div>
+        <div className="d-flex text-center p-black2 mt-3">
+          You have exceeded the allowed attempts. Please contact customer
+          support to recover your account.
+        </div>
+
+        <button className="xbtn button-blue w-100 mt-5">CONTACT US</button>
+      </div>
     </Modal>
   );
 };

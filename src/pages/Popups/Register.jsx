@@ -90,11 +90,10 @@ const Register = ({
   showRegister,
   setShowRegister,
   setTermsPopup,
-  setMessage,
   setShowThanks,
   setShowThanksSignup,
   setShowLogin,
-  setShowSuccess,
+  onLoginSuccess,
 }) => {
   const navigate = useNavigate();
   const [activeButton, setActiveButton] = useState(1);
@@ -160,7 +159,7 @@ const Register = ({
   useEffect(() => {
     if (
       securityQuestions.length > 0 &&
-      formData.securityQuestions.length == 0
+      formData.securityQuestions.length === 0
     ) {
       setFormData((prev) => ({
         ...prev,
@@ -170,7 +169,7 @@ const Register = ({
         })),
       }));
     }
-  }, [securityQuestions]);
+  }, [securityQuestions, formData.securityQuestions.length]);
 
   useEffect(() => {
     if (!showRegister || hasFetchedData.current) return;
@@ -301,26 +300,6 @@ const Register = ({
     setCurrencydropdownOpen(false);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    const updatedValue = type === "checkbox" ? checked : value;
-
-    setCheckBoxes((prev) => ({
-      ...prev,
-      [name]: updatedValue,
-    }));
-
-    if (name === "age_agree") {
-      setIsChecked(updatedValue);
-    }
-    if (name === "agree_policy") {
-      setIsAgreed(updatedValue);
-    }
-
-    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
-  };
-
   const fetchUsername = async (user_name) => {
     setUserError("");
 
@@ -346,7 +325,7 @@ const Register = ({
       }
     } catch (error) {
       setIsUsernameLoading(false);
-      setUserError("Something went wrong");
+      setUserError(error || "Something went Wriong");
     }
   };
 
@@ -538,37 +517,14 @@ const Register = ({
           photo: userInfo?.photo,
         };
 
-        localStorage.setItem("user_data", encryptData(userData));
-        localStorage.setItem("jwt_token", response?.token);
-        localStorage.setItem("welcomeBonusId", userInfo?.promoId);
-        localStorage.setItem("password", response?.password);
+        await localStorage.setItem("user_data", encryptData(userData));
+        await localStorage.setItem("jwt_token", response?.token);
+        await localStorage.setItem("welcomeBonusId", userInfo?.promoId);
+        await localStorage.setItem("password", response?.password);
 
-        setLoading(false);
-        setMessage(response.message);
-        setApiErrors([]);
-        setSelectedCountryItem("");
-        setSelectedCurrencyItem("");
-        setCurrencydropdownOpen(false);
-        setSelectedCountry(null);
-        setSelectedCurrency(null);
-
-        setValidationErrors({
-          name: "",
-          lastName: "",
-          user_name: "",
-          password: "",
-          confirmPassword: "",
-          dob: "",
-          country_id: "",
-          currency_id: "",
-          email: "",
-          age_agree: false,
-          agree_policy: false,
-        });
-        setActiveButton(1);
         setShowThanks(true);
-        setShowThanksSignup(false);
-        setShowRegister(false);
+        onLoginSuccess();
+        handleClose();
       }
     } catch (error) {
       setLoading(false);
@@ -580,9 +536,7 @@ const Register = ({
         });
         setValidationErrors(errors);
       } else {
-        setApiErrors([
-          error.message || "An error occurred during registration",
-        ]);
+        setApiErrors([error || "An error occurred during registration"]);
       }
     }
   };
@@ -716,49 +670,9 @@ const Register = ({
         localStorage.setItem("jwt_token", response?.token);
         localStorage.setItem("welcomeBonusId", userInfo?.promoId);
 
-        setShowSuccess(true);
-
-        setLoading(false);
-        setFormData({
-          name: "",
-          lastName: "",
-          user_name: "",
-          password: "",
-          confirmPassword: "",
-          masterID: "",
-          dob: "",
-          country_id: "",
-          currency_id: "",
-          email: "",
-          securityQuestions: [],
-        });
-
-        setMessage(response.message);
-
-        setApiErrors([]);
-        setSelectedCountryItem("");
-        setSelectedCurrencyItem("");
-        setCurrencydropdownOpen(false);
-        setSelectedCountry(null);
-        setSelectedCurrency(null);
-
-        setValidationErrors({
-          name: "",
-          lastName: "",
-          user_name: "",
-          password: "",
-          confirmPassword: "",
-          dob: "",
-          country_id: "",
-          currency_id: "",
-          email: "",
-          age_agree: false,
-          agree_policy: false,
-        });
-        setActiveButton(1);
-        setShowThanks(false);
         setShowThanksSignup(true);
-        showRegister(false);
+        onLoginSuccess();
+        handleClose();
       }
     } catch (error) {
       setLoading(false);
@@ -770,9 +684,7 @@ const Register = ({
         });
         setValidationErrors(errors);
       } else {
-        setApiErrors([
-          error.message || "An error occurred during registration",
-        ]);
+        setApiErrors([error || "An error occurred during registration"]);
       }
     }
   };
@@ -783,9 +695,12 @@ const Register = ({
   };
 
   const handleClose = () => {
+    setLoading(false);
     setApiErrors([]);
     setSelectedCountryItem("");
     setSelectedCurrencyItem("");
+    setSelectedCountry(null);
+    setSelectedCurrency(null);
     setCurrencydropdownOpen(false);
     setIsCheckedError("");
     setIsAgreedError("");
@@ -911,7 +826,7 @@ const Register = ({
                       handleChange(e);
                     }
                   }}
-                  error={validationErrors.user_name}
+                  error={userError || validationErrors.user_name}
                   showLoading={isUsernameLoading}
                   showCheckmark={
                     !isUsernameLoading &&
@@ -925,10 +840,10 @@ const Register = ({
             <div className="row">
               <div className="col-md-6">
                 <TextInput
-                  type={showPassword ? "text" : "password"}
+                  type="password"
                   label="Password"
                   name="password"
-                  placeholder="Enter"
+                  placeholder="Enter Password"
                   value={formData.password}
                   onChange={(e) => {
                     const value = e.target.value;
@@ -943,10 +858,10 @@ const Register = ({
               </div>
               <div className="col-md-6">
                 <TextInput
-                  type={showConfirmPassword ? "text" : "password"}
+                  type="password"
                   label="Confirm Password"
                   name="confirmPassword"
-                  placeholder="Enter"
+                  placeholder="Re-Enter Password"
                   value={formData.confirmPassword}
                   onChange={(e) => {
                     const value = e.target.value;
@@ -1000,6 +915,7 @@ const Register = ({
                 <SelectInput
                   label="Country"
                   name="country_id"
+                  placeholder="Select Country"
                   value={selectedCountry}
                   onChange={(selected) => handleCountryChange(selected)}
                   options={countries.map((c) => ({
@@ -1014,6 +930,7 @@ const Register = ({
                 <SelectInput
                   label="Currency"
                   name="currency_id"
+                  placeholder="Select Currency"
                   value={selectedCurrency}
                   onChange={(selected) => handleCurrencyChange(selected)}
                   options={countries.map((country) => ({
@@ -1091,6 +1008,7 @@ const Register = ({
                 <SelectInput
                   label="Country"
                   name="country_id"
+                  placeholder="Select Country"
                   value={selectedCountry}
                   onChange={(selected) => handleCountryChange(selected)}
                   options={countries.map((c) => ({
@@ -1105,6 +1023,7 @@ const Register = ({
                 <SelectInput
                   label="Currency"
                   name="currency_id"
+                  placeholder="Select Currency"
                   value={selectedCurrency}
                   onChange={(selected) => handleCurrencyChange(selected)}
                   options={countries.map((country) => ({
