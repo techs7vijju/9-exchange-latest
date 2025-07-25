@@ -1567,7 +1567,12 @@ form .textarea-group small,
     display: block;
   }
 }
-
+@media (max-width: 991px) {
+  .sports-navigator img {
+   max-height: 100px;
+    /* width: 100px; */
+  }
+}
 .scroll-xaxis {
   overflow-x: auto;
   white-space: nowrap;
@@ -1603,8 +1608,7 @@ form .textarea-group small,
 }
 
 .scroll-card {
-  flex: 0 0 24%;
-  max-width: 24%;
+  min-width: 100px;
   box-sizing: border-box;
   border-radius: 5px;
   margin-right: 1%;
