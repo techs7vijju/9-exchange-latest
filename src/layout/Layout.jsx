@@ -16,7 +16,7 @@ const Layout = () => {
       <div className="layout-main-content">
         <Outlet />
       </div>
-      {/* <Footer /> */}
+      <Footer />
       {isMobile && <BottomTabNavigator />}
     </div>
   );
