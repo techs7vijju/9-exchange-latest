@@ -40,6 +40,7 @@ const Login = ({
   });
 
   const handleChange = async (name, value) => {
+    console.log("name, value", name, value);
     setFormData({ ...formData, [name]: value });
     try {
       await validationSchema.validateAt(name, { [name]: value });
@@ -160,7 +161,7 @@ const Login = ({
       </div>
       <div className="popup-scroll blue-color4">
         <form onSubmit={handleLogin}>
-          <div className="col-md-6">
+          <div>
             <TextInput
               type="text"
               label="User Name"
@@ -168,13 +169,16 @@ const Login = ({
               placeholder="Enter"
               value={formData.username}
               onChange={(e) => {
-                handleChange(e);
+                const value = e.target.value;
+                if (/^[a-zA-Z0-9_]*$/.test(value) && value.length <= 15) {
+                  handleChange("username", value);
+                }
               }}
               error={validationErrors.username}
             />
           </div>
 
-          <div className="col-md-6">
+          <div>
             <TextInput
               type={showPassword ? "text" : "password"}
               label="Password"
@@ -184,7 +188,7 @@ const Login = ({
               onChange={(e) => {
                 const value = e.target.value;
                 if (value.length <= 36) {
-                  handleChange(e);
+                  handleChange("password", value);
                 }
               }}
               error={validationErrors.password}

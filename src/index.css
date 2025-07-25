@@ -227,11 +227,12 @@ input[type="number"] {
   --blue-color18: #5488b6;
   --blue-color19: #2f5a84;
   --blue-color20: #065ca8;
-  --blue-color22: #286aa6;
   --blue-color21: #badeff;
+  --blue-color22: #286aa6;
   --blue-color23: #417aaf;
   --blue-color24: #dff0ff;
-  --blue-color25: #eff4ff;
+  --blue-color25: #276aa599;
+  --blue-color26: #eff4ff;
   --grey-color1: #e9eef2;
   --grey-color2: #787e84;
   --grey-color3: #767c82;
@@ -783,7 +784,7 @@ form .input-group .input-section,
 .form .input-group .input-section {
   border-color: var(--blue-color1);
   background-color: var(--white-color);
-  border: 2px solid var(--blue-color22);
+  border: 2px solid var(--blue-color25);
   border-radius: 5px !important;
   /* border-top-left-radius: 10px !important;
   border-bottom-right-radius: 10px !important; */
@@ -896,7 +897,7 @@ form .select-group label span,
 }
 form .select-group .react-select__control,
 .form .select-group .react-select__control {
-  border: 2px solid var(--blue-color22);
+  border: 2px solid var(--blue-color25);
   border-radius: 5px;
   min-height: 48px;
   font-size: 16px;
@@ -905,7 +906,7 @@ form .select-group .react-select__control,
 }
 form .select-group .react-select__control--is-focused,
 .form .select-group .react-select__control--is-focused {
-  border-color: var(--blue-color4);
+  border: 2px solid var(--blue-color25);
 }
 form .select-group .react-select__input input,
 .form .select-group .react-select__input .input {
@@ -916,7 +917,7 @@ form .select-group .react-select__menu,
 .form .select-group .react-select__menu {
   margin-top: 0;
   border-radius: 0 0 5px 5px;
-  border: 2px solid var(--blue-color4);
+  border: 2px solid var(--blue-color25);
   border-top: none;
   box-shadow: none;
 }
@@ -991,7 +992,7 @@ form .select-group small,
   appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid var(--blue-color22);
+  border: 2px solid var(--blue-color25);
   border-radius: 0.25em;
   cursor: pointer;
   position: relative;
