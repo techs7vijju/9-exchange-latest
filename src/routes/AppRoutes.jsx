@@ -18,7 +18,6 @@ function AppRoutes() {
     <div className={body}>
       <Routes>
         <Route element={<Layout />}>
-          {/* Main pages with right bar */}
           <Route element={<SportsLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/sports" element={<Sports />} />

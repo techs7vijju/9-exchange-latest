@@ -2,16 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { FaChevronRight } from "react-icons/fa";
 import { IoChevronDownSharp, IoChevronUpSharp } from "react-icons/io5";
-// import Dropdown from "react-bootstrap/Dropdown";
 import { MdOutlineChat } from "react-icons/md";
 import { ImExit } from "react-icons/im";
-// import MessagePopup from "../pages/popup/MessagePopup";
-// import Registration from "../pages/registration/Registration";
-// import "./styles.css";
-// import "./common.css";
-// import { getWalletDetails } from "../api/apiMethods";
-// import handleError from "../utils/errorHandler";
-// import socketService from "../utils/socketService";
 import { useMediaQuery } from "react-responsive";
 import { Images } from "../../images/images";
 import Login from "../../pages/Popups/Login";
@@ -46,14 +38,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const [openMore, setOpenMore] = useState(false);
   const [openEn, setOpenEn] = useState(false);
 
-  const handleToggle = (dropdown) => {
-    setOpenSports(dropdown === "sports" ? !openSports : false);
-    setOpenLive(dropdown === "live" ? !openLive : false);
-    setOpenCasino(dropdown === "casino" ? !openCasino : false);
-    setOpenMore(dropdown === "more" ? !openMore : false);
-    setOpenEn(dropdown === "en" ? !openEn : false);
-  };
-
   const [showMessages, setShowMessages] = useState(false);
 
   const toggleMessages = () => {
@@ -74,15 +58,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const handleRegister = () => {
     setShowRegister(true);
   };
-
-  // const getWelcomeBonus = async () => {
-  //   const welcomeId = localStorage.getItem("welcomeBonusId");
-
-  //   if (!welcomeId || welcomeId === "undefined" || welcomeId === "null") {
-  //     return <Navigate to="/" />;
-  //   }
-  //   setWelcomeBonusPopup(true);
-  // };
 
   const imagePaths = [
     Images.ezugicasino,
@@ -160,17 +135,16 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
   const EnItems = [{ name: "English" }, { name: "Spanish" }];
   return (
     <div className="header flex items-center">
-      <div className="header-container">
       {isMobile ? (
-        <div className=" flex justify-content-between align-items-center">
+        <div className="w-100 flex justify-between items-center px-2">
           <div>
             <img src={Images.Logo} alt="logo" className="logo-img w-100" />
           </div>
 
-          <div className="">
+          <div>
             {isLogin ? (
               <>
-                <div className="flex-evenly gap-3 white-font large-font mx-2">
+                <div className="flex-evenly gap-2 mx-2">
                   <div className="d-flex flex-start">
                     <div>
                       BALANCE
@@ -179,25 +153,17 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
                     </div>
                   </div>
                 </div>
-                <div className="xbtn green-color large-font white-font pointer ">
-                  Deposit
-                </div>
-                <div className="xbtn login large-font white-font pointer">
+                <div className="xbtn green-color pointer ">Deposit</div>
+                <div className="xbtn login pointer">
                   <img src={Images.personal} className="payment-images" />
                 </div>
               </>
             ) : (
-              <div className="d-flex flex-between gap-1 w-100">
-                <div
-                  className="xbtn button-blue large-font w-60"
-                  onClick={handleRegister}
-                >
+              <div className="d-flex gap-2">
+                <div className="xbtn button-blue w-60" onClick={handleRegister}>
                   REGISTRATION
                 </div>
-                <div
-                  className="xbtn login large-font w-40"
-                  onClick={handleLoginClick}
-                >
+                <div className="xbtn login w-40" onClick={handleLoginClick}>
                   LOGIN
                 </div>
               </div>
@@ -205,33 +171,36 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
           </div>
         </div>
       ) : (
-        <div className="header-container-before ">
-          <div className="flex  align-items-center">
-          <div className="">
-            <img src={Images.Logo} alt="logo" className="logo-img w-100" />
-          </div>
-           <div> <DropdownMenu
-              title="CRICKET"
-              open={false}
-              onToggle={() => {}}
-              items={[]}
-              showImages={false}
-            /></div>
-           <div>
-           <DropdownMenu
-              title="SPORTS"
-              open={openSports}
-              onToggle={() => setOpenSports(!openSports)}
-              items={sportsItems}
-            />
-           </div>
+        <div className="w-100 flex justify-between items-center px-2">
+          <div className="flex align-items-center">
+            <div className="">
+              <img src={Images.Logo} alt="logo" className="logo-img w-100" />
+            </div>
             <div>
-            <DropdownMenu
-              title="LIVE"
-              open={openLive}
-              onToggle={() => setOpenLive(!openLive)}
-              items={liveItems}
-            />
+              {" "}
+              <DropdownMenu
+                title="CRICKET"
+                open={false}
+                onToggle={() => {}}
+                items={[]}
+                showImages={false}
+              />
+            </div>
+            <div>
+              <DropdownMenu
+                title="SPORTS"
+                open={openSports}
+                onToggle={() => setOpenSports(!openSports)}
+                items={sportsItems}
+              />
+            </div>
+            <div>
+              <DropdownMenu
+                title="LIVE"
+                open={openLive}
+                onToggle={() => setOpenLive(!openLive)}
+                items={liveItems}
+              />
             </div>
             <div className="d-flex justify-content-center">
               <div
@@ -278,121 +247,123 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
               </div>
             </div>
             <div>
-            <DropdownMenu
-              title="MORE"
-              open={openMore}
-              onToggle={() => setOpenMore(!openMore)}
-              items={moreItems}
-            />
-            </div>
-          </div>  
-          <div className="flex justify-content-between align-items-center">
-          <div className="flex w-100">
-            {isLogin ? (
-              <div className="d-flex flex-between w-100 gap-1">
-                <div className="xbtn green-color large-font w-50 pointer ">
-                  Make A Deposit
-                </div>
-                <div className="d-flex flex-between w-50 gap-1">
-                  <div
-                    className="d-flex flex-between xbtn login white-font pointer "
-                    onClick={toggleMessages}
-                  >
-                    <MdOutlineChat />
-                    {showMessages && (
-                      <div className="message-dropdown shadow rounded">
-                        <div className="dropdown-arrow-up" />
-                        <div className="fw-bold px-3 pt-3 pb-2 text-primary border-bottom">
-                          Your Messsages
-                        </div>
-                        {notificationData.map((item, i) => (
-                          <div
-                            className="d-flex align-items-start px-3 py-3 border-bottom"
-                            key={i}
-                          >
-                            <img
-                              src={item.image}
-                              alt="avatar"
-                              className="avatar-img me-2"
-                            />
-                            <div className="flex-grow-1">
-                              <div className="fw-bold small mb-1 text-dark">
-                                {item.name}
-                              </div>
-                              <div className="small text-body ">
-                                {item.text}
-                              </div>
-                            </div>
-                            <div className="text-muted small ms-2 mt-1 white-space-nowrap">
-                              {item.date}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className="d-flex flex-between  xbtn login white-font pointer">
-                    <ImExit />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="d-flex flex-between gap-1 w-100">
-                <div className="registration-container">
-                  <div
-                    className="xbtn button-blue large-font w-100"
-                    onClick={handleRegister}
-                  >
-                    REGISTRATION
-                  </div>
-                </div>
-              
-                <div
-                  className="xbtn login large-font w-40"
-                  onClick={handleLoginClick}
-                >
-                  LOGIN
-                </div>
-            
-              </div>
-            )}
-          </div>
-          <div className="flex">
-            {isLogin && (
-              <>
-                <div className="flex-evenly gap-3 white-font large-font mx-2">
-                  <div className="d-flex flex-end">
-                    <div style={{ textAlign: "right" }}>
-                      Sports Bal: <span className="green-clr fw-600">1000</span>
-                      <br />
-                      Exp: <span className="green-clr fw-600">1000</span>
-                    </div>
-                  </div>
-                </div>
-                <span>|</span>
-                <div className="flex-evenly gap-3 white-font large-font mx-2">
-                  <div className="d-flex flex-end">
-                    <div style={{ textAlign: "right" }}>
-                      Casino Bal: <span className="green-clr fw-600">1000</span>
-                      <br />
-                      Exp: <span className="green-clr fw-600">1000</span>
-                    </div>
-                  </div>
-                </div>
-                <span>|</span>
-              </>
-            )}
-            <div className="d-flex flex-end w-40">
               <DropdownMenu
-                title="ENG"
-                open={openEn}
-                onToggle={() => setOpenEn(!openEn)}
-                items={EnItems}
+                title="MORE"
+                open={openMore}
+                onToggle={() => setOpenMore(!openMore)}
+                items={moreItems}
               />
             </div>
           </div>
+
+          <div className="flex justify-content-between align-items-center">
+            <div className="flex w-100">
+              {isLogin ? (
+                <div className="d-flex flex-between w-100 gap-1">
+                  <div className="xbtn green-color large-font w-50 pointer ">
+                    Make A Deposit
+                  </div>
+                  <div className="d-flex flex-between w-50 gap-1">
+                    <div
+                      className="d-flex flex-between xbtn login white-font pointer"
+                      onClick={toggleMessages}
+                    >
+                      <MdOutlineChat />
+                      {showMessages && (
+                        <div className="message-dropdown shadow rounded">
+                          <div className="dropdown-arrow-up" />
+                          <div className="fw-bold px-3 pt-3 pb-2 text-primary border-bottom">
+                            Your Messsages
+                          </div>
+                          {notificationData.map((item, i) => (
+                            <div
+                              className="d-flex align-items-start px-3 py-3 border-bottom"
+                              key={i}
+                            >
+                              <img
+                                src={item.image}
+                                alt="avatar"
+                                className="avatar-img me-2"
+                              />
+                              <div className="flex-grow-1">
+                                <div className="fw-bold small mb-1 text-dark">
+                                  {item.name}
+                                </div>
+                                <div className="small text-body ">
+                                  {item.text}
+                                </div>
+                              </div>
+                              <div className="text-muted small ms-2 mt-1 white-space-nowrap">
+                                {item.date}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="d-flex flex-between  xbtn login white-font pointer">
+                      <ImExit />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="d-flex flex-between gap-3 w-100">
+                  <div className="registration-container">
+                    <div
+                      className="xbtn button-blue large-font w-100"
+                      onClick={handleRegister}
+                    >
+                      REGISTRATION
+                    </div>
+                  </div>
+
+                  <div
+                    className="xbtn login large-font w-40"
+                    onClick={handleLoginClick}
+                  >
+                    LOGIN
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex">
+              {isLogin && (
+                <>
+                  <div className="flex-evenly gap-3 white-font large-font mx-2">
+                    <div className="d-flex flex-end">
+                      <div style={{ textAlign: "right" }}>
+                        Sports Bal:{" "}
+                        <span className="green-clr fw-600">1000</span>
+                        <br />
+                        Exp: <span className="green-clr fw-600">1000</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span>|</span>
+                  <div className="flex-evenly gap-3 white-font large-font mx-2">
+                    <div className="d-flex flex-end">
+                      <div style={{ textAlign: "right" }}>
+                        Casino Bal:{" "}
+                        <span className="green-clr fw-600">1000</span>
+                        <br />
+                        Exp: <span className="green-clr fw-600">1000</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span>|</span>
+                </>
+              )}
+              <div className="d-flex flex-end w-40">
+                <DropdownMenu
+                  title="ENG"
+                  open={openEn}
+                  onToggle={() => setOpenEn(!openEn)}
+                  items={EnItems}
+                />
+              </div>
+            </div>
           </div>
-          </div>
+        </div>
       )}
 
       <Register
@@ -404,16 +375,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setShowSuccess={setShowSuccess}
         setShowLogin={setShowLogin}
       />
-
-      {/* <LoginPopup
-        setLoginModal={setLoginPopup}
-        loginModal={loginPopup}
-        setRegisterModal={setRegisterpopup}
-        registerModal={registerpopup}
-        setForgotPasswordModal={setForgotPasswordModal}
-        setAdminResetPopup={setAdminResetPopup}
-        adminResetPopup={adminResetPopup}
-      /> */}
       <Thanks showThanks={showThanks} setShowThanks={setShowThanks} />
       <ThanksSignup
         showThanksSignup={showThanksSignup}
@@ -440,7 +401,6 @@ function Header({ userData, setUserData, openOneClick, setOpenClick }) {
         setShowBlocked={setShowBlocked}
       />
       <Blocked showBlocked={showBlocked} setShowBlocked={setShowBlocked} />
-      </div>
     </div>
   );
 }
