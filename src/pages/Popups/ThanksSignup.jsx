@@ -7,7 +7,7 @@ import { FaCopy } from "react-icons/fa";
 const ThanksSignup = ({ showThanksSignup, setShowThanksSignup }) => {
   const [loading, setLoading] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
-  const isMobile = useMediaQuery({ maxWidth: 1023 });
+  const isMobile = useMediaQuery({ maxWidth: 991 });
 
   const handleClose = () => {
     setShowThanksSignup(false);

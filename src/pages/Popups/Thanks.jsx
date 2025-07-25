@@ -13,7 +13,7 @@ import { getWelcomeBonusAvail } from "../../api/apiMethods";
 const Thanks = ({ showThanks, setShowThanks }) => {
   const [loading, setLoading] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
-  const isMobile = useMediaQuery({ maxWidth: 1023 });
+  const isMobile = useMediaQuery({ maxWidth: 991 });
 
   const credentialsRef = useRef(null);
   const [copiedUserId, setCopiedUserId] = useState(false);
