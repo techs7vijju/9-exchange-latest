@@ -2317,7 +2317,6 @@ form .textarea-group small,
 
 .footer-bottom .footer-bottom-left {
   background-color: var(--blue-color17);
-  /* padding: 6px 15px; */
 }
 
 @media (max-width: 1024px) {
@@ -2326,8 +2325,6 @@ form .textarea-group small,
     padding: 6px 15px;
   }
 }
-<<<<<<< HEAD
-=======
 @media (max-width: 1440px) {
   .footer-bottom .footer-bottom-left {
     background-color: var(--blue-color17);
@@ -2337,7 +2334,6 @@ form .textarea-group small,
 @media (min-width: 1441px) and (max-width: 2560px) {
   .footer-bottom .footer-bottom-left {
     background-color: var(--blue-color17);
-    /* padding: 15px 15px; */
   }
 }
 
@@ -2482,7 +2478,6 @@ form .textarea-group small,
 }
 .mobile-social-network{
   border-bottom: 2px solid #FFFFFF1A;
- 
 }
 .mobile-footer .mobile-social-network h6 {
   font-weight: 600;
@@ -2559,7 +2554,5 @@ height: 0px;
 .mobile-footer .mobile-footer-bottom .footer-18-plus {
   background: var(--blue-color17);
 }
-
->>>>>>> 6490ee1223ffc1cd661ec0d5f25288ab399e214d
 
 /*-----------------------------------*/
