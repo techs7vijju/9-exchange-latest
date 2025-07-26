@@ -8,7 +8,6 @@ import { IoChevronDownSharp, IoChevronUpSharp } from "react-icons/io5";
 import { Carousel, Col, Row } from "react-bootstrap";
 import DropdownMenu from "../../components/common/DropdownMenu";
 
-
 const Footer = () => {
   const isMobile = useMediaQuery({ maxWidth: 991 });
   const [isOpen, setIsOpen] = useState(false);
@@ -17,20 +16,17 @@ const Footer = () => {
     setIsOpen((prev) => !prev);
   };
 
-
- 
   const paymentOptions = [
     [
-      { icon: "/assets/footer/payment-1.svg",  },
-      { icon: "/assets/footer/payment-1.svg", },
-      { icon: "/assets/footer/payment-1.svg",  }
+      { icon: "/assets/footer/payment-1.svg" },
+      { icon: "/assets/footer/payment-1.svg" },
+      { icon: "/assets/footer/payment-1.svg" },
     ],
     [
-      { icon: "/assets/footer/payment-1.svg",  },
-      { icon: "/assets/footer/payment-1.svg", },
-      { icon: "/assets/footer/payment-1.svg",  }
-    ]
-
+      { icon: "/assets/footer/payment-1.svg" },
+      { icon: "/assets/footer/payment-1.svg" },
+      { icon: "/assets/footer/payment-1.svg" },
+    ],
   ];
   const [openEn, setOpenEn] = useState(false);
   const EnItems = [{ name: "English" }, { name: "Spanish" }];
@@ -209,51 +205,43 @@ const Footer = () => {
               <p className="text-white m-0">Copyright © 2023 9XCHANGE</p>
             </div>
           </div>
+
           <div className="mobile-footer-payments">
-      <Carousel 
-        wrap={true} 
-        pause={false}
-        indicators={false} 
-        controls={false} 
-        interval={2500}
-        className="payment-slider"
-      >
-        {paymentOptions.map((group, groupIndex) => (
-          <Carousel.Item key={`group-${groupIndex}`} className="payment-slide">
-            <Row className="payment-row">
-              {group.map((option, optionIndex) => (
-                <Col xs={4} key={`option-${optionIndex}`} className="payment-option-col">
-                  <div className="payment-option">
-                    <img 
-                      src={option.icon} 
-                      alt={option.label} 
-                      className="payment-icon"
-                    />
-                    <span className="payment-label">{option.label}</span>
-                  </div>
-                </Col>
+            <Carousel
+              wrap={true}
+              pause={false}
+              indicators={false}
+              controls={false}
+              interval={2500}
+              className="payment-slider"
+            >
+              {paymentOptions.map((group, groupIndex) => (
+                <Carousel.Item
+                  key={`group-${groupIndex}`}
+                  className="payment-slide"
+                >
+                  <Row className="payment-row">
+                    {group.map((option, optionIndex) => (
+                      <Col
+                        xs={4}
+                        key={`option-${optionIndex}`}
+                        className="payment-option-col"
+                      >
+                        <div className="payment-option">
+                          <img
+                            src={option.icon}
+                            alt={option.label}
+                            className="payment-icon"
+                          />
+                          <span className="payment-label">{option.label}</span>
+                        </div>
+                      </Col>
+                    ))}
+                  </Row>
+                </Carousel.Item>
               ))}
-            </Row>
-          </Carousel.Item>
-        ))}
-      </Carousel>
-    </div>
-    <div className="mobile-footer-bottom p-2 d-flex justify-content-between align-items-center">
-    <div className="footer-18-plus flex-center p-1 ">
-      <p className="text-white">18+</p>
-      </div>
-      <div>
-      <DropdownMenu
-                  title="ENG"
-                  open={openEn}
-                  onToggle={() => setOpenEn(!openEn)}
-                  items={EnItems}
-                />
-      </div>
-    </div>
-
-
-          
+            </Carousel>
+          </div>
         </div>
       ) : (
         <footer className="footer-container">

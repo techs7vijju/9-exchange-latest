@@ -7,7 +7,7 @@ const BannerScoreLayout = ({ children }) => {
       <div className="d-none d-lg-flex px-1">
         <SidebarButtons />
       </div>
-      <div className="px-2 w-100">{children}</div>
+      <div className="px-0 px-lg-2 w-100">{children}</div>
     </div>
   );
 };
